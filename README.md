@@ -86,3 +86,60 @@ Example:
 PS C:\> .\sinequa-for-azure-image-to-gallery.ps1 -version 11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -subscriptionId 00000000-0000-0000-0000-000000000000
 ```
 
+### 2. Deploy a Sinequa Grid
+
+For deploying a Grid from the Marketplace or from your own image, ARM (Azure Resource Manager) deployment is used.
+
+```powershell
+sinequa-for-azure-deploy-grid.ps1
+    [[-subscriptionId] <String>]    
+    [-templateFile <String>]    
+    [-templateParameterFile <SecureString>]    
+    [[-resourceGroupName] <String>]    
+    [[-galleryName] <String>]    
+    [[-imageDefinitionName] <String>]    
+    [[-imageName] <String>]    
+    [[-version] <String>]
+```
+
+Example:
+```powershell
+PS C:\> .\sinequa-for-azure-deploy-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid
+```
+This script will run default template:
+* mainTemplate.json, ARM template which can instantiate a complete grid with:
+  * 1 Application Gateway
+  * 1 Availability Set
+  * 1 Keyvault
+  * 2 Network security group
+  * 1 Public IP address (if public)
+  * 1 Storage account
+  * 2 Virtual machine scale sets
+  * 1 Virtual network
+  * 1 or 3 Virtual Machines for Primary Nodes
+* mainTemplate.parameters.json: paramaters that should be updated
+  *	license: Sinequa Licence
+  * location
+  * prefix: Prefix of object name. Default: sq
+  * adminUsername: Windows User. Default: sinequa
+  * adminPassword: Windows User Password
+  * vmSize: vmSize of primary nodes. Default: Standard_D4s_v3
+  * vmIndexerSize: vmSize of the indexer Scale Set. Default: Standard_B2s
+  * vmIndexerScaleSetSize: Indexer Scale Set size. Default: 1
+  * vmConnectorSize": vmSize of the connector Scale Set. Default: Standard_B2s
+  * vmConnectorScaleSetSize: Connector Scale Set size. Default: 1
+  * primaryNodeCount: Number of primary nodes (1 or 3)
+  * virtualNetworkName: Virtual Networdk Name
+  * addressPrefixes": Ip Address Range. Default: 10.6.0.0/16
+  * appSubnetName: Subnet App Name for Applications. Default: snet-app
+  * frontSubnetName: Subnet App Name for FrontEnd (Application Gateway). Default: snet-front
+  * appSubnetPrefix: Ip range for App subnet. Default: 10.6.0.0/24
+  * frontSubnetPrefix: Ip range for Frontend subnet. Default: 10.6.1.0/24
+  *	loadBalancerType: application Gateway is accessible from internet. Possible values are: internal/external
+  * certificateBase64: Certificate file (pfx) in base64 format for HTTPS
+  * certificatePassword: Password of the certificate
+  * imageReferenceId: Id of the custom image to use. If empty the marketplace will be used.
+    * Example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+		
+
+
