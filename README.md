@@ -12,7 +12,7 @@ Sinequa For Azure (S4A) is a set of Azure optimizations for reducing cost and im
    3.1. [Add a VM Node](#add_vm)<br>
    3.2. [Add a VMSS Node](#add_vmss)<br>
 4. [Update a Sinequa Grid](#update)<br> 
-   4.1. [Update a VM Node](#update_vm)<br>  
+   4.1. [Update a VM Node](#update_vm)<br>
    4.2. [Update a VM Node](#update_vmss)<br>
    4.3. [Update All Nodes](#update_all)<br>
 
