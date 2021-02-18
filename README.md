@@ -2,17 +2,31 @@
 
 Sinequa For Azure (S4A) is a set of Azure optimizations for reducing cost and improving reliability and performances
 
+### Table of contents
+1. [Create Your Own Sinequa Image](#ownimage)
+   1.1. [Create the Base Image](#ownimage_base)
+   1.2. [Create a Sinequa Version Image](#ownimage_version)
+   1.3. [Publish an Image in a Shared Image Gallery (Optional)](#ownimage_shared)
+2. [Deploy a Sinequa Grid](#deploy)
+3. [Add node to a Sinequa Grid](#add)
+   3.1. [Add a VM Node](#add_vm) 
+   3.2. [Add a VMSS Node](#add_vmss) 
+4. [Update a Sinequa Grid](#update) 
+   4.1. [Update a VM Node](#update_vm)   
+   4.2. [Update a VM Node](#update_vmss)   
+   4.3. [Update all Nodes](#update_all)   
+
 In the script folder, different PowerShell scripts allow you to deploy and manage a Sinequa Grid based on the Official Sinequa Marketplace Image or by your own Sinequa Custom Image
 
 Depending on where are located Sinequa Images and where you deploy a Grid, different sources can be used:
-- Deploy a Grid in an another Tenant than your image: Only Marketplace can be used (Official Image, not a custom image)
-- Deploy a Grid in the same Tenant but not in the same subscription: Marketplace or Image Shared Image Gallery 
-- Deploy a Grid in the same subscription: Marketplace or Image Shared Image Gallery or Image
+- Deploy a Grid in an **another Tenant** than your image: **Only Marketplace** can be used (Official Image, not a custom image)
+- Deploy a Grid in the **same Tenant** but not in the same subscription: **Marketplace** or **Shared Image Gallery** 
+- Deploy a Grid in the **same subscription**: **Marketplace** or **Shared Image Gallery** or **Image**
 
 ## Scripts
-### 1. Create Your Own Sinequa Image
+### 1. Create Your Own Sinequa Image <a name="ownimage">
 
-#### 1.1 Create the Base Image
+#### 1.1. Create the Base Image <a name="ownimage_base">
 This first image is a Base Windows Image including all pre-requisite that you want to install before build a specific version of Sinequa
 
 ```powershell
@@ -38,7 +52,7 @@ This script will run these "Custom Sript Extensions":
 * sinequa-az-cse-install-programs.ps1, that could be customized
 * sinequa-az-cse-windows-update.ps1: Apply Windows Updates
 
-#### 1.2 Create a Sinequa Version Image
+#### 1.2. Create a Sinequa Version Image <a name="ownimage_version">
 Create an Sinequa Image from a distribution "sinequa.11.zip". This script will pre-install sinequa (unzip & install services)
 
 ```powershell
@@ -64,7 +78,7 @@ Example:
 PS C:\> .\sinequa-for-azure-build-image.ps1 -version 11.5.1.54 -tempResourceGroupName temp-sinequa-image-11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -localfile c:\builds\11.5.1.54\sinequa.11.zip -subscriptionId 00000000-0000-0000-0000-000000000000
 ```
 
-#### 1.3 Publish an Image in a Shared Image Gallery (Optional)
+#### 1.3. Publish an Image in a Shared Image Gallery (Optional) <a name="ownimage_shared">
 This script publishes an Image into Shared Image Gallery. An existing Shared Image Gallery with, at least, one Image definition is required.
 
 ```powershell
@@ -86,7 +100,7 @@ Example:
 PS C:\> .\sinequa-for-azure-image-to-gallery.ps1 -version 11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -subscriptionId 00000000-0000-0000-0000-000000000000
 ```
 
-### 2. Deploy a Sinequa Grid
+### 2. Deploy a Sinequa Grid <a name="deploy">
 
 For deploying a Grid from the Marketplace or from your own image, ARM (Azure Resource Manager) deployment is used.
 
@@ -143,8 +157,8 @@ This script will run default template:
 | certificatePassword    | Password of the certificate |
 | imageReferenceId       | Id of the custom image to use. If empty the marketplace will be used.<br> Example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly" |
 		
-### 3. Add node to a Sinequa Grid
-#### 3.1 Add a VM Node  
+### 3. Add node to a Sinequa Grid <a name="add">	
+#### 3.1. Add a VM Node <a name="add_vm"> 
 Add a VM node which is a regular node.
 
 ```powershell
@@ -164,7 +178,7 @@ Example:
 PS C:\> .\sinequa-for-azure-add-vm-node-to-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 ```
 
-#### 3.2 Add a VMSS Node  
+#### 3.2. Add a VMSS Node <a name="add_vmss"> 
 Add a VM Scale Set node for indexers or connectors.
 
 ```powershell
@@ -184,8 +198,8 @@ Example:
 PS C:\> .\sinequa-for-azure-add-vmss-node-to-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 ```
 
-### 4. Update a Sinequa Grid
-#### 3.1 Update a VM Node  
+### 4. Update a Sinequa Grid <a name="update"> 
+#### 4.1. Update a VM Node <a name="update_vm">   
 Update a VM node to an another version. This script will create a temporay VM with a new image, and then switch the OS disk of the VM to update
 
 ```powershell
@@ -205,7 +219,7 @@ Example:
 PS C:\> .\sinequa-for-azure-upgrade-vm-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 ```
 
-#### 3.2 Update a VMSS Node  
+#### 4.2. Update a VMSS Node <a name="update_vmss">    
 Update a VM Scale Set node for indexers or connectors. This script remove an existing VMSS and recreate it with a new image
 
 ```powershell
@@ -225,7 +239,7 @@ Example:
 PS C:\> .\sinequa-for-azure-upgrade-vmss-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 ```
 
-#### 3.2 Update all nodes  
+#### 4.3. Update all nodes <a name="update_all">    
 Update all VM and VMSS of a grid (Resource Group).
 
 ```powershell
