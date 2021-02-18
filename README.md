@@ -3,21 +3,18 @@
 Sinequa For Azure (S4A) is a set of Azure optimizations for reducing cost and improving reliability and performances
 
 #### Table of contents
-1. [Create Your Own Sinequa Image](#ownimage)
-   1.1. [Create the Base Image](#ownimage_base)
-   1.2. [Create a Sinequa Version Image](#ownimage_version)
-   1.3. [Publish an Image in a Shared Image Gallery (Optional)](#ownimage_shared)
-
-2. [Deploy a Sinequa Grid](#deploy)
-
-3. [Add node to a Sinequa Grid](#add)
-   3.1. [Add a VM Node](#add_vm) 
-   3.2. [Add a VMSS Node](#add_vmss) 
-
-4. [Update a Sinequa Grid](#update) 
-   4.1. [Update a VM Node](#update_vm)   
-   4.2. [Update a VM Node](#update_vmss)   
-   4.3. [Update all Nodes](#update_all)   
+1. [Create Your Own Sinequa Image](#ownimage)<br>
+   1.1. [Create the Base Image](#ownimage_base)<br>
+   1.2. [Create a Sinequa Version Image](#ownimage_version)<br>
+   1.3. [Publish an Image in a Shared Image Gallery (Optional)](#ownimage_shared)<br>
+2. [Deploy a Sinequa Grid](#deploy)<br>
+3. [Add node to a Sinequa Grid](#add)<br>
+   3.1. [Add a VM Node](#add_vm)<br>
+   3.2. [Add a VMSS Node](#add_vmss)<br>
+4. [Update a Sinequa Grid](#update)<br> 
+   4.1. [Update a VM Node](#update_vm)<br>  
+   4.2. [Update a VM Node](#update_vmss)<br>
+   4.3. [Update All Nodes](#update_all)<br>
 
 In the script folder, different PowerShell scripts allow you to deploy and manage a Sinequa Grid based on the Official Sinequa Marketplace Image or by your own Sinequa Custom Image
 
@@ -242,7 +239,7 @@ Example:
 PS C:\> .\sinequa-for-azure-upgrade-vmss-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 ```
 
-#### 4.3. Update all nodes <a name="update_all">    
+#### 4.3. Update All Nodes <a name="update_all">    
 Update all VM and VMSS of a grid (Resource Group).
 
 ```powershell
