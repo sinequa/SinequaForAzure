@@ -26,6 +26,7 @@ Depending on where are located Sinequa Images and where you deploy a Grid, diffe
 ## Prerequisites
 In PowerShell run these commands:
 ```powershell
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 Install-Module -Name Az -AllowClobber -Force
 Connect-AzAccount
 ```
