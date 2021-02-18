@@ -23,6 +23,13 @@ Depending on where are located Sinequa Images and where you deploy a Grid, diffe
 - Deploy a Grid in the **same Tenant** but not in the same subscription: **Marketplace** or **Shared Image Gallery** 
 - Deploy a Grid in the **same subscription**: **Marketplace** or **Shared Image Gallery** or **Image**
 
+## Prerequisites
+In PowerShell run these commands:
+```powershell
+Install-Module -Name Az -AllowClobber -Force
+Connect-AzAccount
+```
+
 ## Scripts
 ### 1. Create Your Own Sinequa Image <a name="ownimage">
 
