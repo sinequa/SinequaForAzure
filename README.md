@@ -118,28 +118,129 @@ This script will run default template:
   * 1 Virtual network
   * 1 or 3 Virtual Machines for Primary Nodes
 * mainTemplate.parameters.json: paramaters that should be updated
-  *	license: Sinequa Licence
-  * location
-  * prefix: Prefix of object name. Default: sq
-  * adminUsername: Windows User. Default: sinequa
-  * adminPassword: Windows User Password
-  * vmSize: vmSize of primary nodes. Default: Standard_D4s_v3
-  * vmIndexerSize: vmSize of the indexer Scale Set. Default: Standard_B2s
-  * vmIndexerScaleSetSize: Indexer Scale Set size. Default: 1
-  * vmConnectorSize": vmSize of the connector Scale Set. Default: Standard_B2s
-  * vmConnectorScaleSetSize: Connector Scale Set size. Default: 1
-  * primaryNodeCount: Number of primary nodes (1 or 3)
-  * virtualNetworkName: Virtual Networdk Name
-  * addressPrefixes": Ip Address Range. Default: 10.6.0.0/16
-  * appSubnetName: Subnet App Name for Applications. Default: snet-app
-  * frontSubnetName: Subnet App Name for FrontEnd (Application Gateway). Default: snet-front
-  * appSubnetPrefix: Ip range for App subnet. Default: 10.6.0.0/24
-  * frontSubnetPrefix: Ip range for Frontend subnet. Default: 10.6.1.0/24
-  *	loadBalancerType: application Gateway is accessible from internet. Possible values are: internal/external
-  * certificateBase64: Certificate file (pfx) in base64 format for HTTPS
-  * certificatePassword: Password of the certificate
-  * imageReferenceId: Id of the custom image to use. If empty the marketplace will be used.
-    * Example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+
+| Parameter              | Description |
+| ---------------------- | ----------- |
+| license                | Sinequa Licence |
+| location               | |
+| prefix                 | Prefix of object name. Default: sq |
+| adminUsername 	 | Windows User. Default: sinequa |
+| adminPassword 	 | Windows User Password |
+| vmSize 		 | vmSize of primary nodes. Default: Standard_D4s_v3 |
+| vmIndexerSize 	 | vmSize of the indexer Scale Set. Default: Standard_B2s |
+| vmIndexerScaleSetSize  | Indexer Scale Set size. Default: 1 |
+| vmConnectorSize 	 | vmSize of the connector Scale Set. Default: Standard_B2s |
+| vmConnectorScaleSetSize| Connector Scale Set size. Default: 1 |
+| primaryNodeCount 	 | Number of primary nodes (1 or 3) |
+| virtualNetworkName 	 | Virtual Networdk Name |
+| addressPrefixes 	 | Ip Address Range. Default: 10.6.0.0/16 |
+| appSubnetName 	 | Subnet App Name for Applications. Default: snet-app |
+| frontSubnetName 	 | Subnet App Name for FrontEnd (Application Gateway). Default: snet-front |
+| appSubnetPrefix 	 | Ip range for App subnet. Default: 10.6.0.0/24 |
+| frontSubnetPrefix 	 | Ip range for Frontend subnet. Default: 10.6.1.0/24 |
+| loadBalancerType  	 | Application Gateway is accessible from internet. Possible values are: internal/external |
+| certificateBase64 	 | Certificate file (pfx) in base64 format for HTTPS |
+| certificatePassword    | Password of the certificate |
+| imageReferenceId       | Id of the custom image to use. If empty the marketplace will be used.<br> Example: "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly" |
 		
+### 3. Add node to a Sinequa Grid
+#### 3.1 Add a VM Node  
+Add a VM node which is a regular node.
 
+```powershell
+sinequa-for-azure-add-vm-node-to-grid.ps1
+    [[-tenantId] <String>]    
+    [[-subscriptionId] <String>]    
+    [-user <String>]    
+    [-password <SecureString>]    
+    [[-location] <String>]    
+    [[-resourceGroupName] <String>]    
+    [[-imageReferenceId] <String>]    
+    [-nodeName <String>]    
+```
 
+Example:
+```powershell
+PS C:\> .\sinequa-for-azure-add-vm-node-to-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+```
+
+#### 3.2 Add a VMSS Node  
+Add a VM Scale Set node for indexers or connectors.
+
+```powershell
+sinequa-for-azure-add-vmss-node-to-grid.ps1
+    [[-tenantId] <String>]    
+    [[-subscriptionId] <String>]    
+    [-user <String>]    
+    [-password <SecureString>]    
+    [[-location] <String>]    
+    [[-resourceGroupName] <String>]    
+    [[-imageReferenceId] <String>]    
+    [-nodeName <String>]    
+```
+
+Example:
+```powershell
+PS C:\> .\sinequa-for-azure-add-vmss-node-to-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+```
+
+### 4. Update a Sinequa Grid
+#### 3.1 Update a VM Node  
+Update a VM node to an another version. This script will create a temporay VM with a new image, and then switch the OS disk of the VM to update
+
+```powershell
+sinequa-for-azure-upgrade-vm-node.ps1
+    [[-tenantId] <String>]    
+    [[-subscriptionId] <String>]    
+    [-user <String>]    
+    [-password <SecureString>]    
+    [[-location] <String>]    
+    [[-resourceGroupName] <String>]    
+    [[-imageReferenceId] <String>]    
+    [-nodeName <String>]    
+```
+
+Example:
+```powershell
+PS C:\> .\sinequa-for-azure-upgrade-vm-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+```
+
+#### 3.2 Update a VMSS Node  
+Update a VM Scale Set node for indexers or connectors. This script remove an existing VMSS and recreate it with a new image
+
+```powershell
+sinequa-for-azure-upgrade-vmss-node.ps1
+    [[-tenantId] <String>]    
+    [[-subscriptionId] <String>]    
+    [-user <String>]    
+    [-password <SecureString>]    
+    [[-location] <String>]    
+    [[-resourceGroupName] <String>]    
+    [[-imageReferenceId] <String>]    
+    [-nodeName <String>]    
+```
+
+Example:
+```powershell
+PS C:\> .\sinequa-for-azure-upgrade-vmss-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+```
+
+#### 3.2 Update all nodes  
+Update all VM and VMSS of a grid (Resource Group).
+
+```powershell
+sinequa-for-azure-upgrade-all-nodes.ps1
+    [[-tenantId] <String>]    
+    [[-subscriptionId] <String>]    
+    [-user <String>]    
+    [-password <SecureString>]    
+    [[-location] <String>]    
+    [[-resourceGroupName] <String>]    
+    [[-imageReferenceId] <String>]    
+    [-nodeName <String>]    
+```
+
+Example:
+```powershell
+PS C:\> .\sinequa-for-azure-upgrade-all-nodes.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+```
