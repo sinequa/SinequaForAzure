@@ -56,6 +56,7 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 
 # Variables
 $vmName = "vm-" + $imageName
+$nodeName = "sq-base"
 $bgFile = ".\config.bgi"
 
 # for debugging
@@ -84,7 +85,7 @@ if (!$rg) {
 $image = Get-AzImage -ResourceGroupName $imageResourceGroupName -ImageName $imageName -ErrorAction SilentlyContinue
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
 if (!$vm) {
-    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -osUsername $osUsername -osPassword $osPassword
+    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword
 }
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -vmName $vmName
 
@@ -92,7 +93,7 @@ $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -vmName $vmName
 if (!$image -or $forceProgramsInstall) {
     $bgFileUrl = (SqAzurePSLocalFileToRGStorageAccount -resourceGroup $rg -imageName $imageName -localFile $bgFile)[1]
     $script = ".\sinequa-az-cse-install-programs.ps1"
-    $parameters = @{bgFileUrl = $bgFileUrl}
+    $parameters = @{bgFileUrl =  """$bgFileUrl"""}
     SqAzurePSRunScript -resourceGroupName $rg.ResourceGroupName -vmName $vmName -scriptName $script -parameters $parameters
 }
 

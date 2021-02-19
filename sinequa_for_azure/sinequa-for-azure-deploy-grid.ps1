@@ -21,7 +21,7 @@ param (
     [string]    $templateParameterFile = "./mainTemplate.parameters.json",
 
     [Parameter(HelpMessage = "Resource Group Name")]
-    [string]    $resourceGroupName = "fred_test"
+    [string]    $resourceGroupName = "fred_test2"
 )
 
 
@@ -44,12 +44,15 @@ $terms = Get-AzMarketplaceTerms -Publisher $publisher -Product $product -Name $n
 $null = Set-AzMarketplaceTerms -Publisher $publisher -Product $product -Name $name -Accept -Terms $terms
 
 # Deploy
-$null = New-AzResourceGroupDeployment `
+$deployment = New-AzResourceGroupDeployment `
   -Name "ManualDeploymentViaPS" `
   -ResourceGroupName $resourceGroupName `
   -TemplateFile $templateFile `
   -TemplateParameterFile $templateParameterFile `
   -Verbose
+
+$deployment.Outputs
+$deployment.OutputsString
 
 $EndTime = Get-Date
 Write-Host "Script execution time: $($EndTime - $StartTime)"

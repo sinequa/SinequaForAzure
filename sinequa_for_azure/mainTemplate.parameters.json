@@ -5,9 +5,6 @@
 		"license": {
 			"value": "\r\n  Sinequa License\r\n\r\n--------------------- options --------\r\n  CreationDate                  09-01-2017\r\n  LicenseTitle                  Developer license\r\n  CustomerName                  Sinequa R&D\r\n  Company                       Sinequa\r\n  Author                        Frederic LARDE\r\n  Version                       V10\r\n  NbrDays                       Unlimited in time\r\n  NbrDocs                       Unlimited\r\n  NbrRecords                    Unlimited\r\n  LicenceType                   Purchased\r\n--------------------- key ------------\r\nbf74871b51e2232dbe1f9642c9b2f58ba2d21a448687ff2ba0e13cb3e458965b7afdb72e7577b5075f0af6a131a703df671395f371af92b7e754ff6e1507ab46\r\n5e4cec6c4312ee9c4fdd0aa6a52230cce82cec57b84c4186c2a0e9bf9472a508aaa2cb7a08b384c70d34cbb1a36438e0c3ed0334a8068f1ec98eb3e3e349b5ce\r\n644da48382e6365e4e22294dae32c38863d934ec4a1f32e5d3263c382ab1608f8ba8c600f702180b2f26fbebe1c7ae6501189ac5cfb4b6c706655d430208a199\r\n--------------------------------------\r\n"
 		},
-		"location": {
-			"value": "westeurope"
-		},
 		"prefix": {
 			"value": "sq"
 		},
@@ -33,7 +30,7 @@
 			"value": 1
 		},
 		"primaryNodeCount": {
-			"value": 1
+			"value": 3
 		},
 		"virtualNetworkName": {
 			"value": "vnet-sq"
@@ -65,8 +62,7 @@
 			"value": "sinequa"
 		},
 		"imageReferenceId":{
-			"value": ""
-			//"value": "/subscriptions/05cdfb61-fbbb-43a9-b505-cd1838fff60e/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+			"value": "/subscriptions/05cdfb61-fbbb-43a9-b505-cd1838fff60e/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 		}    
 	}
 }

@@ -587,6 +587,7 @@ function SqAzurePSGetTagsFromGrid($vms, $vmsss) {
     $sinequaPrimaryNodes =""
     $sinequaGrid = ""
     $vmCount = 0
+    $vmssCount = 0
     if ($vms) {
         foreach ($vm in $vms) {
             $kv = $vm.Tags["Sinequa_KeyVault"]

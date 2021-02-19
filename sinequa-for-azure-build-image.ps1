@@ -70,6 +70,7 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 # Variables
 $vmName = "vm-sq-" + $version.Replace(".","-")
 $vmName = $vmName.Substring(0,14)
+$nodeName = "sq-version"
 $startupFile = ".\sinequa-az-startup.ps1"
 
 # Azure Login
@@ -96,7 +97,7 @@ if (!$rg) {
 $baseImage = Get-AzImage -ResourceGroupName $imageResourceGroupName -ImageName $baseImageName
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
 if (!$vm) {
-    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -osUsername $osUsername -osPassword $osPassword
+    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword
 }
 
 #If Local File, copy it into the storage account
