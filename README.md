@@ -53,7 +53,8 @@ sinequa-for-azure-build-base-image.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-build-base-image.ps1 -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
+# Create 'sinequa-base-image' in the 'MyImage' resource group (sub-snqa-sandbox subscription)
+PS C:\> .\sinequa-for-azure-build-base-image.ps1 -subscriptionId 8a9fc7e2-ac08-4009-8498-2026cb37bb25 -imageResourceGroupName MyImages -imageName sinequa-base-image
 ```
 
 This script will run these "Custom Sript Extensions":
@@ -83,7 +84,8 @@ sinequa-for-azure-build-image.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-build-image.ps1 -version 11.5.1.54 -tempResourceGroupName temp-sinequa-image-11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -localfile c:\builds\11.5.1.54\sinequa.11.zip -subscriptionId 00000000-0000-0000-0000-000000000000
+# Create 'sinequa-nightly-11.5.1.54' in the 'MyImage' resource group (sub-snqa-sandbox subscription) from the 'sinequa-base-image' base image with a local zip file
+PS C:\> .\sinequa-for-azure-build-image.ps1 -subscriptionId 8a9fc7e2-ac08-4009-8498-2026cb37bb25 -baseImageName sinequa-base-image -version 11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -imageResourceGroupName MyImages -localfile c:\builds\11.5.1.54\sinequa.11.zip
 ```
 
 #### 1.3. Publish an Image in a Shared Image Gallery (Optional) <a name="ownimage_shared">
@@ -105,7 +107,8 @@ sinequa-for-azure-image-to-gallery.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-image-to-gallery.ps1 -version 11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -subscriptionId 00000000-0000-0000-0000-000000000000
+# Publish the 'sinequa-nightly-11.5.1.54' into the 'MySinequaForAzure' Shared Image Gallery ('MySinequaNightly' Image Definition)
+PS C:\> .\sinequa-for-azure-image-to-gallery.ps1 -subscriptionId 8a9fc7e2-ac08-4009-8498-2026cb37bb25 -imageName sinequa-nightly-11.5.1.54 -version 11.5.1.54 -galleryName MySinequaForAzure -imageDefinitionName MySinequaNightly
 ```
 
 ### 2. Deploy a Sinequa Grid <a name="deploy">
@@ -126,7 +129,8 @@ sinequa-for-azure-deploy-grid.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-deploy-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid
+# Deply a complete grid in the 'MySQGrid' resource group
+PS C:\> .\sinequa-for-azure-deploy-grid.ps1 -subscriptionId 8a9fc7e2-ac08-4009-8498-2026cb37bb25 -resourceGroupName MySQGrid
 ```
 This script will run default template:
 * mainTemplate.json, ARM template which can instantiate a complete grid with:
@@ -183,7 +187,8 @@ sinequa-for-azure-add-vm-node-to-grid.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-add-vm-node-to-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+# Adds a VM node in the 'MySQGrid' resource group
+PS C:\> .\sinequa-for-azure-add-vm-node-to-grid.ps1 -subscriptionId 8a9fc7e2-ac08-4009-8498-2026cb37bb25 -resourceGroupName MySQGrid -imageReferenceId "/subscriptions/8a9fc7e2-ac08-4009-8498-2026cb37bb25/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/MySinequaForAzure/images/MySinequaNightly"
 ```
 
 #### 3.2. Add a VMSS Node <a name="add_vmss"> 
@@ -203,7 +208,8 @@ sinequa-for-azure-add-vmss-node-to-grid.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-add-vmss-node-to-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+# Adds a VMSS node in the 'MySQGrid' resource group
+PS C:\> .\sinequa-for-azure-add-vmss-node-to-grid.ps1  -subscriptionId 8a9fc7e2-ac08-4009-8498-2026cb37bb25 -resourceGroupName MySQGrid -imageReferenceId "/subscriptions/8a9fc7e2-ac08-4009-8498-2026cb37bb25/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/MySinequaForAzure/images/MySinequaNightly"
 ```
 
 ### 4. Update a Sinequa Grid <a name="update"> 
@@ -219,12 +225,13 @@ sinequa-for-azure-upgrade-vm-node.ps1
     [[-location] <String>]    
     [[-resourceGroupName] <String>]    
     [[-imageReferenceId] <String>]    
-    [-nodeName <String>]    
+    [[-vmName] <String>]    
 ```
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-upgrade-vm-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+# Update the "vm-sq-7" VM of the 'MySQGrid' resource group with the latest version of 'MySinequaNightly'
+PS C:\> .\sinequa-for-azure-upgrade-vm-node.ps1 -subscriptionId 8a9fc7e2-ac08-4009-8498-2026cb37bb25 -resourceGroupName MySQGrid -imageReferenceId "/subscriptions/8a9fc7e2-ac08-4009-8498-2026cb37bb25/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/MySinequaForAzure/images/MySinequaNightly" -vmName vm-sq-7
 ```
 
 #### 4.2. Update a VMSS Node <a name="update_vmss">    
@@ -239,12 +246,13 @@ sinequa-for-azure-upgrade-vmss-node.ps1
     [[-location] <String>]    
     [[-resourceGroupName] <String>]    
     [[-imageReferenceId] <String>]    
-    [-nodeName <String>]    
+    [-vmssName <String>]    
 ```
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-upgrade-vmss-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
+Update the "vmss-sq-indexer" VMSS of the 'MySQGrid' resource group with the latest version of 'MySinequaNightly'
+PS C:\> .\sinequa-for-azure-upgrade-vmss-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly" -vmssName vmss-sq-connector
 ```
 
 #### 4.3. Update All Nodes <a name="update_all">    
@@ -259,10 +267,10 @@ sinequa-for-azure-upgrade-all-nodes.ps1
     [[-location] <String>]    
     [[-resourceGroupName] <String>]    
     [[-imageReferenceId] <String>]    
-    [-nodeName <String>]    
 ```
 
 Example:
 ```powershell
+Update all VM and VMSS of the 'MySQGrid' resource group with the latest version of 'MySinequaNightly'
 PS C:\> .\sinequa-for-azure-upgrade-all-nodes.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 ```
