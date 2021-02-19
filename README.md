@@ -251,7 +251,7 @@ sinequa-for-azure-upgrade-vmss-node.ps1
 
 Example:
 ```powershell
-Update the "vmss-sq-indexer" VMSS of the 'MySQGrid' resource group with the latest version of 'MySinequaNightly'
+# Update the "vmss-sq-indexer" VMSS of the 'MySQGrid' resource group with the latest version of 'MySinequaNightly'
 PS C:\> .\sinequa-for-azure-upgrade-vmss-node.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly" -vmssName vmss-sq-connector
 ```
 
@@ -271,6 +271,6 @@ sinequa-for-azure-upgrade-all-nodes.ps1
 
 Example:
 ```powershell
-Update all VM and VMSS of the 'MySQGrid' resource group with the latest version of 'MySinequaNightly'
+# Update all VM and VMSS of the 'MySQGrid' resource group with the latest version of 'MySinequaNightly'
 PS C:\> .\sinequa-for-azure-upgrade-all-nodes.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -imageReferenceId "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/Sinequa/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 ```
