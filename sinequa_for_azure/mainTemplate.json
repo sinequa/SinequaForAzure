@@ -223,12 +223,12 @@
         "frontSubnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('frontsubnetName'))]",
         "networkInterfaceName": "[concat('nic-',parameters('prefix'))]",
         "publicIpAddressName": "[concat('pip-',parameters('prefix'))]",
-        "publicIpAddressType": "Dynamic",
+        "publicIpAddressType": "Static",
         "patchMode": "AutomaticByOS",
         "dataDiskName": "[concat('datadisk-', parameters('prefix'))]",
         "osDiskName": "[concat('osdisk-', parameters('prefix'))]",
         "dataDiskSize": 100,
-        "publicIpAddressSku": "Basic",
+        "publicIpAddressSku": "Standard",
         "primaryNodeVmNamePrefix" : "[concat('vm-', parameters('prefix'))]",
         "primaryNodeOsPrefix" : "node", // length <= 12
         "keyVaultName": "[substring(concat('kv-', parameters('prefix'), '-', replace(guid(resourceGroup().id), '-', '')), 0, 24)]",
@@ -278,7 +278,41 @@
                     "destinationAddressPrefix": "*",
                     "destinationPortRange": "3389"
                 }
-            }
+            },
+            {
+                "name": "Appgatewayskuv2",
+                "properties": {
+                    "protocol": "*",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "65200-65535",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 110,
+                    "direction": "Inbound",
+                    "sourcePortRanges": [],
+                    "destinationPortRanges": [],
+                    "sourceAddressPrefixes": [],
+                    "destinationAddressPrefixes": []
+                }
+            },
+            {
+                "name": "HTTPS_443",
+                "properties": {
+                    "protocol": "TCP",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "443",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 120,
+                    "direction": "Inbound",
+                    "sourcePortRanges": [],
+                    "destinationPortRanges": [],
+                    "sourceAddressPrefixes": [],
+                    "destinationAddressPrefixes": []
+                }
+            }            
         ],
         "appNetworkInterfaceConfigurations": [
             {
@@ -1135,8 +1169,8 @@
             ],
             "properties": {
                 "sku": {
-                    "name": "Standard_Medium",
-                    "tier": "Standard",
+                    "name": "Standard_v2",
+                    "tier": "Standard_v2",
                     "capacity": 2
                 },
                 "gatewayIPConfigurations": [
@@ -1177,8 +1211,9 @@
                         "properties": {
                             "Port": 80,
                             "Protocol": "Http",
-                            "cookieBasedAffinity": "Disabled",
-                            "requestTimeout": 20
+                            "cookieBasedAffinity": "Enabled",
+                            "requestTimeout": 20,
+                            "affinityCookieName": "SQApplicationGatewayAffinity"
                         }
                     }
                 ],
@@ -1239,7 +1274,10 @@
             "apiVersion": "2019-11-01",
             "location": "[resourceGroup().location]",
             "properties": {
-                "publicIPAllocationMethod": "Dynamic"
+                "publicIPAllocationMethod": "Static"
+            },
+            "sku": {
+                "name": "[variables('publicIpAddressSku')]"
             }
         }       
     ],
