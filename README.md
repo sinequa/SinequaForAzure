@@ -58,7 +58,22 @@ PS C:\> .\sinequa-for-azure-build-base-image.ps1 -subscriptionId 8a9fc7e2-ac08-4
 ```
 
 This script will run these "Custom Sript Extensions":
-* sinequa-az-cse-install-programs.ps1, that could be customized
+* sinequa-az-cse-install-programs.ps1, that could be customized for adding programms
+	ex
+```powershell
+# Google Chrome
+Invoke-WebRequest "http://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile "$tempDrive\chrome_installer.exe"
+Start-Process -FilePath "chrome_installer.exe" -Args "/silent /install" -Verb RunAs -Wait
+
+# NotePadd++
+Invoke-WebRequest "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.9/npp.7.9.Installer.exe" -OutFile "$tempDrive\npp.7.9.Installer.exe"
+Start-Process -FilePath "npp.7.9.Installer.exe" -Args "/S" -Wait -PassThru
+
+#Visual Code
+Invoke-WebRequest "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64" -OutFile "$tempDrive\VSCodeSetup.exe"
+Start-Process -FilePath "VSCodeSetup.exe" -Args "/VERYSILENT /NORESTART /MERGETASKS=!runcode" -Wait -PassThru
+
+```	
 * sinequa-az-cse-windows-update.ps1: Apply Windows Updates
 
 #### 1.2. Create a Sinequa Version Image <a name="ownimage_version">
