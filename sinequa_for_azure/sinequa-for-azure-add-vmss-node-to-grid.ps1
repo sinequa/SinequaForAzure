@@ -23,16 +23,26 @@ param (
     [SecureString]    $password = ("$env:AZURE_BUILD_PWD" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
     [Parameter(HelpMessage = "Azure Location")]
-    [string]    $location = "westeurope",
+    [string]    $location = "francecentral",
 
     [Parameter(HelpMessage = "Resource Group Name of the Sinequa GRID")]
-    [string]    $resourceGroupName = "fred_test2",    
+    [string]    $resourceGroupName,    
     
     [Parameter(HelpMessage = "Sinequa Image Reference")]
-    [string]    $imageReferenceId = "/subscriptions/05cdfb61-fbbb-43a9-b505-cd1838fff60e/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/5.1.51",    
+    [string]    $imageReferenceId = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly",    
 
     [Parameter(HelpMessage = "Node Name")]
-    [string]    $nodeName
+    [string]    $nodeName = "",
+
+    [Parameter(HelpMessage = "Engine Name")]
+    [string]    $engineName = "",
+
+    [Parameter(HelpMessage = "Indexer Name")]
+    [string]    $indexerName = "",
+
+    [Parameter(HelpMessage = "WebApp Name")]
+    [string]    $webAppName = ""
+
 )
 
 
@@ -69,23 +79,35 @@ $rg = Get-AzResourceGroup -Name $resourceGroupName -Location $location
 
 # Get existing VMs
 WriteLog "Get existing VMs from the '$($rg.ResourceGroupName)' Resource Group"
-[array]$vms = Get-AzVM -ResourceGroupName $rg.ResourceGroupName | Where-Object {$_.Tags['Sinequa_Grid']}
+[array]$vms = Get-AzVmss -ResourceGroupName $rg.ResourceGroupName | Where-Object {$_.Tags['Sinequa_Grid']}
 if (!$vms) {
     WriteError "No Sinequa Grid or VM in the $($rg.ResourceGroupName) resource group"
     Exit 1
 }
-$vmCount = $vms.Length
+WriteLog "Get existing VMsss from the '$($rg.ResourceGroupName)' Resource Group"
+[array]$vmsss = Get-AzVmss -ResourceGroupName $rg.ResourceGroupName | Where-Object {$_.Tags['Sinequa_Grid']}
+$vmssCount = 0
+if ($vmsss) {
+    $vmssCount = $vmsss.Length
+} 
 
 
 # Get Tags
 $tags = SqAzurePSGetTagsFromGrid -vms $vms
 $sinequaGrid = $tags.Sinequa_Grid
 $sinequaKeyVault = $tags.Sinequa_KeyVault
-if ($nodeName.Length -eq 0) {$nodeName = $vmCount +1}
-$vmName = "vm-$sinequaGrid-$($nodeName)" 
-$tags.Add("Sinequa_NodeName", $vmName)
+if ($nodeName.Length -eq 0) {$nodeName = $vmssCount +1}
+$vmssName = "vmss-$sinequaGrid-$($nodeName)" 
+$hostName = "s$nodeName"
+$tags.Add("Sinequa_NodeName", $vmssName)
 $tags.Add("Sinequa_Role", "Regular Node")
-WriteLog " ==> Add '$vmName' as a $($tags.Sinequa_Role) in the Sinequa Grid"
+$tags.Add("Sinequa_AutoDisk", "auto")
+$tags.Add("Sinequa_Path", "F:\sinequa")
+if ($engineName.length -gt 0) { $tags.Add("Sinequa_Engine", $engineName) }
+if ($indexerName.length -gt 0) { $tags.Add("Sinequa_Indexer", $engineName) }
+if ($webAppName.length -gt 0) { $tags.Add("Sinequa_WebApp", $webAppName) }
+
+WriteLog " ==> Add '$vmssName' as a $($tags.Sinequa_Role) in the Sinequa Grid"
 
 # Get existing Storage Account
 WriteLog "Get existing Storage Account from the '$sinequaGrid' Sinequa Grid"
@@ -99,11 +121,23 @@ $ngs = $vmNic.NetworkSecurityGroup
 $subnet = $vmNic.IpConfigurations[0].Subnet
 
 # Get Keyvaul for os user/password
+# Get Keyvaul for os user/password
 $userId = (Get-AzContext).Account.Id
+$roleDefinitionName = "Key Vault Secrets User"
 WriteLog "Read secrets in $sinequaKeyVault"
-WriteLog "Requires the Key 'Vault Secrets User' role on $sinequaKeyVault for $userId"
+WriteLog "Requires the Key '$roleDefinitionName' role on $($rg.ResourceGroupName) for $userId"
+$role = Get-AzRoleAssignment -ResourceGroupName $rg.ResourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName
+if (-Not $role) {
+    WriteLog "Add transient '$roleDefinitionName' role on $($rg.ResourceGroupName) for $userId"
+    $null = New-AzRoleAssignment -ResourceGroupName $rg.ResourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName
+    Start-Sleep -s 15
+}
 $osUsername = SqAzurePSGetSecret -keyVaultName $sinequaKeyVault -secretName "os-username"
 $osPassword = SqAzurePSGetSecret -keyVaultName $sinequaKeyVault -secretName "os-password" | ConvertTo-SecureString -Force -AsPlainText
+if (-Not $role) {
+    WriteLog "Remove transient '$roleDefinitionName' role on $($rg.ResourceGroupName) for $userId"
+    $null = Remove-AzRoleAssignment -ResourceGroupName $rg.ResourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName    
+}
 
 # Get Image
 $image = SqAzGetImageByRefId -referenceId $imageReferenceId -context $imageContext
@@ -112,35 +146,28 @@ if (!$image) {
 }
  
  ## Create the virtual machine
-SqAzurePSCreateVMforNode `
+SqAzurePSCreateVMSSforNode `
  -resourceGroup $rg `
  -storageAccount $sa `
- -createPip $true `
- -prefix $sinequaGrid `
  -image $image `
- -nodeName $nodeName `
- -vmName $vmName `
+ -hostName $hostName `
+ -vmssName $vmssName `
  -nsg $ngs `
  -subnet $subnet `
  -osUsername $osUsername `
  -osPassword $osPassword `
  -tags $tags `
- -vmSize "Standard_D8s_v3" `
- -dataDiskSizeInGB 1024
+ -vmSize "Standard_D8s_v3" 
 
-$vm = Get-AzVm -Name $vmName -ResourceGroupName $rg.ResourceGroupName
+$vmss = Get-AzVmss -Name $vmssName -ResourceGroupName $rg.ResourceGroupName
 
-# Run startup script
-WriteLog "Run '$startupScript' script"
-SqAzurePSRunScript -ResourceGroupName $rg.ResourceGroupName -VMName $vmName -scriptName $startupScript
-   
 # Add IAM roles 
 WriteLog "Add 'Reader' role on '$rg.ResourceGroupName'"
-$null = New-AzRoleAssignment -ObjectId $vm.Identity.PrincipalID -RoleDefinitionName "Reader" -ResourceGroupName $rg.ResourceGroupName
+$null = New-AzRoleAssignment -ObjectId $vmss.Identity.PrincipalID -RoleDefinitionName "Reader" -ResourceGroupName $rg.ResourceGroupName
 WriteLog "Add 'Contributor' role on '$($sa.StorageAccountName)'"
-$null = New-AzRoleAssignment -ObjectId $vm.Identity.PrincipalID -RoleDefinitionName "Contributor" -Scope  "$($rg.ResourceId)/providers/Microsoft.Storage/storageAccounts/$($sa.StorageAccountName)"
+$null = New-AzRoleAssignment -ObjectId $vmss.Identity.PrincipalID -RoleDefinitionName "Contributor" -ResourceGroupName $rg.ResourceGroupName
 WriteLog "Add 'Key Vault Secrets Officer' role on '$sinequaKeyVault'"
-$null = New-AzRoleAssignment -ObjectId $vm.Identity.PrincipalID -RoleDefinitionName "Key Vault Secrets Officer" -Scope  "$($rg.ResourceId)/providers/Microsoft.KeyVault/vaults/$($sinequaKeyVault)"
+$null = New-AzRoleAssignment -ObjectId $vmss.Identity.PrincipalID -RoleDefinitionName "Key Vault Secrets Officer" -ResourceGroupName $rg.ResourceGroupName
 	
 $EndTime = Get-Date
 WriteLog "Script execution time: $($EndTime - $StartTime)"

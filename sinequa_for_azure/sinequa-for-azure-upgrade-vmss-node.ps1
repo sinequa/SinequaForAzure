@@ -23,16 +23,16 @@ param (
     [SecureString]    $password = ("$env:AZURE_BUILD_PWD" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
     [Parameter(HelpMessage = "Azure Location")]
-    [string]    $location = "westeurope",
+    [string]    $location = "francecentral",
 
     [Parameter(HelpMessage = "Resource Group Name of the Sinequa GRID")]
-    [string]    $resourceGroupName = "fred_test2",    
+    [string]    $resourceGroupName,    
     
     [Parameter(HelpMessage = "VmSS Name to Upgrade")]
     [string]    $vmssName = "vmss-sq-connector",    
 
     [Parameter(HelpMessage = "Sinequa Image Reference")]
-    [string]    $imageReferenceId = "/subscriptions/05cdfb61-fbbb-43a9-b505-cd1838fff60e/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"    
+    [string]    $imageReferenceId = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"    
 
 )
 
@@ -73,11 +73,24 @@ $sinequaKeyVault = $vmss.Tags.Sinequa_KeyVault
 
 
 # Get KeyVault for os user/password
+# Get Keyvaul for os user/password
 $userId = (Get-AzContext).Account.Id
+$roleDefinitionName = "Key Vault Secrets Officer"
 WriteLog "Read secrets in $sinequaKeyVault"
-WriteLog "Requires the Key 'Vault Secrets User' role on $sinequaKeyVault for $userId"
+WriteLog "Requires the Key '$roleDefinitionName' role on $($resourceGroupName) for $userId"
+$role = Get-AzRoleAssignment -ResourceGroupName $resourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName
+if (-Not $role) {
+    WriteLog "Add transient '$roleDefinitionName' role on $($resourceGroupName) for $userId"
+    $null = New-AzRoleAssignment -ResourceGroupName $resourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName
+    Start-Sleep -s 15
+}
+$null = Get-AzRoleAssignment -ResourceGroupName $resourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName
 $osUsername = SqAzurePSGetSecret -keyVaultName $sinequaKeyVault -secretName "os-username"
 $osPassword = SqAzurePSGetSecret -keyVaultName $sinequaKeyVault -secretName "os-password" | ConvertTo-SecureString -Force -AsPlainText
+if (-Not $role) {
+    WriteLog "Remove transient '$roleDefinitionName' role on $($resourceGroupName) for $userId"
+    $null = Remove-AzRoleAssignment -ResourceGroupName $resourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName    
+}
 
 WriteLog "Remove VM ScaleSet: $vmssName"
 $null = Remove-AzVmss -ResourceGroupName $resourceGroupName -VMScaleSetName $vmssName -Force

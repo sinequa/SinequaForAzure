@@ -15,7 +15,7 @@ param (
     [string]    $tenantId = "465ec3fd-500e-4e38-a426-5ca3086440bd",
     
     [Parameter(HelpMessage = "Azure Subscription Id")]
-    [string]    $subscriptionId = "05cdfb61-fbbb-43a9-b505-cd1838fff60e",
+    [string]    $subscriptionId = "$env:AZURE_PRODUCT_SUBSCRIPTION",
 
     [Parameter(HelpMessage = "Azure User Login")]
     [string]    $user = "$env:AZURE_BUILD_USER",
@@ -24,7 +24,7 @@ param (
     [SecureString]    $password = ("$env:AZURE_BUILD_PWD" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
     [Parameter(HelpMessage = "Azure Location")]
-    [string]    $location = "westeurope",
+    [string]    $location = "francecentral",
 
     [Parameter(HelpMessage = "Image Resource Group Name")]
     [string]    $imageResourceGroupName = "Product",    

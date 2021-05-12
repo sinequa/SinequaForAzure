@@ -17,6 +17,9 @@ param (
     [Parameter(HelpMessage = "ARM Template")]
     [string]    $templateFile = "./mainTemplate.json",
 
+    [Parameter(HelpMessage = "ARM Template")]
+    [string]    $templateUri = "https://sinequadownload.blob.core.windows.net/s4a/ARM/mainTemplate.json",    
+
     [Parameter(HelpMessage = "ARM Template Parameters")]
     [string]    $templateParameterFile = "./mainTemplate.parameters.json",
 
@@ -47,7 +50,7 @@ $null = Set-AzMarketplaceTerms -Publisher $publisher -Product $product -Name $na
 $deployment = New-AzResourceGroupDeployment `
   -Name "ManualDeploymentViaPS" `
   -ResourceGroupName $resourceGroupName `
-  -TemplateFile $templateFile `
+  -TemplateUri $templateUri `
   -TemplateParameterFile $templateParameterFile `
   -Verbose
 

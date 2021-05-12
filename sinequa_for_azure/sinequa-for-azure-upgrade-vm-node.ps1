@@ -23,16 +23,16 @@ param (
     [SecureString]    $password = ("$env:AZURE_BUILD_PWD" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
     [Parameter(HelpMessage = "Azure Location")]
-    [string]    $location = "westeurope",
+    [string]    $location = "francecentral",
 
     [Parameter(HelpMessage = "Resource Group Name of the Sinequa GRID")]
-    [string]    $resourceGroupName = "fred_test2",    
+    [string]    $resourceGroupName,    
     
     [Parameter(HelpMessage = "Vm Name to Upgrade")]
-    [string]    $vmName = "vm-sq-7",    
+    [string]    $vmName,    
 
     [Parameter(HelpMessage = "Sinequa Image Reference")]
-    [string]    $imageReferenceId = "/subscriptions/05cdfb61-fbbb-43a9-b505-cd1838fff60e/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/5.1.50"    
+    [string]    $imageReferenceId = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"    
 
 )
 

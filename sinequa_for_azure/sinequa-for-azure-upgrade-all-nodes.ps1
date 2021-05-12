@@ -11,10 +11,10 @@
 param (
 
     [Parameter(HelpMessage = "Azure Tenant Id")]
-    [string]    $tenantId = "465ec3fd-500e-4e38-a426-5ca3086440bd",
+    [string]    $tenantId = "8c2243fe-2eba-45da-bf61-0ceb475dcde8",
     
     [Parameter(HelpMessage = "Azure Subscription Id")]
-    [string]    $subscriptionId = "8a9fc7e2-ac08-4009-8498-2026cb37bb25", #"05cdfb61-fbbb-43a9-b505-cd1838fff60e",
+    [string]    $subscriptionId = "8c2243fe-2eba-45da-bf61-0ceb475dcde8", #"8a9fc7e2-ac08-4009-8498-2026cb37bb25", #"05cdfb61-fbbb-43a9-b505-cd1838fff60e",
 
     [Parameter(HelpMessage = "Azure User Login")]
     [string]    $user = "$env:AZURE_BUILD_USER",
@@ -23,13 +23,13 @@ param (
     [SecureString]    $password = ("$env:AZURE_BUILD_PWD" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
     [Parameter(HelpMessage = "Azure Location")]
-    [string]    $location = "westeurope",
+    [string]    $location = "francecentral",
 
     [Parameter(HelpMessage = "Resource Group Name of the Sinequa GRID")]
-    [string]    $resourceGroupName = "fred_test2",    
+    [string]    $resourceGroupName = "rg-www-docsearch",    
     
     [Parameter(HelpMessage = "Sinequa Image Reference")]
-    [string]    $imageReferenceId = "/subscriptions/05cdfb61-fbbb-43a9-b505-cd1838fff60e/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/5.1.54"
+    [string]    $imageReferenceId = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 )
 
 
@@ -86,14 +86,14 @@ $scriptBlocSqAzurePSUpdateVM = {
     param ($tenantId, $subscriptionId, $user, [secureString] $password, $resourceGroupName, $location, $vmName, $imageReferenceId)
       
         # Update a VM
-        . .\sinequa-for-azure-upgrade-vm-node.ps1 -resourceGroupName $resourceGroupName -location $location -vmName $vmName -imageReferenceId $imageReferenceId
+        . .\sinequa-for-azure-upgrade-vm-node.ps1 -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -location $location -vmName $vmName -imageReferenceId $imageReferenceId
     }
 
 $scriptBlocSqAzurePSUpdateVMSS = {
     param ($tenantId, $subscriptionId, $user, [secureString] $password, $resourceGroupName, $location, $vmssName, $imageReferenceId)
         
         # Update a VM
-        . .\sinequa-for-azure-upgrade-vmss-node.ps1 -resourceGroupName $resourceGroupName -location $location -vmssName $vmssName -imageReferenceId $imageReferenceId
+        . .\sinequa-for-azure-upgrade-vmss-node.ps1 -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -location $location -vmssName $vmssName -imageReferenceId $imageReferenceId
     }
 
 # Update VMs
@@ -102,13 +102,11 @@ foreach ($vm in $vms) {
     $jobName = "Update-$($vm.Name)"   
     $vmName = $vm.Name
     $jobs += Start-Job -Name $jobName -ScriptBlock $scriptBlocSqAzurePSUpdateVM -ArgumentList @($tenantId,$subscriptionId, $user, $password, $resourceGroupName, $location, $vmName, $imageReferenceId)    
-    #. .\sinequa-for-azure-upgrade-vm-node.ps1 -resourceGroupName $resourceGroupName -location $location -vmName $vmName -imageReferenceId $imageReferenceId
 }
 foreach ($vmss in $vmsss) {
     $jobName = "Update-$($vmss.Name)"   
     $vmssName = $vmss.Name
     $jobs += Start-Job -Name $jobName -ScriptBlock $scriptBlocSqAzurePSUpdateVMSS -ArgumentList @($tenantId,$subscriptionId, $user, $password, $resourceGroupName, $location, $vmssName, $imageReferenceId)    
-    #. .\sinequa-for-azure-upgrade-vm-node.ps1 -resourceGroupName $resourceGroupName -location $location -vmName $vmName -imageReferenceId $imageReferenceId
 }
 do {
     $finished = $true

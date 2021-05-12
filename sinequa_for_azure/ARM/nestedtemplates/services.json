@@ -1,0 +1,225 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },   
+        "kv_name": {
+            "type": "string"
+        },      
+        "st_name": {
+            "type" : "string"
+        },
+        "container_name": {
+            "type" : "string"
+        },
+        "admin_username": {    
+            "type" :"string"
+        },
+        "admin_password": {
+            "type": "SecureString"
+        },
+        "license": {
+            "type": "string"
+        },
+        "blob_sinequa_primary_nodes": {
+            "type": "string"
+        },
+        "blob_sinequa_beta": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "blob_sinequa_keyvault": {
+            "type":"string"
+        },
+        "blob_sinequa_queuecluster": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {}
+        }
+    },
+    "variables": {
+        "st_container_name": "[concat(parameters('st_name'), '/default/', parameters('container_name'))]"
+    },
+    "resources": [      
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "name": "[parameters('kv_name')]",
+            "apiVersion": "2019-09-01",
+            "tags": "[parameters('tags')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "enabledForDeployment": true,
+                "enabledForTemplateDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enableRbacAuthorization": true,
+                "tenantId": "[subscription().tenantId]",
+                "sku": {
+                    "name": "Standard",
+                    "family": "A"
+                },
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 90,
+                "networkAcls": {
+                    "value": {
+                        "defaultAction": "allow",
+                        "bypass": "AzureServices"
+                    }
+                }
+            }           
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('kv_name'), '/', 'os-username')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('kv_name'))]"
+            ],
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "value": "[parameters('admin_username')]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('kv_name'), '/', 'os-password')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('kv_name'))]"
+            ],
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "value": "[parameters('admin_password')]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('kv_name'), '/', 'sinequa-license')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('kv_name'))]"
+            ],
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "value": "[parameters('license')]"
+            }
+        }, 
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('st_name')]",
+            "tags": "[parameters('tags')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Hot"
+            }          
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "name": "[variables('st_container_name')]",
+            "apiVersion": "2021-02-01",
+            "dependsOn": [
+                "[parameters('st_name')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2020-10-01",
+            "name": "runPowerShellInline",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[parameters('st_name')]"
+            ],
+            "kind": "AzurePowerShell", 
+            "properties": {
+                "forceUpdateTag": "1",
+                "containerSettings": {
+                    "containerGroupName": "deploymentScripts"
+                },
+                "storageAccountSettings": {
+                    "storageAccountName": "[parameters('st_name')]",
+                    "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('st_name')), '2019-06-01').keys[0].value]"
+                },
+                "azPowerShellVersion": "3.0",
+                "environmentVariables": [
+                    {
+                        "name": "blob_sinequa_primary_nodes",
+                        "value": "[parameters('blob_sinequa_primary_nodes')]"
+                    },
+                    {
+                        "name": "blob_sinequa_beta",
+                        "secureValue": "[parameters('blob_sinequa_beta')]"
+                    },
+                    {
+                        "name": "blob_sinequa_queuecluster",
+                        "secureValue": "[parameters('blob_sinequa_queuecluster')]"
+                    },
+                    {
+                        "name": "blob_sinequa_keyvault",
+                        "secureValue": "[parameters('blob_sinequa_keyvault')]"
+                    },                                        
+                    {
+                        "name": "containerName",
+                        "value": "[parameters('container_name')]"
+                    },
+                    {
+                        "name": "storageAccountName",
+                        "value": "[parameters('st_name')]"
+                    },
+                    {
+                        "name": "storageAccountKey",
+                        "secureValue": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('st_name')), '2019-06-01').keys[0].value]"
+                    }            
+                ],
+                "scriptContent": "
+                    $context = New-AzStorageContext -StorageAccountName ${env:storageAccountName} -StorageAccountKey ${env:storageAccountKey}
+                    $tempFile = '.\\file.txt'
+                    
+                    Set-Content -Path $tempFile -Value ${env:blob_sinequa_primary_nodes}
+                    $key = \"var/sinequa-primary-nodes\"
+                    Set-AzStorageBlobContent -File $tempFile -Blob $key -Container ${env:containerName} -Context $context -Force 
+
+                    Set-Content -Path $tempFile -Value ${env:blob_sinequa_beta}
+                    $key = \"var/sinequa-beta\"
+                    Set-AzStorageBlobContent -File $tempFile -Blob $key -Container ${env:containerName} -Context $context -Force 
+
+                    Set-Content -Path $tempFile -Value ${env:blob_sinequa_queuecluster}
+                    $key = \"var/sinequa-queuecluster\"
+                    Set-AzStorageBlobContent -File $tempFile -Blob $key -Container ${env:containerName} -Context $context -Force 
+
+                    Set-Content -Path $tempFile -Value ${env:blob_sinequa_keyvault}
+                    $key = \"var/sinequa-keyvault\"
+                    Set-AzStorageBlobContent -File $tempFile -Blob $key -Container ${env:containerName} -Context $context -Force 
+
+                    $DeploymentScriptOutputs = @{}
+                    $DeploymentScriptOutputs['text'] = ${env:Sinequa_KeyVault}
+                ", 
+                "timeout": "PT30M",
+                "cleanupPreference": "OnExpiration",
+                "retentionInterval": "P1D"
+            }
+        }        
+    ],
+    
+    "outputs": {
+        "st": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('st_name')))]"
+        },
+        "kv": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('kv_name')))]"
+        },
+        "container": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.Storage/storageAccounts/blobServices/containers',  parameters('st_name'), 'default', parameters('container_name')))]"
+        }
+    }
+}

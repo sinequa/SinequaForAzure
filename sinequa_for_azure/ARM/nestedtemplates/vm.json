@@ -1,0 +1,236 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },   
+        "vm_name": {
+            "type":"string"
+        },
+        "vm_size": {
+            "type":"string",
+            "defaultValue": "Standard_E8s_v3"
+        },
+        "computer_name": {
+            "type":"string"
+        },
+        "subnet_id": {
+            "type":"string"
+        },
+        "image_id": {
+            "type":"string",
+            "defaultValue": ""
+        },
+        "os_disk_type": {
+            "type":"string",
+            "defaultValue": "Premium_LRS"
+        },
+        "data_disk_type": {
+            "type":"string",
+            "defaultValue": "Premium_LRS"
+        },
+        "data_disk_size": {
+            "type": "int",
+            "defaultValue": 100
+        },
+        "admin_username": {    
+            "type":"string",
+            "defaultValue":"sinequa"
+        },
+        "admin_password": {
+            "type":"securestring"
+        },       
+        "availability_set_id": {
+            "type":"string",
+            "defaultValue": ""
+        },
+         "network_security_group_id": {
+            "type":"string"
+        },
+        "pip": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "backend_address_pool_id": {
+            "type":"string"
+        },        
+        "tags": {
+            "type": "object",
+            "defaultValue": {}
+        }
+    },
+    "variables": {
+        "os_disk_name"          : "[concat('osdisk-', parameters('vm_name'))]",
+        "data_disk_name"        : "[concat('datadisk-', parameters('vm_name'))]",
+        "nic_name"              : "[concat('nic-',parameters('vm_name'))]",
+        "pip_name"              : "[concat('pip-',parameters('vm_name'))]",
+        "nic_publicIpAddress": {
+            "id": "[resourceId('Microsoft.Network/publicIpAddresses', concat(variables('pip_name')))]"
+        },
+        "plan": {
+            "publisher": "sinequa",
+            "product": "sinequa_virtual_machine",
+            "name": "nightly"
+        },
+        "imageReferenceWithImage": {
+            "id": "[parameters('image_id')]"
+        },
+        "imageReferenceWithPlan": {
+            "publisher": "sinequa",
+            "offer": "sinequa_virtual_machine",
+            "sku": "nightly",
+            "version": "latest"
+        },
+        "keyVaultSecretsOfficer": "[concat('/subscriptions/', subscription().subscriptionId,        '/providers/Microsoft.Authorization/roleDefinitions/', 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7')]",
+        "storageBlobDataContributor": "[concat('/subscriptions/', subscription().subscriptionId,    '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
+    },
+    "resources": [      
+        {
+            "condition": "[parameters('pip')]",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "name": "[variables('pip_name')]",
+            "apiVersion": "2020-08-01",
+            "tags": "[parameters('tags')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIpAllocationMethod": "Static"
+            },
+            "sku": {
+                "name": "Standard"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nic_name')]",
+            "apiVersion": "2020-06-01",
+            "tags": "[parameters('tags')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig-1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[parameters('subnet_id')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": "[if(parameters('pip'), variables('nic_publicIpAddress'),json('null'))]",
+                            "applicationGatewayBackendAddressPools": [
+                            {
+                                "id": "[parameters('backend_address_pool_id')]"
+                            }]
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[parameters('network_security_group_id')]"
+                }
+            },
+             "dependsOn": [
+                "[variables('pip_name')]"                
+            ]
+        },
+         {
+            "type": "Microsoft.Compute/virtualMachines",
+            "dependsOn": [
+                "[variables('nic_name')]"                
+            ],
+            "name": "[parameters('vm_name')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "tags": "[parameters('tags')]",
+            "apiVersion": "2020-06-01",
+            "location": "[parameters('location')]",
+            "plan": "[if(empty(parameters('image_id')),variables('plan'),json('null'))]",
+            "properties": {
+                "osProfile": {
+                    "computerName": "[parameters('computer_name')]",
+                    "adminUsername": "[parameters('admin_username')]",
+                    "adminPassword": "[parameters('admin_password')]",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true,
+                        "patchSettings": {
+                            "patchMode": "AutomaticByOS"
+                        }
+                    }
+                },                  
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vm_size')]"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "name": "[variables('os_disk_name')]",
+                        "managedDisk": {
+                            "storageAccountType": "[parameters('os_disk_type')]"
+                        }
+                    },
+                    "imageReference": "[if(empty(parameters('image_id')),variables('imageReferenceWithPlan'),variables('imageReferenceWithImage'))]",
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "[variables('data_disk_name')]",
+                            "createOption": "Empty",
+                            "caching": "ReadOnly",
+                            "writeAcceleratorEnabled": false,
+                            "managedDisk": {
+                                "storageAccountType": "[parameters('data_disk_type')]"
+                            },
+                            "diskSizeGB": "[parameters('data_disk_size')]"
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic_name'))]"
+                        }
+                    ]
+                },               
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                },
+                "availabilitySet": {
+                    "id": "[parameters('availability_set_id')]"                
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[guid(resourceGroup().id, concat('keyVaultSecretsOfficer', parameters('vm_name')))]",
+            "properties": {
+                "roleDefinitionId": "[variables('keyVaultSecretsOfficer')]",
+                "principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', parameters('vm_name')), '2020-06-01', 'Full').identity.principalId]",
+                "scope": "[resourceGroup().id]"
+            },
+            "dependsOn": [
+                "[parameters('vm_name')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[guid(resourceGroup().id, concat('storageBlobDataContributor', parameters('vm_name')))]",
+            "properties": {
+                "roleDefinitionId": "[variables('storageBlobDataContributor')]",
+                "principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', parameters('vm_name')), '2020-06-01', 'Full').identity.principalId]",
+                "scope": "[resourceGroup().id]"
+            },
+            "dependsOn": [
+                "[parameters('vm_name')]"
+            ]
+        }        
+    ],    
+    "outputs": {
+        "vm": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.Compute/virtualMachines', parameters('vm_name')))]"
+        }       
+    }
+}

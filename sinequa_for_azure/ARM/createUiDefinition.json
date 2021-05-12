@@ -1,0 +1,281 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Azure.CreateUIDef",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "config": {
+            "isWizard": false,
+            "basics": {
+                "description": "Deploy a Sinequa Grid with **Sinequa For Azure**, see [more](https://www.sinequa.com/).",
+                "resourceGroup": {
+                    "allowExisting": true
+                },
+                "location": {
+                    "label": "Location",
+                    "toolTip": "provide a useful tooltip",
+                    "resourceTypes": [
+                        "Microsoft.Compute/virtualMachines"
+                    ],
+                    "allowedValues": [
+                        "westeurope",
+                        "northeurope",
+                        "francecentral",
+                        "eastus",
+                        "westus2"
+                    ],
+                    "visible": true
+                }
+            }
+        },
+        "basics": [
+            {
+                "name": "prefix",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Object Name Prefix",
+                "toolTip": "Prefix that will be used on all deployed objects.",
+                "defaultValue": "sq",
+                "constraints": {
+                    "required": true,
+                    "regex": "^[a-z0-9A-Z-]{2,79}$",
+                    "validationMessage": "The Prefix Name must be between 2 and 79 characters long and contain letters, numbers and hyphens only."
+                }
+            },
+            {
+                "name": "adminUsername",
+                "type": "Microsoft.Compute.UserNameTextBox",
+                "label": "OS Username",
+                "toolTip": "Admin username for the machine (eg: sinequa)",
+                "osPlatform": "Windows",
+                "constraints": {
+                    "required": true
+                }
+            },
+            {
+                "name": "adminPassword",
+                "type": "Microsoft.Compute.CredentialsCombo",
+                "label": {
+                    "password": "OS Password",
+                    "confirmPassword": "Confirm OS Password"
+                },
+                "toolTip": {
+                    "password": "Type your OS password"
+                },
+                "constraints": {
+                    "required": true,
+                    "customPasswordRegex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{12,}$",
+                    "customValidationMessage": "The password must be alphanumeric, contain at least 12 characters, and have at least 1 letter and 1 number."
+                },
+                "options": {
+                    "hideConfirmation": false
+                },
+                "osPlatform": "Windows",
+                "visible": true
+            },
+            {
+                "name": "license",
+                "type": "Microsoft.Common.FileUpload",
+                "label": "Your Sinequa License",
+                "toolTip": "Your Sinequa License",
+                "constraints": {
+                    "required": true,
+                    "accept": ".txt"
+                },
+                "options": {
+                    "multiple": false,
+                    "uploadMode": "file",
+                    "openMode": "text",
+                    "encoding": "UTF-8"
+                },
+                "visible": true
+            }
+        ],
+        "steps": [
+            {
+                "name": "sinequa",
+                "label": "Sinequa Grid",
+                "elements": [                                                        
+                    {
+                        "name": "ServerPlan",
+                        "type": "Microsoft.Common.OptionsGroup",
+                        "label": "Server Plan",
+                        "toolTip": "Single Primary Node or High Availability",
+                        "defaultValue": "Single Server (1 Primary Node + 1 Indexer ScaleSet + 1 Connector ScaleSet)",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Single Server (1 Primary Node + 1 Indexer ScaleSet + 1 Connector ScaleSet)",
+                                    "value": "{\"ServerPlan\":\"Single\",\"host\":1}"
+                                },
+                                {
+                                    "label": "High Availability (3 Primary Nodes + 1 Indexer ScaleSet + 1 Connector ScaleSet)",
+                                    "value": "{\"ServerPlan\":\"HA\",\"host\":3}"
+                                }
+                            ],
+                            "required": true
+                        },
+                        "visible": true
+                    },                                                               
+                    {
+                        "name": "sinequaPNVMSize",
+                        "type": "Microsoft.Compute.SizeSelector",
+                        "label": "Sinequa Primary Node VM Size",
+                        "toolTip": "VM size for Sinequa Primary Nodes",
+                        "recommendedSizes": [
+                            "Standard_E8s_v3"
+                        ],                        
+                        "osPlatform": "Windows",
+                        "imageReference": {
+                            "publisher": "MicrosoftWindowsServer",
+                            "offer": "WindowsServer",
+                            "sku": "2012-R2-Datacenter"
+                        },
+                        "count": "[parse(steps('sinequa').ServerPlan).host]",
+                        "visible": true
+                    },
+                    {
+                        "name": "sinequaIndexerScaleSetSize",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Sinequa Indexer ScaleSet Instance Count",
+                        "defaultValue": "1",
+                        "toolTip": "Initial Number of VMs in the scaleset",
+                        "constraints": {
+                            "required": true,
+                            "validations": [
+                                {
+                                    "regex": "^[0-9]{1,}$",
+                                    "message": "Only numeric characters are allowed"
+                                }
+                            ]
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "sinequaIndexerVMSize",
+                        "type": "Microsoft.Compute.SizeSelector",
+                        "label": "Sinequa Indexer ScaleSet VM Size",
+                        "toolTip": "VM size for Sinequa Indexer ScaleSet",
+                        "recommendedSizes": [
+                            "Standard_B2s"
+                        ],                       
+                        "osPlatform": "Windows",
+                        "imageReference": {
+                            "publisher": "MicrosoftWindowsServer",
+                            "offer": "WindowsServer",
+                            "sku": "2012-R2-Datacenter"
+                        },
+                        "count": "1",
+                        "visible": true
+                    }                    
+                ]
+            },
+            {
+                "name": "VirtualMachineConfig",
+                "label": "Network Settings",
+                "subLabel": {
+                    "preValidation": "Configure the virtual machine's resources and settings",
+                    "postValidation": "Done"
+                },
+                "bladeTitle": "Virtual Machine Settings",
+                "elements": [
+                    {
+                        "name": "virtualNetwork",
+                        "type": "Microsoft.Network.VirtualNetworkCombo",
+                        "label": {
+                            "virtualNetwork": "Virtual network",
+                            "subnets": "Subnets"
+                        },
+                        "toolTip": {
+                            "virtualNetwork": "Name of the virtual network",
+                            "subnets": "Subnets for the virtual network"
+                        },
+                        "defaultValue": {
+                            "name": "[concat('vnet-',basics('prefix'))]",
+                            "addressPrefixSize": "/16"
+                        },
+                        "constraints": {
+                            "minAddressPrefixSize": "/16"
+                        },
+                        "options": {
+                            "hideExisting": true
+                        },
+                        "subnets": {
+                            "subnet1": {
+                                "label": "App Subnet",
+                                "defaultValue": {
+                                    "name": "snet-app",
+                                    "addressPrefixSize": "/24"
+                                },
+                                "constraints": {
+                                    "minAddressPrefixSize": "/24",
+                                    "minAddressCount": 12,
+                                    "requireContiguousAddresses": false
+                                }
+                            },
+                            "subnet2": {
+                                "label": "Front Subnet",
+                                "defaultValue": {
+                                    "name": "snet-front",
+                                    "addressPrefixSize": "/24"
+                                },
+                                "constraints": {
+                                    "minAddressPrefixSize": "/24",
+                                    "minAddressCount": 12,
+                                    "requireContiguousAddresses": false
+                                }
+                            }
+                        }
+                    },                   
+                    {
+                        "name": "certificate",
+                        "type": "Microsoft.Common.FileUpload",
+                        "label": "PFX certificate file (for HTTPS)",
+                        "toolTip": "Select a .pfx certificate file",
+                        "constraints": {
+                            "required": true,
+                            "accept": ".pfx"
+                        },
+                        "options": {
+                            "multiple": false,
+                            "uploadMode": "file",
+                            "openMode": "binary"
+                        },
+                        "visible": true
+                    },
+                    {
+                        "name": "certificatePassword",
+                        "type": "Microsoft.Common.PasswordBox",
+                        "label": {
+                          "password": "Certificate Password",
+                          "confirmPassword": "Confirm Certificate Password"
+                        },
+                        "constraints": {
+                            "required": true,
+                            "regex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{12,}$",
+                            "validationMessage": "The password must be alphanumeric, contain at least 12 characters, and have at least 1 letter and 1 number."
+                                },
+                        "toolTip": "Type your certificate password",                        
+                        "options": {
+                          "hideConfirmation": false
+                        },
+                        "visible": true
+                    }                  
+                ]
+            }
+        ],
+        "outputs": {
+            "location": "[location()]",
+            "license": "[basics('license')]",
+            "prefix": "[basics('prefix')]",
+            "adminUsername": "[basics('adminUsername')]",
+            "adminPassword": "[basics('adminPassword').password]",
+            "vmSize": "[steps('sinequa').sinequaPNVMSize]",
+            "vmIndexerSize": "[steps('sinequa').sinequaIndexerVMSize]",
+            "vmIndexerScaleSetSize": "[parse(steps('sinequa').sinequaIndexerScaleSetSize)]",            
+            "certificateBase64": "[steps('VirtualMachineConfig').certificate]",
+            "certificatePassword": "[steps('VirtualMachineConfig').certificatePassword]",
+            "primaryNodeCount": "[parse(steps('sinequa').ServerPlan).host]",
+            "imageReferenceId": "none",
+            "virtualNetwork": "[steps('VirtualMachineConfig').virtualNetwork]"
+        }
+    }
+}

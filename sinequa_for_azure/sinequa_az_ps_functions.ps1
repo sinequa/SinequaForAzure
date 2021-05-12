@@ -5,7 +5,7 @@ Set-StrictMode -Version latest;
 Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 
 
-$startupScript = "sinequa-az-startup.ps1"
+$startupScript = $null; #"sinequa-az-startup.ps1"
 function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$password) {
     <#
     .SYNOPSIS
@@ -124,25 +124,31 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
         Virtual Machine object created
     #>
     
-    # Variables
-    $pipName = "pip-$prefix-$nodeName"
-    $nicName = "nic-$prefix-$nodeName"
-    $osDiskName = "osdisk-$($prefix)_$($nodeName)-$($image.Name)"
-    $dataDiskName = "datadisk-$($prefix)_$($nodeName)"
-    $dataDiskType = "Premium_LRS" #"Premium_LRS"
-    if (!$vmName) {$vmName = "vm-$prefix-$nodeName"}
-    if (!$hostName) {$hostName = $nodeName}
-
     #default windows image (Microsoft Windows 2019 Datacenter)
     $publisherName = "MicrosoftWindowsServer"
     $offer = "WindowsServer"
     $sku = "2019-Datacenter"
+
+    # Variables
+    $pipName = "pip-$prefix-$nodeName"
+    $nicName = "nic-$prefix-$nodeName"
+    $imageName = $offer
+    if ($image) {
+        $imageName = $image.Name
+    }
+    $osDiskName = "osdisk-$($prefix)_$($nodeName)-$($imageName)"
+    $dataDiskName = "datadisk-$($prefix)_$($nodeName)"
+    $dataDiskType = "Premium_LRS" #"Premium_LRS"
+    if (!$vmName) {$vmName = "vm-$prefix-$nodeName"}
+    if (!$hostName) {$hostName =  "$prefix-$nodeName"}
+
+  
     
     #default tag
     if (!$tags) {
-        $tags = @{sinequa=$image.Name}
+        $tags = @{Sinequa_Image=$imageName}
     } else {
-        $tags.Add('Sinequa_Image', $image.Name)
+        $tags.Add('Sinequa_Image', $imageName)
     }
     # Create a public IP address
     $pip = $null
@@ -202,7 +208,7 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
     $vm = New-AzVM -ResourceGroupName $resourceGroup.ResourceGroupName -Location $resourceGroup.Location -VM $vm -Verbose -Tag $tags
 }
 
-function SqAzurePSCreateVMSSforNode($resourceGroup, $storageAccount, $prefix, $image, $tags, $nodeName, $vmssName, $nsg, $subnet, $osUsername, [SecureString]$osPassword, $vmSize = "Standard_D4s_v3") {
+function SqAzurePSCreateVMSSforNode($resourceGroup, $storageAccount, $prefix, $image, $tags, $nodeName, $hostName, $vmssName, $nsg, $subnet, $osUsername, [SecureString]$osPassword, $vmSize = "Standard_D4s_v3") {
     <#
     .SYNOPSIS
         Create a VM ScaleSet from an Image or from a default Windows Image
@@ -222,16 +228,17 @@ function SqAzurePSCreateVMSSforNode($resourceGroup, $storageAccount, $prefix, $i
     
     # Variables
     if (!$vmssName) {$vmssName = "vmss-$prefix-$nodeName"}
-  
+    $osNamePrefix = "$prefix-$nodeName"
+    if ($hostname) {
+        $osNamePrefix = $hostName
+    } 
+    if ($osNamePrefix.Length -gt 8) {$osNamePrefix = $osNamePrefix.SubString(0,8)}
+
     #default tag
     if (!$tags) {
-        $tags = @{sinequa=$image.Name}
+        $tags = @{Sinequa_Image=$image.Name}
     } else {
-        if ($tags.Sinequa_Image) {
-            $tags.Sinequa_Image = $image.Name
-        } else {
-            $tags.Add('Sinequa_Image', $image.Name)
-        }
+        $tags.Add('Sinequa_Image', $image.Name)
     }
 
     # Create IP address configurations
@@ -240,18 +247,14 @@ function SqAzurePSCreateVMSSforNode($resourceGroup, $storageAccount, $prefix, $i
     # Create a configuration  
     $vmss = New-AzVmssConfig -Location $resourceGroup.Location -IdentityType SystemAssigned -SkuCapacity 2 -SkuName $vmSize -UpgradePolicyMode "Automatic" -Tag $tags
     
-    # 
-    $customConfig = @{"commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File C:\sinequa\scripts\sinequa-az-startup.ps1"};
-    $null = Add-AzVmssExtension -VirtualMachineScaleSet $vmss -Name "customScript" -Publisher "Microsoft.Compute" -Type "CustomScriptExtension" -TypeHandlerVersion 1.9 -Setting $customConfig
-
     # Reference the image version
-    WriteLog "[$($vmssName)] Reference the image version: $image.Id"
+    WriteLog "[$($vmssName)] Reference the image version: $($image.Id)"
     $null = Set-AzVmssStorageProfile $vmss -OsDiskCreateOption "FromImage" -ImageReferenceId $image.Id
 
     # Complete the configuration
     $null = Add-AzVmssNetworkInterfaceConfiguration -VirtualMachineScaleSet $vmss -Name "network-config" -Primary $true -IPConfiguration $ipConfig 
 
-    $null = Set-AzVmssOSProfile -VirtualMachineScaleSet $vmss -ComputerNamePrefix $vmssName.SubString(0,8) -AdminUsername $osUsername -AdminPassword $osPassword
+    $null = Set-AzVmssOSProfile -VirtualMachineScaleSet $vmss -ComputerNamePrefix $osNamePrefix -AdminUsername $osUsername -AdminPassword $osPassword
 
     # Create the scale set 
     WriteLog "[$($vmssName)] Creating virtual machine ScaleSet: $vmssName"
@@ -359,7 +362,7 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
         $reboot
 
         if ($reboot) {
-            WriteLog "[$($vmName)] $($date) Restart Windows"
+            WriteLog "[$($vmName)] Restart Windows"
             $null = Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
             Start-Sleep -s 60
         }
@@ -453,7 +456,7 @@ function SqAzGetImageByRefId($referenceId, $context){
             $imageDefVersion = $null
             if ($a.length -ge 12) { $imageDefVersion = $a[11] }
             $image = Get-AzGalleryImageVersion -DefaultProfile $context -ResourceGroupName $resourceGroupName -GalleryName $galleryName -GalleryImageDefinitionName $imageDefName -GalleryImageVersionName $imageDefVersion
-            if ($image -is [array]) {$image= $image[0]}
+            if ($image -is [array]) {$image= $image  | Sort-Object -Property @{Expression={[int][RegEx]::Match($_.Name, "([0-9]+)\.([0-9]+)\.([0-9]+)$").Groups[1].value}},@{Expression={[int][RegEx]::Match($_.Name, "([0-9]+)\.([0-9]+)\.([0-9]+)$").Groups[2].value}},@{Expression={[int][RegEx]::Match($_.Name, "([0-9]+)\.([0-9]+)\.([0-9]+)$").Groups[3].value}} | Select-Object -Last 1}
             return $image
         } elseif ($type.ToLower() -eq "images") {
             $imageName = $a[8]
@@ -493,8 +496,9 @@ function SqAzurePSCreateImageVersion($resourceGroup, $galleryName, $imageDefinit
 
     #Create a new version for the image
     WriteLog "Create Image Version: $version"
-    $region1 = @{Name=$resourceGroup.Location;ReplicaCount=1}
-    $targetRegions = @($region1)
+    $region1 = @{Name="westeurope";ReplicaCount=1}
+    $region2 = @{Name="francecentral";ReplicaCount=1}
+    $targetRegions = @($region1,$region2)
     $expiration = ((Get-Date).AddYears(1)).ToString("yyyy-MM-dd")
 
     return New-AzGalleryImageVersion `
@@ -649,20 +653,35 @@ function SqAzurePSUpdateVM($resourceGroupName, $location, $vmName, $image, $star
     $vm = Get-AzVm -Name $vmName -ResourceGroupName $resourceGroupName   
     $sinequaKeyVault = $vm.tags.Sinequa_KeyVault
     $sinequaGrid = $vm.tags.Sinequa_Grid
+    $sinequaNode = $vm.tags.Sinequa_Node
 
     $nodeName = "0"
     $pattern = "$($sinequaGrid)-(.*)$"         
     $m =  $vm.Name | Select-String -Pattern $pattern
     if ($m) { $nodeName = $m.Matches.Groups[1].Value }
     $osDiskName = "osdisk-$($sinequaGrid)_$($nodeName)-$($image.Name)"
-
+    $osName = $sinequaNode
 
     # Get KeyVault for os user/password
+    # Get Keyvaul for os user/password
     $userId = (Get-AzContext).Account.Id
+    $roleDefinitionName = "Key Vault Secrets User"
     WriteLog "Read secrets in $sinequaKeyVault"
-    WriteLog "Requires the Key 'Vault Secrets User' role on $sinequaKeyVault for $userId"
+    WriteLog "Requires the Key '$roleDefinitionName' role on $($resourceGroupName) for $userId"
+    $role = Get-AzRoleAssignment -ResourceGroupName $resourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName
+    $role
+    if (-Not $role) {
+        WriteLog "Add transient '$roleDefinitionName' role on $($resourceGroupName) for $userId"
+        $null = New-AzRoleAssignment -ResourceGroupName $resourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName
+        Start-Sleep -s 15
+    }
+    $null = Get-AzRoleAssignment -ResourceGroupName $resourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName
     $osUsername = SqAzurePSGetSecret -keyVaultName $sinequaKeyVault -secretName "os-username"
     $osPassword = SqAzurePSGetSecret -keyVaultName $sinequaKeyVault -secretName "os-password" | ConvertTo-SecureString -Force -AsPlainText
+    if (-Not $role) {
+        WriteLog "Remove transient '$roleDefinitionName' role on $($resourceGroupName) for $userId"
+        $null = Remove-AzRoleAssignment -ResourceGroupName $resourceGroupName -SignInName  $userId -RoleDefinitionName $roleDefinitionName -ErrorAction SilentlyContinue   
+    }
 
     # Get Original Disk
     $srcDiskName = $vm.StorageProfile.OsDisk.Name
@@ -691,7 +710,7 @@ function SqAzurePSUpdateVM($resourceGroupName, $location, $vmName, $image, $star
     $credential = New-Object -TypeName PSCredential -ArgumentList ($osUsername, $osPassword)
 
     # Set the VM Size and Type
-    $null = Set-AzVMOperatingSystem -VM $newVm -Windows -ComputerName $vmName -Credential $credential
+    $null = Set-AzVMOperatingSystem -VM $newVm -Windows -ComputerName $osName -Credential $credential
 
     #Stop the VM used for the image
     WriteLog "[$($vm.Name)] Stop virtual machine: $($vm.Name)"

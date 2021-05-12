@@ -1,0 +1,181 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },   
+        "vmss_name": {
+            "type":"string"
+        },
+        "vmss_size": {
+            "type":"string",
+            "defaultValue": "Standard_B2s"
+        },
+        "vmss_capacity": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "computer_name_prefix": {
+            "type":"string"
+        },
+        "subnet_id": {
+            "type":"string"
+        },
+        "image_id": {
+            "type":"string",
+            "defaultValue": ""
+        },
+        "os_disk_type": {
+            "type":"string",
+            "defaultValue": "Premium_LRS"
+        },       
+        "admin_username": {    
+            "type":"string",
+            "defaultValue":"sinequa"
+        },
+        "admin_password": {
+            "type":"securestring"
+        },               
+        "network_security_group_id": {
+            "type":"string"
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {}
+        }
+    },
+    "variables": {
+        "plan": {
+            "publisher": "sinequa",
+            "product": "sinequa_virtual_machine",
+            "name": "nightly"
+        },
+        "imageReferenceWithImage": {
+            "id": "[parameters('image_id')]"
+        },
+        "imageReferenceWithPlan": {
+            "publisher": "sinequa",
+            "offer": "sinequa_virtual_machine",
+            "sku": "nightly",
+            "version": "latest"
+        },
+        "keyVaultSecretsOfficer": "[concat('/subscriptions/', subscription().subscriptionId,        '/providers/Microsoft.Authorization/roleDefinitions/', 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7')]",
+        "storageBlobDataContributor": "[concat('/subscriptions/', subscription().subscriptionId,    '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
+    },
+    "resources": [      
+       {
+            "type": "Microsoft.Compute/virtualMachineScaleSets",
+            "name": "[parameters('vmss_name')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "tags": "[parameters('tags')]",
+            "apiVersion": "2019-12-01",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('vmss_size')]",
+                "capacity": "[parameters('vmss_capacity')]"
+            },
+            "plan": "[if(empty(parameters('image_id')),variables('plan'),json('null'))]",
+            "properties": {
+                "overprovision": true,
+                "upgradePolicy": {
+                    "mode": "Manual"
+                },
+                "singlePlacementGroup": true,
+                "virtualMachineProfile": {
+                    "storageProfile": {
+                        "osDisk": {
+                            "createOption": "fromImage",
+                            "caching": "ReadWrite",
+                            "managedDisk": {
+                                "storageAccountType": "[parameters('os_disk_type')]"
+                            }
+                        },
+                        "imageReference": "[if(empty(parameters('image_id')),variables('imageReferenceWithPlan'),variables('imageReferenceWithImage'))]"
+                    },
+                    "priority": "Regular",
+                    "networkProfile": {
+                        "networkInterfaceConfigurations": [
+                            {
+                                "name": "nic",
+                                "properties": {
+                                    "primary": true,
+                                    "enableAcceleratedNetworking": false,
+                                    "enableIPForwarding": false,
+                                    "ipConfigurations": [
+                                        {
+                                            "name": "ipconfig",
+                                            "properties": {
+                                                "primary": true,
+                                                "subnet": {
+                                                    "id": "[parameters('subnet_id')]"
+                                                },
+                                                "privateIPAddressVersion": "IPv4"
+                                            }
+                                        }
+                                    ],
+                                    "networkSecurityGroup": {
+                                        "id": "[parameters('network_security_group_id')]"
+                                    }
+                                }
+                            }
+                        ]
+                    },                   
+                    "diagnosticsProfile": {
+                        "bootDiagnostics": {
+                            "enabled": false
+                        }
+                    },
+                    "osProfile": {
+                        "computerNamePrefix": "[toLower(parameters('computer_name_prefix'))]",
+                        "adminUsername": "[parameters('admin_username')]",
+                        "adminPassword": "[parameters('admin_password')]",
+                        "windowsConfiguration": {
+                            "provisionVmAgent": true
+                        }
+                    }
+                },
+                "scaleInPolicy": {
+                    "rules": [
+                        "Default"
+                    ]
+                },
+                "platformFaultDomainCount": "5"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[guid(resourceGroup().id, concat('keyVaultSecretsOfficer', parameters('vmss_name')))]",
+            "properties": {
+                "roleDefinitionId": "[variables('keyVaultSecretsOfficer')]",
+                "principalId": "[reference(concat('Microsoft.Compute/virtualMachineScaleSets/', parameters('vmss_name')), '2020-06-01', 'Full').identity.principalId]",
+                "scope": "[resourceGroup().id]"
+            },
+            "dependsOn": [
+                "[parameters('vmss_name')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[guid(resourceGroup().id, concat('storageBlobDataContributor', parameters('vmss_name')))]",
+            "properties": {
+                "roleDefinitionId": "[variables('storageBlobDataContributor')]",
+                "principalId": "[reference(concat('Microsoft.Compute/virtualMachineScaleSets/', parameters('vmss_name')), '2020-06-01', 'Full').identity.principalId]",
+                "scope": "[resourceGroup().id]"
+            },
+            "dependsOn": [
+                "[parameters('vmss_name')]"
+            ]
+        }        
+    ],    
+    "outputs": {
+        "vmss": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('vmss_name')))]"
+        }       
+    }
+}

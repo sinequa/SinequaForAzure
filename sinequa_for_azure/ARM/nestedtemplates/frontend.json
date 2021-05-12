@@ -1,0 +1,181 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },           
+        "availability_set_name": {
+            "type":"string"
+        },
+        "application_gateway_name": {
+            "type":"string"
+        },
+        "subnet_id": {
+            "type":"string"
+        },
+        "certificate_data": {
+            "type": "securestring"
+        },
+        "certificate_password": {
+            "type": "secureString"
+        },       
+        "tags": {
+            "type": "object",
+            "defaultValue": {}
+        }
+    },
+    "variables": {
+        "pip_ag" : "[concat('pip-', parameters('application_gateway_name'))]",
+        "ag_id"  : "[resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name'))]"
+    },
+    "resources": [      
+        {
+            "name": "[parameters('availability_set_name')]",
+            "type": "Microsoft.Compute/availabilitySets",
+            "apiVersion": "2019-07-01",
+            "tags": "[parameters('tags')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "platformUpdateDomainCount": 5,
+                "platformFaultDomainCount": 2
+            },
+            "sku": {
+                "name": "Aligned"
+            }
+        },   
+        {
+            "name": "[variables('pip_ag')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "tags": "[parameters('tags')]",           
+            "apiVersion": "2019-11-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            },
+            "sku": {
+                "name": "Standard"
+            }
+        },
+        {
+            "name": "[parameters('application_gateway_name')]",
+            "type": "Microsoft.Network/applicationGateways",
+            "apiVersion": "2019-09-01",
+            "location": "[parameters('location')]",
+            "tags": "[parameters('tags')]",
+            "dependsOn": [
+                "[variables('pip_ag')]"
+            ],
+            "properties": {
+                "sku": {
+                    "name": "Standard_v2",
+                    "tier": "Standard_v2",
+                    "capacity": 2
+                },
+                "gatewayIPConfigurations": [
+                    {
+                        "name": "appGatewayIpConfig",
+                        "properties": {
+                            "subnet": {
+                                "id": "[parameters('subnet_id')]"
+                            }
+                        }
+                    }
+                ],
+                "frontendIPConfigurations": [
+                    {
+                        "name": "appGwFrontendIp",
+                        "properties": {
+                            "PublicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses/',variables('pip_ag'))]"
+                            }
+                        }
+                    }
+                ],
+                "frontendPorts": [
+                    {
+                        "name": "port_443",
+                        "properties": {
+                            "Port": 443
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "sinequaBackendPool"
+                    }
+                ],
+                "backendHttpSettingsCollection": [
+                    {
+                        "name": "http",
+                        "properties": {
+                            "Port": 80,
+                            "Protocol": "Http",
+                            "cookieBasedAffinity": "Enabled",
+                            "requestTimeout": 20,
+                            "affinityCookieName": "SQApplicationGatewayAffinity"
+                        }
+                    }
+                ],
+                "httpListeners": [
+                    {
+                        "name": "httpslistener",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(variables('ag_id'), '/frontendIPConfigurations/appGwFrontendIp')]"
+                            },
+                            "frontendPort": {
+                                "id": "[concat(variables('ag_id'), '/frontendPorts/port_443')]"
+                            },
+                            "protocol": "Https",
+                            "sslCertificate": {
+                                "id": "[concat(variables('ag_id'), '/sslCertificates/sinequaFrontEnd')]"
+                            }
+                        }
+                    }
+                ],
+                "requestRoutingRules": [
+                    {
+                        "Name": "https",
+                        "properties": {
+                            "RuleType": "Basic",
+                            "httpListener": {
+                                "id": "[concat(variables('ag_id'), '/httpListeners/httpslistener')]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[concat(variables('ag_id'), '/backendAddressPools/sinequaBackendPool')]"
+                            },
+                            "backendHttpSettings": {
+                                "id": "[concat(variables('ag_id'), '/backendHttpSettingsCollection/http')]"
+                            }
+                        }
+                    }
+                ],
+                "enableHttp2": false,
+                "sslCertificates": [
+                    {
+                        "name": "sinequaFrontEnd",
+                        "properties": {
+                            "data": "[parameters('certificate_data')]",
+                            "password": "[parameters('certificate_password')]"
+                        }
+                    }
+                ]
+            }
+        } 
+    ],   
+    "outputs": {
+       "ag": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name')))]"
+        },
+       "as": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.Compute/availabilitySets', parameters('availability_set_name')))]"
+        },
+        "pip": {
+            "type": "object",
+            "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('pip_ag')))]"
+        }
+    }
+}
