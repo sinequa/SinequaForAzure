@@ -24,15 +24,6 @@ variable "container_name" {
   type              = string
 }
 
-variable "admin_username" {    
-    type            = string
-    default         = "sinequa"
-}
-
-variable "admin_password" {
-    type            = string
-}
-
 variable "license" {
     type            = string
 }

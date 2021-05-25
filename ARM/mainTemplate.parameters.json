@@ -18,10 +18,10 @@
           "value": "Password2020"
         },
         "vmSize": {
-          "value": "Standard_E8s_v3"
+          "value": "Standard_D4s_v3"
         },
         "vmIndexerSize": {
-          "value": "Standard_B2s"
+          "value": "Standard_D4s_v3"
         },
         "vmIndexerScaleSetSize": {
           "value": 1
@@ -41,7 +41,7 @@
         "virtualNetwork": {
           "value": {
             "name": "vnet-sq",
-            "resourceGroup": "fred_test",
+            "resourceGroup": "test",
             "addressPrefixes": [
               "10.0.0.0/16"
             ],

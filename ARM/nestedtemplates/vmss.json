@@ -151,7 +151,7 @@
             "name": "[guid(resourceGroup().id, concat('keyVaultSecretsOfficer', parameters('vmss_name')))]",
             "properties": {
                 "roleDefinitionId": "[variables('keyVaultSecretsOfficer')]",
-                "principalId": "[reference(concat('Microsoft.Compute/virtualMachineScaleSets/', parameters('vmss_name')), '2020-06-01', 'Full').identity.principalId]",
+                "principalId": "[reference(resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('vmss_name')), '2020-06-01', 'Full').identity.principalId]",
                 "scope": "[resourceGroup().id]"
             },
             "dependsOn": [
@@ -164,7 +164,7 @@
             "name": "[guid(resourceGroup().id, concat('storageBlobDataContributor', parameters('vmss_name')))]",
             "properties": {
                 "roleDefinitionId": "[variables('storageBlobDataContributor')]",
-                "principalId": "[reference(concat('Microsoft.Compute/virtualMachineScaleSets/', parameters('vmss_name')), '2020-06-01', 'Full').identity.principalId]",
+                "principalId": "[reference(resourceId('Microsoft.Compute/virtualMachineScaleSets', parameters('vmss_name')), '2020-06-01', 'Full').identity.principalId]",
                 "scope": "[resourceGroup().id]"
             },
             "dependsOn": [

@@ -125,6 +125,11 @@
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "name": "[variables('st_container_name')]",
             "apiVersion": "2021-02-01",
+            "properties": {
+                "metadata": {
+                    "type": "sq"
+                }
+            },
             "dependsOn": [
                 "[parameters('st_name')]"
             ]

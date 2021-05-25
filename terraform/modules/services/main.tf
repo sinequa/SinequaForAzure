@@ -17,21 +17,6 @@ resource "azurerm_role_assignment" "sinequa_kv_role_for_me" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
-resource "azurerm_key_vault_secret" "sinequa_kv_secret_user" {
-  name         = "os-username"
-  value        = var.admin_username
-  key_vault_id = azurerm_key_vault.sinequa_kv.id
-
-  depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
-}
-
-resource "azurerm_key_vault_secret" "sinequa_kv_secret_password" {
-  name         = "os-password"
-  value        = var.admin_password
-  key_vault_id = azurerm_key_vault.sinequa_kv.id
-  
-  depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
-}
 
 resource "azurerm_key_vault_secret" "sinequa_kv_secret_sinequa_license" {
   name         = "sinequa-license"

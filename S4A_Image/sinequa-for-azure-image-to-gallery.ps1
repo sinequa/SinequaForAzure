@@ -12,7 +12,7 @@
 param (
 
     [Parameter(HelpMessage = "Azure Tenant Id")]
-    [string]    $tenantId = "465ec3fd-500e-4e38-a426-5ca3086440bd",
+    [string]    $tenantId = "$env:AZURE_PRODUCT_TENANT",
     
     [Parameter(HelpMessage = "Azure Subscription Id")]
     [string]    $subscriptionId = "$env:AZURE_PRODUCT_SUBSCRIPTION",
@@ -27,7 +27,7 @@ param (
     [string]    $location = "francecentral",
 
     [Parameter(HelpMessage = "Image Resource Group Name")]
-    [string]    $imageResourceGroupName = "Product",    
+    [string]    $imageResourceGroupName = "rg-sinequa",    
 
     [Parameter(HelpMessage = "Shared Image Gallery Name")]
     [string]    $galleryName = "SinequaForAzure",    
@@ -35,11 +35,11 @@ param (
     [Parameter(HelpMessage = "Image Definition Name")]
     [string]    $imageDefinitionName = "sinequa-11-nightly",    
 
-    [Parameter(HelpMessage = "Sinequa Image Name")]
-    [string]    $imageName = "sinequa-nightly-11.5.0.100",    
+    [Parameter(HelpMessage = "Sinequa Image Name to share")]
+    [string]    $imageName,    
 
     [Parameter(HelpMessage = "Sinequa Build Version")]
-    [string]    $version = "11.5.0.100",
+    [string]    $version,
 
     [Parameter(HelpMessage = "Delete old images")]
     [bool]    $deleteOlds = $false    
@@ -59,6 +59,7 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 . .\sinequa_az_ps_functions.ps1
 
 # Variables
+# Number of image to keep
 $maxImagesToKeep = 5
 
 # Azure Login

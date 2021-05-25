@@ -80,6 +80,7 @@ variable "pip" {
 
 variable "backend_address_pool_id" {
     type            = string
+    default         = ""
 }
 
 variable "network_security_group_id" {

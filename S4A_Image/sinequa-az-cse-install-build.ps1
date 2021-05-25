@@ -45,19 +45,24 @@ $serviceName = "sinequa.service"
 if ($fileUrl -and $fileUrl.length -gt 1 -and $fileUrl[0] -eq """" -and $fileUrl[$fileUrl.length-1] -eq """") { $fileUrl = $fileUrl -replace ".$" -replace "^." }
 
 	
-# Set Sinequa Azure Env Vars
-WriteLog "Set Sinequa Azure Env Vars";
+# Set Sinequa Azure OS Environment Variables
+WriteLog "Set Sinequa Azure OS Environment Variables";
 [System.Environment]::SetEnvironmentVariable('SINEQUA_TEMP', 'd:\sinequa\temp',[System.EnvironmentVariableTarget]::Machine)
 [System.Environment]::SetEnvironmentVariable('SINEQUA_CLOUD', 'Azure',[System.EnvironmentVariableTarget]::Machine)
 
-# For Debug / folder must exist
+# For Debugging Sinequa init - Folder must exist
 [System.Environment]::SetEnvironmentVariable('SINEQUA_LOG_INIT', 'Path=d:\;Level=10000',[System.EnvironmentVariableTarget]::Machine)
 
-# Exclude sinequaFolder from Windows Defender
+# Add inbound Firewall Rules for Sinequa
+WriteLog "Add Sinequa Rule in Firewall"
+netsh advfirewall firewall delete rule name= "Sinequa"
+netsh advfirewall firewall add rule name= "Sinequa" dir=in action=allow protocol=TCP localport=10300-10500
+
+# Exclude $sinequaFolder from Windows Defender
 WriteLog "Update Windows Defender Exclusion";
 Add-MpPreference -ExclusionPath $sinequaFolder
 
-# Test if installed
+# Test if Sinequa is already installed
 WriteLog "Install $zipFile in $destinationFolder";
 if ((Test-Path $sinequaFolder) -and (Test-Path $versionFile)) {
 	$currentVersion = Get-Content $versionFile;
@@ -65,7 +70,7 @@ if ((Test-Path $sinequaFolder) -and (Test-Path $versionFile)) {
 	Exit 0
 }
 
-# Download Files
+# Download the Sinequa Distribution
 WriteLog "Download $($fileUrl)";
 Invoke-WebRequest $fileUrl -OutFile $zipFile
 if (-Not (Test-Path $sinequaScriptsFolder)) {
@@ -78,7 +83,7 @@ WriteLog "Unzip package" ;
 $currentVersion = Get-Content $versionFile;
 WriteLog "Unzip of $currentVersion binaries are done"
 
-# Clean Old Stuffs
+# Clean Old SBA v1 Stuffs (can be removed)
 if (Test-Path "$sinequaFolder\assets\static\static_resources_sba1.zxb") {
     WriteLog "Remove SBA v1 resources"
     Remove-Item "$sinequaFolder\assets\static\static_resources_sba1.zxb" -Force    
@@ -102,18 +107,16 @@ $acl = Get-ACL $sinequaFolder
 $acl.AddAccessRule($accessRule)
 Set-ACL -Path $sinequaFolder -ACLObject $acl
 
-# Install service
-WriteLog "Install $serviceName service"
-#$start = "auto"
-$start = "delayed-auto"
-& "sc.exe" "create" $serviceName "start=$start" "binPath=""$sinequaFolder\website\bin\sinequa.service.exe""" "DisplayName=sinequa.service"
-
 # Install Website
 WriteLog "Install Sinequa website";
 Import-Module WebAdministration
 Set-ItemProperty 'IIS:\Sites\Default Web Site\' -name physicalPath -value "$sinequaFolder\website"
 C:\Windows\System32\inetsrv\appcmd.exe set config http://localhost -section:system.webServer/isapiFilters /+"[name='Sinequa',path='$sinequaFolder\website\bin\sinequa_filter.dll',enabled='True',enableCache='True']" /commit:apphost
 
+# Install the Sinequa service
+WriteLog "Install $serviceName service"
+$start = "delayed-auto"
+& "sc.exe" "create" $serviceName "start=$start" "binPath=""$sinequaFolder\bin\sinequa.service.exe""" "DisplayName=sinequa.service"
 
 $EndTime = Get-Date
 WriteLog "Script execution time: $($EndTime - $StartTime)"

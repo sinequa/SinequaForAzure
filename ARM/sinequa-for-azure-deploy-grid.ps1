@@ -14,11 +14,12 @@ param (
     [Parameter(HelpMessage = "Azure Subscription Id")]
     [string]    $subscriptionId = "8a9fc7e2-ac08-4009-8498-2026cb37bb25", #subscription id of "sub-snqa-sandbox"
 
+<#
     [Parameter(HelpMessage = "ARM Template")]
     [string]    $templateFile = "./mainTemplate.json",
-
+#>
     [Parameter(HelpMessage = "ARM Template")]
-    [string]    $templateUri = "https://sinequadownload.blob.core.windows.net/s4a/ARM/mainTemplate.json",    
+    [string]    $templateUri = "https://sinequabuilds.blob.core.windows.net/arm/mainTemplate.json",    
 
     [Parameter(HelpMessage = "ARM Template Parameters")]
     [string]    $templateParameterFile = "./mainTemplate.parameters.json",
@@ -50,9 +51,9 @@ $null = Set-AzMarketplaceTerms -Publisher $publisher -Product $product -Name $na
 $deployment = New-AzResourceGroupDeployment `
   -Name "ManualDeploymentViaPS" `
   -ResourceGroupName $resourceGroupName `
-  -TemplateUri $templateUri `
   -TemplateParameterFile $templateParameterFile `
-  -Verbose
+  -Verbose `
+  -TemplateUri $templateUri
 
 # Display Outputs
 $deployment.OutputsString

@@ -26,8 +26,7 @@
         }
     },
     "variables": {
-        "pip_ag" : "[concat('pip-', parameters('application_gateway_name'))]",
-        "ag_id"  : "[resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name'))]"
+        "pip_ag" : "[concat('pip-', parameters('application_gateway_name'))]"
     },
     "resources": [      
         {
@@ -122,14 +121,14 @@
                         "name": "httpslistener",
                         "properties": {
                             "frontendIPConfiguration": {
-                                "id": "[concat(variables('ag_id'), '/frontendIPConfigurations/appGwFrontendIp')]"
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name')), '/frontendIPConfigurations/appGwFrontendIp')]"
                             },
                             "frontendPort": {
-                                "id": "[concat(variables('ag_id'), '/frontendPorts/port_443')]"
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name')), '/frontendPorts/port_443')]"
                             },
                             "protocol": "Https",
                             "sslCertificate": {
-                                "id": "[concat(variables('ag_id'), '/sslCertificates/sinequaFrontEnd')]"
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name')), '/sslCertificates/sinequaFrontEnd')]"
                             }
                         }
                     }
@@ -140,13 +139,13 @@
                         "properties": {
                             "RuleType": "Basic",
                             "httpListener": {
-                                "id": "[concat(variables('ag_id'), '/httpListeners/httpslistener')]"
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name')), '/httpListeners/httpslistener')]"
                             },
                             "backendAddressPool": {
-                                "id": "[concat(variables('ag_id'), '/backendAddressPools/sinequaBackendPool')]"
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name')), '/backendAddressPools/sinequaBackendPool')]"
                             },
                             "backendHttpSettings": {
-                                "id": "[concat(variables('ag_id'), '/backendHttpSettingsCollection/http')]"
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('application_gateway_name')), '/backendHttpSettingsCollection/http')]"
                             }
                         }
                     }

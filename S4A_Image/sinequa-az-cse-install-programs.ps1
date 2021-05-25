@@ -36,17 +36,11 @@ Install-Module PSWindowsUpdate -Force
 WriteLog "Install Azure PS Package"
 Install-Module Az.Storage -Force
 
-
-# Add inbound Firewall Rules for Sinequa
-WriteLog "Add Sinequa Rule in Firewall"
-netsh advfirewall firewall delete rule name= "Sinequa"
-netsh advfirewall firewall add rule name= "Sinequa" dir=in action=allow protocol=TCP localport=10300-10500
-
 #Go to Temp Drive
 $tempDrive = "D:\"
 Set-Location -Path $tempDrive
 
-# Install Custom BGInfo
+# Install Custom BGInfo (This file has to be accessible for downloading - e.g. a blob Storage)
 if ($bgFileUrl.Length -gt 0)
 {
     WriteLog "Download $bgFileUrl"
@@ -64,7 +58,8 @@ if ((Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"
 #>
 
 # Winget
-<#Invoke-WebRequest "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "$tempDrive\Microsoft.VCLibs.x64.14.00.Desktop.appx"
+<#
+Invoke-WebRequest "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "$tempDrive\Microsoft.VCLibs.x64.14.00.Desktop.appx"
 $localPackage = "$tempDrive\Microsoft.VCLibs.x64.14.00.Desktop.appx"
 DISM.EXE /Online /Add-ProvisionedAppxPackage /PackagePath:$localPackage /SkipLicense
 Invoke-WebRequest "https://github.com/microsoft/winget-cli/releases/download/v-0.2.10191-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle" -OutFile "$tempDrive\winget.appxbundle"
@@ -90,29 +85,29 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 #& winget install --silent -e --id Microsoft.WindowsTerminal
 
 
-# Telnet Client
-WriteLog "Install telnet"
-Install-WindowsFeature "telnet-client"
+# Telnet Client (can be removed) (for debugging)
+#WriteLog "Install telnet"
+#Install-WindowsFeature "telnet-client"
 
-# Google Chrome
+# Google Chrome (can be removed)
 #& winget install --silent -e --id Google.Chrome
 WriteLog "Install Google Chrome"
 Invoke-WebRequest "http://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile "$tempDrive\chrome_installer.exe"
 Start-Process -FilePath "chrome_installer.exe" -Args "/silent /install" -Verb RunAs -Wait
 
-# NotePad++
+# NotePad++ (can be removed)
 #& winget install --silent notepad++
 WriteLog "Install Notepad++"
 Invoke-WebRequest "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.9/npp.7.9.Installer.exe" -OutFile "$tempDrive\npp.7.9.Installer.exe"
 Start-Process -FilePath "npp.7.9.Installer.exe" -Args "/S" -Wait -PassThru
 
-#Visual Code
+#Visual Code (can be removed)
 #& winget install --silent -e --id Microsoft.VisualStudioCode
 WriteLog "Install Visual Code"
 Invoke-WebRequest "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64" -OutFile "$tempDrive\VSCodeSetup.exe"
 Start-Process -FilePath "VSCodeSetup.exe" -Args "/VERYSILENT /NORESTART /MERGETASKS=!runcode" -Wait -PassThru
 
-#GIT Client
+#GIT Client (can be removed)
 WriteLog "Install Git Client"
 Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.30.2.windows.1/Git-2.30.2-64-bit.exe" -OutFile "$tempDrive\git.exe"
 Start-Process -FilePath "git.exe" -Args "/VERYSILENT /NORESTART /MERGETASKS=!runcode" -Wait -PassThru

@@ -23,7 +23,8 @@
             "type": "string"
         },
         "primaryNodeCount": {
-            "type": "int"
+            "type": "int",
+            "defaultValue": 3
         },
         "vmIndexerScaleSetSize": {
             "type": "int",
@@ -82,12 +83,11 @@
         "nsg_front_name"            : "[concat('nsg-',parameters('prefix'),'-front')]",
         "availability_set_name"     : "[concat('as-', parameters('prefix'))]",
         "application_gateway_name"  : "[concat('ag-',parameters('prefix'))]",
-        "vnet_id"                   : "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetwork').name)]",
-        "subnet_id2"                : "[concat(variables('vnet_id'), '/subnets/', parameters('virtualNetwork').subnets.subnet2.name)]",
-        "subnet_id1"                : "[concat(variables('vnet_id'), '/subnets/', parameters('virtualNetwork').subnets.subnet1.name)]",
+        "subnet_id2"                : "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').name, parameters('virtualNetwork').subnets.subnet2.name)]",
+        "subnet_id1"                : "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetwork').name, parameters('virtualNetwork').subnets.subnet1.name)]",
         "data_storage_url"          : "[concat('https://',variables('st_name'),'.blob','.core','.windows','.net/',variables('container_name'))]",
         "imageReferenceId"          : "[if(equals(parameters('imageReferenceId'),'none'),'',parameters('imageReferenceId'))]",
-        "backend_address_pool_id"   : "[concat(resourceId('Microsoft.Network/applicationGateways', variables('application_gateway_name')),'/backendAddressPools/sinequaBackendPool')]",
+        "backend_address_pool_id"   : "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools', variables('application_gateway_name'),'sinequaBackendPool')]",
         "frontend_template_uri"     : "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/frontend.json', parameters('_artifactsLocationSasToken')))]",
         "network_template_uri"      : "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/network.json', parameters('_artifactsLocationSasToken')))]",
         "services_template_uri"     : "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/services.json', parameters('_artifactsLocationSasToken')))]",
