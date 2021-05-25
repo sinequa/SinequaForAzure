@@ -30,7 +30,7 @@ For deploying a Grid from the Marketplace or from your own image, ARM (Azure Res
 ```powershell
 sinequa-for-azure-deploy-grid.ps1
     [[-subscriptionId] <String>]    
-    [-templateFile <String>]    
+    [-templateUri <String>]    
     [-templateParameterFile <SecureString>]    
     [[-resourceGroupName] <String>]    
     [[-galleryName] <String>]    
@@ -41,7 +41,7 @@ sinequa-for-azure-deploy-grid.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-deploy-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid
+PS C:\> .\sinequa-for-azure-deploy-grid.ps1 -subscriptionId 00000000-0000-0000-0000-000000000000 -resourceGroupName sq-grid -templateUri https://sinequabuilds.blob.core.windows.net/arm/mainTemplate.json
 ```
 This script will deploy the `mainTemplate.json` file:
 * mainTemplate.json, ARM template which can instantiate a complete grid with:
