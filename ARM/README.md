@@ -4,7 +4,7 @@ Sinequa For Azure (S4A) ARM is a set of ARM templates used for a Sinequa ES grid
 
 #### Table of contents
 1. [Deploy a Sinequa Grid](#deploy)<br>
-2. [Nodes specialization](#specify)<br>
+2. [Node specialization](#specify)<br>
 3. [Add node to a Sinequa Grid](#add)<br>
    3.1. [Add a VM Node](#add_vm)<br>
    3.2. [Add a VMSS Node](#add_vmss)<br>
@@ -79,7 +79,7 @@ Note: Some variables could be change like:
 * node2_name
 * node2_name
 
-### 2. Nodes specialization <a name="specify">
+### 2. Node specialization <a name="specify">
 
 * **Cloud Tags of `vm-node1`**
     | Name                     | Value |
@@ -124,7 +124,7 @@ Note: Some variables could be change like:
 * **Cloud secrets (Secrets in Key Vault)**
     | Name                     | Value |
     | ------------------------ | ----- |
-	| sinequa-license		   | {License} |
+	| sinequa-license		   | `{License}` |
 
 
 ### 3. Add node to a Sinequa Grid <a name="add">	
