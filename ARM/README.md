@@ -86,7 +86,7 @@ Note: Some variables could be change like:
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
 	| sinequa-path		       | f:\sinequa |
-	| sinequa-data-storage-url | https://{storage account name}.blob.core.windows.net/sinequa |
+	| sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/sinequa |
 	| sinequa-primary-node-id  | 1 |
 	| sinequa-node	           | vm-node1 |
 	| sinequa-webapp 		   | webapp1 | 
@@ -97,7 +97,7 @@ Note: Some variables could be change like:
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
 	| sinequa-path		       | f:\sinequa |
-	| sinequa-data-storage-url | https://{storage account name}.blob.core.windows.net/sinequa |
+	| sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/sinequa |
 	| sinequa-primary-node-id  | 2 |
 	| sinequa-node	           | vm-node2 |
 	| sinequa-webapp 		   | webapp2 |
@@ -108,20 +108,20 @@ Note: Some variables could be change like:
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
 	| sinequa-path		       | f:\sinequa |
-	| sinequa-data-storage-url | https://{storage account name}.blob.core.windows.net/sinequa |
+	| sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/sinequa |
 	| sinequa-primary-node-id  | 3 |
 	| sinequa-node	           | vm-node3 |
 	| sinequa-webapp 		   | webapp3 |
 
-* Cloud Vars (in Storage Account)
+* **Cloud Vars (in Storage Account)**
     | Name                     | Value |
     | ------------------------ | ----- |
 	| sinequa-primary-nodes    | 1=srpc://vm-node1:10300;2=srpc://vm-node2:10300;3=srpc://vm-node3=10300 |
     | sinequa-beta             | true |
-	| sinequa-keyvault 	       | {Key Vault Name} |
+	| sinequa-keyvault 	       | `{Key Vault Name}` |
 	| sinequa-queue-cluster    | QueueCluster1(vm-node1,vm-node2,vm-node3) |
 	
-* Cloud secrets (Secrets in Key Vault)
+* **Cloud secrets (Secrets in Key Vault)**
     | Name                     | Value |
     | ------------------------ | ----- |
 	| sinequa-license		   | {License} |
