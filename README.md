@@ -26,7 +26,7 @@ This repository contains:
 
 ### 2.1. Cloud Init
 
-`Cloud Init` features are some capabilities during a VM deployement for initalizing a Sinequa Node for having a Ready-To-Go Node which is automaticaly registerd into a Grid and whith some roles enabled (like engine, indexer, ...).
+`Cloud Init` features are some capabilities during a VM deployement for initalizing a Sinequa Node for having a Ready-To-Go Node which is automaticaly registered into a Grid and whith some roles enabled (like engine, indexer, ...).
 
 
 #### 2.2.1. Environment Variable
@@ -44,13 +44,7 @@ The **SINEQUA_CLOUD** `Environment Variable` has to be set before starting the S
 
 | Name                     | Value Example                        | Description                          |
 | ------------------------ | ------------------------------------ | ------------------------------------ |
-|	sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/`{container}` | Used for enabling storage of 
-* Configuration
-* User Settings
-* Document Cache
-* Log Store
-* Audit Store
-and for declaring `Cloud Vars` (see bellow)|
+|	sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/`{container}` | Used for enabling storage of<br>* Configuration<br>* User Settings<br>* Document Cache<br>* Log Store<br>* Audit Store<br>and for declaring `Cloud Vars` <br>(see bellow)|
 | sinequa-auto-disk         | "auto" or JSON value                | When adding datadisk to an Azure VM there are not partitioned/formated. By using "auto", all raw disks will be automaticaly enebled |
 |	sinequa-path		          | "f:\sinequa".  Default is `distrib_path` | `sinequa-path` is the root folder for all customer data, in oppositon of `distrib-path` that contains only binaries on the OS disk. `sinequa-path` should be located on a dedicated Azure DataDisk |
 |	sinequa-index-path	      | "g:\sinequa". Optional. Default is sinequa-path | `sinequa-index-path` is the root folder for all indexes. It's recommend to use it for NVMe disks | 
