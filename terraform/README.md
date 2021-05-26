@@ -1,4 +1,4 @@
-# ARM
+# Terraform
 
 Sinequa For Azure (S4A) Terraform is a set of Terraform scritps used for a Sinequa ES grid deployment
 
@@ -29,6 +29,7 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scritps used for a Sineq
 In the modules folder, scritps are provided for building blocks:
 
 * **frontend**: Deploys an `Application Gateway` with a `Public IP`
+
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location |
