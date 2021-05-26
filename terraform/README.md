@@ -7,10 +7,10 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scritps used for a Sineq
 1. [Terraform Modules](#modules)<br>
 2. [complete_grid Sample](#complete_grid)<br>
 2.1. [Nodes specialization](#specify)<br>
-2.2. [Add node to a Sinequa Grid](#add)<br>
-2.2.1. [Add a VM Node](#add_vm)<br>
-2.2.2. [Add a VMSS Node](#add_vmss)<br>
-2.2.3. [Update a Sinequa Grid](#update)<br>
+2.2. [Add nodes to a Sinequa Grid](#add)<br>
+2.2.1.  [Add a VM Node](#add_vm)<br>
+2.2.2.  [Add a VMSS Node](#add_vmss)<br>
+2.2.3.  [Update a Sinequa Grid](#update)<br>
 
    
 
@@ -133,7 +133,7 @@ In the modules folder, scritps are provided for building blocks:
 
 ### 2. complete_grid sample <a name="complete_grid">
 
-`complete_grid`is a a deployment of all modules with these ojects:
+`complete_grid` is a a deployment of all modules with these objects:
  * 1 Application Gateway
  * 1 Availability Set
  * 1 Keyvault
@@ -206,7 +206,7 @@ PS C:\> .\terraform apply
     | ------------------------ | ----- |
 	| sinequa-license		   | `{License}` |
 
-### 2.2. Add node to a Sinequa Grid <a name="add">	
+### 2.2. Add nodes to a Sinequa Grid <a name="add">	
 #### 2.2.1 Add a VM Node <a name="add_vm"> 
 In `conf.tf` add a new resource using the `vm` module and re-deploy.
 
