@@ -26,23 +26,12 @@ provider "azurerm" {
 
 data "azurerm_client_config" "current" {}
 
-// Specify an existing key_vault
-data "azurerm_key_vault" "existing" {
-  name                 = "kvsinequatf"
-  resource_group_name  = "tfstate"
-}
-
-data "azurerm_key_vault_secret" "user" {
-  name = "test-tf-user-login"
-  key_vault_id = data.azurerm_key_vault.existing.id
-}
-data "azurerm_key_vault_secret" "password" {
-  name = "test-tf-user-password"
-  key_vault_id = data.azurerm_key_vault.existing.id
-}
-data "azurerm_key_vault_secret" "license" {
-  name = "test-tf-license"
-  key_vault_id = data.azurerm_key_vault.existing.id
+resource "random_password" "passwd" {
+  length      = 24
+  min_upper   = 4
+  min_lower   = 2
+  min_numeric = 4
+  special     = false
 }
 
 locals {
@@ -50,9 +39,9 @@ locals {
   resource_group_name     = "test_complete_grid"
   prefix                  = "sq"
   sinequa_grid            = "test"
-  os_admin_username       = data.azurerm_key_vault_secret.user.value
-  os_admin_password       = data.azurerm_key_vault_secret.password.value
-  license                 = data.azurerm_key_vault_secret.license.value
+  os_admin_username       = "sinequa"
+  os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0)
+  license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""
   node1_name              = "node1"  
   node2_name              = "node2"  
   node3_name              = "node3"  
@@ -62,7 +51,7 @@ locals {
   queue_cluster           = join("",["QueueCluster1('",local.node1_name,"')"])
   st_container_name       = "sinequa"
   data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name])
-  image_id                = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/6.1.42"
+  image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/6.1.55"
   
   ssl_certificate = {
     "name"                  = "SinequaSSL"
@@ -124,8 +113,6 @@ module "kv_st_services" {
   location              = azurerm_resource_group.sinequa_rg.location
   kv_name               = local.kv_name
   st_name               = local.st_name
-  admin_username        = local.os_admin_username
-  admin_password        = local.os_admin_password
   license               = local.license
   container_name        = local.st_container_name
 
@@ -152,6 +139,7 @@ module "vm-primary-node1" {
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
   availability_set_id   = module.frontend.as.id
+  linked_to_application_gateway = true
   backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
@@ -167,10 +155,10 @@ module "vm-primary-node1" {
     "sinequa-engine"                      = "engine1"
   }
 
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
+  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
 }
 
-// Create Primary Node1
+// Create Primary Node2
 module "vm-primary-node2" {
   source                = "../../modules/vm"
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
@@ -185,6 +173,7 @@ module "vm-primary-node2" {
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
   availability_set_id   = module.frontend.as.id
+  linked_to_application_gateway = true
   backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
@@ -194,13 +183,47 @@ module "vm-primary-node2" {
     "sinequa-auto-disk"                   = "auto"
     "sinequa-path"                        = "F:\\sinequa"
     "sinequa-data-storage-url"            = local.data_storage_url
-    "sinequa-primary-node-id"             = "1"
-    "sinequa-node"                        = local.node1_name
+    "sinequa-primary-node-id"             = "2"
+    "sinequa-node"                        = local.node2_name
     "sinequa-webapp"                      = "webApp1"
     "sinequa-engine"                      = "engine1"
   }
 
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
+  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
+}
+
+// Create Primary Node3
+module "vm-primary-node3" {
+  source                = "../../modules/vm"
+  resource_group_name   = azurerm_resource_group.sinequa_rg.name
+  location              = azurerm_resource_group.sinequa_rg.location
+  vm_name               = "vm-${local.prefix}-${local.node3_name}"
+  computer_name         = local.node3_name
+  vm_size               = "Standard_E8s_v3"
+  subnet_id             = module.network.vnet.subnet.*.id[0]
+  image_id              = local.image_id
+  admin_username        = local.os_admin_username
+  admin_password        = local.os_admin_password
+  key_vault_id          = module.kv_st_services.kv.id
+  storage_account_id    = module.kv_st_services.st.id
+  availability_set_id   = module.frontend.as.id
+  linked_to_application_gateway = true
+  backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
+  network_security_group_id = module.network.nsg_app.id
+  pip                   = true
+
+  tags = {
+    "sinequa-grid"                        = local.prefix
+    "sinequa-auto-disk"                   = "auto"
+    "sinequa-path"                        = "F:\\sinequa"
+    "sinequa-data-storage-url"            = local.data_storage_url
+    "sinequa-primary-node-id"             = "3"
+    "sinequa-node"                        = local.node3_name
+    "sinequa-webapp"                      = "webApp1"
+    "sinequa-engine"                      = "engine1"
+  }
+
+  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
 }
 
 // Create Indexer Scale Set

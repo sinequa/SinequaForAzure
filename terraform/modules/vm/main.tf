@@ -28,7 +28,7 @@ resource "azurerm_network_interface" "sinequa_vm_nic" {
 
 
 resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "sinequa_vm_to_ag" {
-  count                   = (length(var.backend_address_pool_id) ==0?0:1)
+  count                   = var.linked_to_application_gateway?0:1
   network_interface_id    = azurerm_network_interface.sinequa_vm_nic.id
   ip_configuration_name   = azurerm_network_interface.sinequa_vm_nic.ip_configuration[0].name
   backend_address_pool_id = var.backend_address_pool_id

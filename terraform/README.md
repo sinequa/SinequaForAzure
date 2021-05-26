@@ -106,6 +106,7 @@ In the modules folder, scritps are provided for building blocks:
 | storage_account_id       | Storage Account used for Sinequa Cloud Var and Container. Needed to grant read/write access on the VM identity |
 | availability_set_id      | Availaibility Set for the Application Gateway |
 | pip                      | Add a Public IP if needed |
+| linked_to_application_gateway | The VM is linked to an  Application Geteway? |
 | backend_address_pool_id  | Backend Address Pool ID of the Application Geteway. Required for VM with Webapp |
 | network_security_group_id | Network Security Group of the VM |
 | datadisk_ids             | Use existing DataDisk |
@@ -230,8 +231,6 @@ module "vm-node4" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
-  availability_set_id   = module.frontend.as.id
-  backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
 
@@ -244,7 +243,7 @@ module "vm-node4" {
     "sinequa-engine"                      = "engine4"
   }
 
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
+  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
 }
 ```
 
@@ -257,14 +256,7 @@ PS C:\> .\terraform apply
 In `conf.tf` add a new resource using the `vmss` module and re-deploy.
 
 ```terraform
-// Create VM Node 4
-
-locals  {
-    node4_name          = "node4"
-}
-
-
-// Create Indexer Scale Set
+// Create Connector Scale Set
 module "vmss-connectors" {
   source                = "../../modules/vmss"
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
