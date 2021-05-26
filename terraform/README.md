@@ -43,6 +43,7 @@ In the modules folder, scritps are provided for building blocks:
 | tags                     | Azure Tags |
 
 * **network**: Deploys `Network Security Groups` and `Virtual Network`
+
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location |
@@ -55,6 +56,7 @@ In the modules folder, scritps are provided for building blocks:
 | tags                     | Azure Tags |
 
 * **service**: Deploys a `Key Vault` and a `Storage Account`
+
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location |
@@ -70,6 +72,7 @@ In the modules folder, scritps are provided for building blocks:
 | tags                     | Azure Tags |
 
 * **service**: Deploys a `Key Vault` and a `Storage Account`
+
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location |
@@ -85,6 +88,7 @@ In the modules folder, scritps are provided for building blocks:
 | tags                     | Azure Tags |
 
 * **vm**: Deploys a `Virtual Machine`
+
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location |
@@ -108,6 +112,7 @@ In the modules folder, scritps are provided for building blocks:
 | tags                     | Azure Tags for Specifying Sinequa Roles |
 
 * **vmss**: Deploys a `Virtual Machine ScaleSet`
+
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location |
