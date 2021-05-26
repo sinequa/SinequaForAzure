@@ -10,7 +10,7 @@ terraform {
     resource_group_name   = "tstate"
     storage_account_name  = "sinequatfstate"
     container_name        = "tstate"
-    key                   = "dev.test1.terraform.tfstate"
+    key                   = "dev.complete_grid.terraform.tfstate"
   }
 }
 
@@ -47,7 +47,7 @@ data "azurerm_key_vault_secret" "license" {
 
 locals {
   region                  = "francecentral"
-  resource_group_name     = "test_fred_tf_1"
+  resource_group_name     = "test_complete_grid"
   prefix                  = "sq"
   sinequa_grid            = "test"
   os_admin_username       = data.azurerm_key_vault_secret.user.value

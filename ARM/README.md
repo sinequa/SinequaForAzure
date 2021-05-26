@@ -113,6 +113,15 @@ Note: Some variables could be change like:
 	| sinequa-node	           | vm-node3 |
 	| sinequa-webapp 		   | webapp3 |
 
+* **Cloud Tags of `vmss-indexer`**
+    | Name                     | Value |
+    | ------------------------ | ----- |
+    | sinequa-auto-disk	       | auto |
+	| sinequa-path		       | f:\sinequa |
+	| sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/sinequa |
+	| sinequa-node	           | vm-indexer |
+	| sinequa-webapp 		   | indexer1 |
+
 * **Cloud Vars (in Storage Account)**
     | Name                     | Value |
     | ------------------------ | ----- |
