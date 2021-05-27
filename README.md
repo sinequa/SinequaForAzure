@@ -8,7 +8,7 @@ Sinequa For Azure (S4A) is a set of Capabilities and Dedicated Features designed
 2.1. [Cloud Init](#cloudinit)<br>
 2.2. [Leverage Storage Account](#storageaccount)<br>
 2.3. [Leverage Scale Set for Elasticity](#scaleset)<br>
-2.4. [Application Backup & Restore](#backup)<br>
+2.4. [Back Up and Restore the Application](#backup)<br>
   
 ## 1. Repository Content <a name="content">
 
@@ -98,7 +98,7 @@ To reduce the cost of VM usage and control the indexing workload, `Scale Set` is
 
 **WIP**
 
-### 2.4. Application Backup & Restore <a name="backup">
+### 2.4. Back Up and Restore the Application <a name="backup">
 
 Thanks to [Storage Accounts](#storageaccount), you can easily back up and restore all stores. 
 
