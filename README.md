@@ -15,7 +15,7 @@ Sinequa For Azure (S4A) is a set of Capabilities and Dedicated Features designed
 This repository contains:
 * **[Powershell](./S4A_Image)** scripts to **build your own Sinequa image**
 * **[ARM](./ARM)** templates samples to **deploy a Sinequa grid**
-* **[Terraform](./Terraform)** samples to **deploy a Sinequa grid**
+* **[Terraform](./terraform)** samples to **deploy a Sinequa grid**
 
 ![Sinequa For Azure](images/S4A.png)
 
