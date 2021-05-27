@@ -55,8 +55,8 @@ The **SINEQUA_CLOUD** `Environment Variable` has to be set before starting the S
 
 #### 2.1.3. Cloud Vars & Cloud Secrets <a name="cloudvars">
 
-* `Cloud Vars` are Azure blobs stored in the Storage Account. They are used for declaring global variables in the configuration.
-* `Cloud Secrets` are secrets stored in the Key Vault defined in Cloud Vars. They are used for storing sensitive data.
+* `Cloud Vars` are `Azure blobs` stored in the `Storage Account`. They are used for declaring global variables in the configuration.
+* `Cloud Secrets` are `secrets` stored in the `Key Vault` defined in `Cloud Vars`. They are used for storing sensitive data.
 
 | Name                                    | Cloud Var | Cloud Secret | Value Example                        | Description                          |
 | --------------------------------------- | --------- | ------------ | ------------------------------------ | ------------------------------------ |
@@ -78,9 +78,9 @@ The **SINEQUA_CLOUD** `Environment Variable` has to be set before starting the S
 
 ### 2.2. Leverage Strorage Account <a name="storageaccount">
 
-In order to reduce the cost of the disk usage and to have a better reliability and availibilty on data, Blob Storage Account is broadly used for all data that not require high I/O performance.
+In order to reduce the cost of the disk usage and to have a better reliability and availibilty on data, `Blob Storage Account` is broadly used for all data that not require high I/O performances.
 
-If a `sinequa-data-storage-url` cloud tag is provided, the components bellows will automaticaly switch from DataDisk to Storage Account.
+If a `sinequa-data-storage-url` `Cloud Tag` is provided, the components bellows will automaticaly switch from `DataDisk` to `Storage Account`.
 
 It concerns:
 * Document Cache Store
@@ -94,7 +94,7 @@ It concerns:
 
 ### 2.3. Leverage Scale Set for Elasticity <a name="scaleset">
 
-In order to reduce the cost of VM usage and to control the indexing workload, Scale Set is used for scaling-up & scaling-down the number of Indexers depending on the indexing workload
+In order to reduce the cost of VM usage and to control the indexing workload, `Scale Set` is used for scaling-up & scaling-down the number of Indexers depending on the indexing workload
 
 <TODO>
 
