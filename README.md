@@ -3,19 +3,19 @@
 Sinequa For Azure (S4A) is a set of Capabilities and Dedicated Features designed for Azure.
 
 #### Table of Contents
-1. [Content of this repository](#content)<br>
+1. [Repository Content](#content)<br>
 2. [Sinequa Azure Features](#features)<br>
 2.1. [Cloud Init](#cloudinit)<br>
-2.2. [Leverage Strorage Account](#storageaccount)<br>
+2.2. [Leverage Storage Account](#storageaccount)<br>
 2.3. [Leverage Scale Set for Elasticity](#scaleset)<br>
 2.4. [Application Backup & Restore](#backup)<br>
   
-## 1. Content of this Repository <a name="content">
+## 1. Repository Content <a name="content">
 
 This repository contains:
-* **[Powershell](./S4A_Image)** scripts for building your **own Sinequa Image**
-* **[ARM](./ARM)** templates sample for **deploying a Sinequa Grid**
-* **[Terraform](./Terraform)** samples for **deploying a Sinequa Grid**
+* **[Powershell](./S4A_Image)** scripts to **build your own Sinequa image**
+* **[ARM](./ARM)** templates samples to **deploy a Sinequa grid**
+* **[Terraform](./Terraform)** samples to **deploy a Sinequa grid**
 
 ![Sinequa For Azure](images/S4A.png)
 
@@ -24,16 +24,16 @@ This repository contains:
 
 ### 2.1. Cloud Init <a name="cloudinit">
 
-`Cloud Init` features are some capabilities during a VM deployement for initalizing an out-of-the-box Sinequa Node which is automaticaly registered into a Grid with some roles enabled (like engine, indexer, etc.).
+The `Cloud Init` features are some capabilities used upon VM deployment to initialize an out-of-the-box Sinequa node that is automaticaly registered into a grid with some roles enabled (like engine, indexer, etc.).
 
 
 #### 2.1.1. Environment Variable <a name="envvars">
 
-The **SINEQUA_CLOUD** `Environment Variable` must be set before starting the Sinequa service for enabling **Cloud Init** Features
+The **SINEQUA_CLOUD** `Environment Variable` must be set before starting the Sinequa service for enabling **Cloud Init** Features.
 
 | Name                     | Value                                | Description                          |
 | ------------------------ | ------------------------------------ | ------------------------------------ |
-|	SINEQUA_CLOUD            | "Azure"                              | Enable Cloud Init features           |
+|	SINEQUA_CLOUD            | "Azure"                              | Enable Cloud Init features.          |
 
 
 #### 2.1.2. Cloud Tags <a name="cloudtags">
@@ -42,15 +42,15 @@ The **SINEQUA_CLOUD** `Environment Variable` must be set before starting the Sin
 
 | Name                     | Value Example                        | Description                          |
 | ------------------------ | ------------------------------------ | ------------------------------------ |
-|	sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/`{container}` | Used to enable storage of<br>* Configuration<br>* User Settings<br>* Document Cache<br>* Log Store<br>* Audit Store<br>and to declare `Cloud Vars` <br>(see bellow).|
+|	sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/`{container}` | Used to enable storage of:<br>* Configuration<br>* User Settings<br>* Document Cache<br>* Log Store<br>* Audit Store<br>and to declare `Cloud Vars` <br>(see bellow).|
 | sinequa-auto-disk         | "auto" or JSON value                | When adding datadisks to an Azure VM, they are not partitioned/formatted. If you select "auto", all raw disks are automaticaly enabled. |
 |	sinequa-path		          | "f:\sinequa".  Default is `distrib_path` | `sinequa-path` is the root folder for all customer data, as opposed to `distrib-path` that only contains binaries on the OS disk. `sinequa-path` should be located on a dedicated Azure DataDisk. |
 |	sinequa-index-path	      | "g:\sinequa". Optional. Default is sinequa-path | `sinequa-index-path` is the root folder for all indexes. It is recommended to use it for NVMe disks. | 
-|	sinequa-node              | "node1"                             | Node name |
-| sinequa-primary-node-id   | 1 (or 2 or 3 or empty)              | To be used on primary nodes |
-|	sinequa-webapp 		        | "webapp1"                           | Name of the WebApp to be created and started on this node |
-|	sinequa-engine		        | "engine1"                           | Name of the engine to be created and started on this node |
-|	sinequa-indexer		        | "indexer1"                          | Name of the indexer to be created and started on this node |
+|	sinequa-node              | "node1"                             | Node name. |
+| sinequa-primary-node-id   | 1 (or 2 or 3 or empty)              | To be used on primary nodes. |
+|	sinequa-webapp 		        | "webapp1"                           | Name of the WebApp to be created and started on this node.  |
+|	sinequa-engine		        | "engine1"                           | Name of the engine to be created and started on this node.  |
+|	sinequa-indexer		        | "indexer1"                          | Name of the indexer to be created and started on this node. |
 
 
 #### 2.1.3. Cloud Vars & Cloud Secrets <a name="cloudvars">
@@ -78,9 +78,9 @@ The **SINEQUA_CLOUD** `Environment Variable` must be set before starting the Sin
 
 ### 2.2. Leverage Storage Account <a name="storageaccount">
 
-To reduce the cost of the disk usage and have a better reliability and availibilty on data, `Blob Storage Account` is broadly used for all data that do not require high I/O performances.
+To reduce the cost of the disk usage and have a better reliability and availabilty on data, `Blob Storage Account` is broadly used for all data that do not require high I/O performances.
 
-If a `sinequa-data-storage-url` `Cloud Tag` is provided, the components bellow will automaticaly switch from `DataDisk` to `Storage Account`.
+If a `sinequa-data-storage-url` `Cloud Tag` is provided, the components below will automatically switch from `DataDisk` to `Storage Account`.
 
 It concerns:
 * Document cache store
@@ -100,7 +100,7 @@ To reduce the cost of VM usage and control the indexing workload, `Scale Set` is
 
 ### 2.4. Application Backup & Restore <a name="backup">
 
-Thanks to [Storage Accounts](#storageaccount), you can easily back-up and restore all stores. 
+Thanks to [Storage Accounts](#storageaccount), you can easily back up and restore all stores. 
 
 * You can back up the engine directly into `Storage Acccount`.
 * You can automatically restore the engine from `Storage Acccount` if indexes disappears (due to NVMe disk Azure policy).
