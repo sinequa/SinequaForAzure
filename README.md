@@ -3,15 +3,12 @@
 Sinequa For Azure (S4A) is a set of Capabilities and Dedicated Features designed for Azure.
 
 #### Table of contents
-0. [Pre-requisite](#prerequisite)<br>
-1. [Terraform Modules](#modules)<br>
-2. [complete_grid Sample](#complete_grid)<br>
-2.1. [Nodes specialization](#specify)<br>
-2.2. [Add nodes to a Sinequa Grid](#add)<br>
-2.2.1.  [Add a VM Node](#add_vm)<br>
-2.2.2.  [Add a VMSS Node](#add_vmss)<br>
-2.2.3.  [Update a Sinequa Grid](#update)<br>
-
+1. [Content of this repository](#content)<br>
+2. [Sinequa Azure Features](#features)<br>
+2.1. [Cloud Init](#cloudinit)<br>
+2.2. [Leverage Strorage Account](#storageaccount)<br>
+2.3. [Leverage Scale Set for Elasticity](#scaleset)<br>
+2.4. [Application Backup & Restore](#backup)<br>
   
 ## 1. Content of this repository <a name="content">
 
@@ -30,7 +27,7 @@ This repository contains:
 `Cloud Init` features are some capabilities during a VM deployement for initalizing a Sinequa Node for having a Ready-To-Go Node which is automaticaly registered into a Grid and whith some roles enabled (like engine, indexer, ...).
 
 
-#### 2.2.1. Environment Variable <a name="envvars">
+#### 2.1.1. Environment Variable <a name="envvars">
 
 The **SINEQUA_CLOUD** `Environment Variable` has to be set before starting the Sinequa service for enabling **Cloud Init** Features
 
@@ -39,7 +36,7 @@ The **SINEQUA_CLOUD** `Environment Variable` has to be set before starting the S
 |	SINEQUA_CLOUD            | "Azure"                              | Enable Cloud Init features           |
 
 
-#### 2.2.2. Cloud Tags <a name="cloudtags">
+#### 2.1.2. Cloud Tags <a name="cloudtags">
 
 `Cloud Tags` are Azure Tags used on Azure resources. They are used for executing some specific init taks for a particular VM or VMSS. 
 
@@ -56,7 +53,7 @@ The **SINEQUA_CLOUD** `Environment Variable` has to be set before starting the S
 |	sinequa-indexer		        | "indexer1"                          | Name of the indexer to create and start on this node |
 
 
-#### 2.2.3. Cloud Vars & Cloud Secrets <a name="cloudvars">
+#### 2.1.3. Cloud Vars & Cloud Secrets <a name="cloudvars">
 
 * `Cloud Vars` are Azure blobs stored in the Storage Account. They are used for declaring global variables in the configuration.
 * `Cloud Secrets` are secrets stored in the Key Vault defined in Cloud Vars. They are used for storing sensitive data.
@@ -79,7 +76,7 @@ The **SINEQUA_CLOUD** `Environment Variable` has to be set before starting the S
 |	sinequa-ssl-client-key                  | x         | x            |                                      | client private key for sRPC |
 |	sinequa-ssl-client-override-host-name   | x         | x            |                                      | override host name for sRPC |
 
-### 2.2 Leverage Strorage Account <a name="storageaccount">
+### 2.2. Leverage Strorage Account <a name="storageaccount">
 
 In order to reduce the cost of the disk usage and to have a better reliability and availibilty on data, Blob Storage Account is broadly used for all data that not require high I/O performance.
 
@@ -95,13 +92,13 @@ It concerns:
 
 <TODO>
 
-### 2.2 Leverage Scale Set for Elasticity <a name="scaleset">
+### 2.3. Leverage Scale Set for Elasticity <a name="scaleset">
 
 In order to reduce the cost of VM usage and to control the indexing workload, Scale Set is used for scaling-up & scaling-down the number of Indexers depending on the indexing workload
 
 <TODO>
 
-### 2.3 Application Backup & Restore <a name="backup">
+### 2.4. Application Backup & Restore <a name="backup">
 
 Thanks to [Storage Accounts](#storageaccount), all store can be easily backuped and restored. 
 
