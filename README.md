@@ -90,13 +90,13 @@ It concerns:
 * Audit Store
 * Log Store
 
-<TODO>
+**WIP**
 
 ### 2.3. Leverage Scale Set for Elasticity <a name="scaleset">
 
 In order to reduce the cost of VM usage and to control the indexing workload, `Scale Set` is used for scaling-up & scaling-down the number of Indexers depending on the indexing workload
 
-<TODO>
+**WIP**
 
 ### 2.4. Application Backup & Restore <a name="backup">
 
@@ -105,4 +105,5 @@ Thanks to [Storage Accounts](#storageaccount), all store can be easily backuped 
 * Engine can backup directly into `Storage Acccount`
 * Engine can restore automatilacy from `Storage Acccount` if indexes disapeared (due to NVMe disk Azure policy)
 * ...
-<TODO>
+
+**WIP**
