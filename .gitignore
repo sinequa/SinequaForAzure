@@ -1,9 +1,19 @@
 # Local .terraform directories
 **/.terraform/*
 
+**/.terraform*
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
+
+# .zip files
+*.zip
+
+# .log files
+*.log
+
+terraform/confs/sinequa.license.txt
 
 # Crash log files
 crash.log
