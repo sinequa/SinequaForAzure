@@ -7,11 +7,11 @@ Sinequa For Azure (S4A) Image is a set of scripts for creating your own Sinequa 
 2. [Create a Sinequa Version Image](#ownimage_version)<br>
 3. [Publish an Image in a Shared Image Gallery (Optional)](#ownimage_shared)<br>
 
-In the script folder, different PowerShell scripts allow you to create your own Sinequa Azure Image that you can deploy to create a Sinequa grid.
+In the script folder, different PowerShell scripts allow you to create your own Sinequa Azure image that you can deploy to create a Sinequa grid.
 
-Depending on where are located Sinequa Images and where you deploy a Grid, different sources can be used:
+Depending on where Sinequa images are located and where you deploy a grid, you can use different sources:
 - Deploy a grid in **another tenant** than your image: **Only use the Azure Marketplace** (official image, not a custom one).
-- Deploy a grid in the **same tenant** but not in the same subscription: **Marketplace** or your own **Shared Image Gallery**.
+- Deploy a grid in the **same tenant** but not in the same subscription: Use **Marketplace** or your own **Shared Image Gallery**.
 - Deploy a grid in the **same subscription**: Use either **Marketplace**, your own **Shared image gallery** or your own **image**.
 
 ## Diagram
@@ -54,7 +54,7 @@ Example:
 PS C:\> .\sinequa-for-azure-build-base-image.ps1 -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
 ```
 
-This script will run these "Custom Script Extensions":
+This script runs the following custom script extensions:
 * `sinequa-az-cse-install-programs.ps1` to install Sinequa prerequisites and optional programs. This script can be customized.
     * Install a Custom BGInfo that displays the Sinequa ES version.
     * Install C++ Resdistribuable.
@@ -94,7 +94,7 @@ sinequa-for-azure-build-image.ps1
 | user 	                 | $env:AZURE_BUILD_USER           | User for login. |
 | password 	             | $env:AZURE_BUILD_PWD            | Password for login. |
 | location               | francecentral                   | Azure region. |
-| imageResourceGroupName | rg-sinequa                      | Resource group name of the base image and of the new image to create. |
+| imageResourceGroupName | rg-sinequa                      | Resource group name of both the base image and the new image to create. |
 | baseImageName          | sinequa-base-image              | Name of the image containing the prerequisites and additional programs. |
 | imageName 	         |                                 | Name of the image to create (e.g: sinequa-nightly-11.7.0.0). |
 | version 	             |                                 | Sinequa Version (e.g.: 11.7.0.0). |
@@ -135,7 +135,7 @@ sinequa-for-azure-image-to-gallery.ps1
 | user 	                 | $env:AZURE_BUILD_USER           | User for login. |
 | password 	             | $env:AZURE_BUILD_PWD            | Password for login. |
 | location               | francecentral                   | Azure region. |
-| imageResourceGroupName | rg-sinequa                      | Resource group name of the image to share & the Shared Image Gallery.|
+| imageResourceGroupName | rg-sinequa                      | Resource group name of both the image to share & the Shared Image Gallery.|
 | galleryName            | SinequaForAzure                 | Shared Image Gallery name. |
 | imageDefinitionName 	 | sinequa-11-nightly              | Image definition name. |
 | imageName              |                                 | Image name to share (e.g.: sinequa-release-11.7.0.0). |
