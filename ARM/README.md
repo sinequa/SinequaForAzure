@@ -4,8 +4,8 @@ Sinequa For Azure (S4A) ARM is a set of ARM templates used for a Sinequa ES grid
 
 #### Table of contents
 1. [Deploy a Sinequa Grid](#deploy)<br>
-2. [Node specialization](#specify)<br>
-3. [Add a node to a Sinequa Grid](#add)<br>
+2. [Node Specialization](#specify)<br>
+3. [Add a Node to a Sinequa Grid](#add)<br>
    3.1. [Add a VM Node](#add_vm)<br>
    3.2. [Add a VMSS Node](#add_vmss)<br>
 4. [Update a Sinequa Grid](#update)<br> 
