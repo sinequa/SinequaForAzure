@@ -19,7 +19,7 @@ Note: These ARM templates are those used for the Azure Marketplace. They are des
 
 ## Diagram
 
-![Sinequa For Azure Deployment](images/S4A_Default_ARM.png)
+![Sinequa For Azure Deployment](../images/S4A_Default_ARM.png)
 
 ## Scripts
 

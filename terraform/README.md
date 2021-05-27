@@ -16,7 +16,7 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scritps used for a Sineq
 
 ## Diagram
 
-![Sinequa For Azure Deployment](images/S4A_Default_ARM.png)
+![Sinequa For Azure Deployment](../images/S4A_Default_ARM.png)
 
 ## Scripts
 
