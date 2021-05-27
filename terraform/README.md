@@ -1,13 +1,13 @@
 # Terraform
 
-Sinequa For Azure (S4A) Terraform is a set of Terraform scritps used for a Sinequa ES grid deployment
+Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sinequa ES grid deployment.
 
 #### Table of contents
-0. [Pre-requisite](#prerequisite)<br>
+0. [Prerequisite](#prerequisite)<br>
 1. [Terraform Modules](#modules)<br>
 2. [complete_grid Sample](#complete_grid)<br>
 2.1. [Nodes specialization](#specify)<br>
-2.2. [Add nodes to a Sinequa Grid](#add)<br>
+2.2. [Add Nodes to a Sinequa Grid](#add)<br>
 2.2.1.  [Add a VM Node](#add_vm)<br>
 2.2.2.  [Add a VMSS Node](#add_vmss)<br>
 2.2.3.  [Update a Sinequa Grid](#update)<br>
@@ -20,130 +20,130 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scritps used for a Sineq
 
 ## Scripts
 
-### 0. Pre-requisite <a name="prerequisite">
+### 0. Prerequisite <a name="prerequisite">
 
 * https://www.terraform.io/downloads.html
 
 ### 1. Terraform Modules <a name="modules">
 
-In the modules folder, scritps are provided for building blocks:
+In the modules folder, scripts are provided to build blocks:
 
 * **frontend**: Deploys an `Application Gateway` with a `Public IP`
 
 | Variables                | Description |
 | ------------------------ | ----------- |
-| location                 | Azure location |
-| resource_group_name      | Resource Group for deployment |
-| availability_set_name    | Availability Set name to create. Needed for the Application Gateway |
-| application_gateway_name | Name of the Application Gateway to create |
-| subnet_id                | Subnet Id for the Application Gateway. Used only for HTTPS from end-users |
-| certificate              | Certificate object for SSL. Could be directly the content of a pfx file or a Certificate from a key vault |
-| dns_name                 | DNS name prefix for the Application Gateway Public IP |
-| kv_identity_reader       | Identity for reading the Key Vault Certificate (if used) |
-| tags                     | Azure Tags |
+| location                 | Azure location. |
+| resource_group_name      | Resource group for deployment. |
+| availability_set_name    | Availability set name to create. Needed for the application gateway. |
+| application_gateway_name | Name of the application gateway to create. |
+| subnet_id                | Subnet ID for the application gateway. Used only for HTTPS from end-users. |
+| certificate              | Certificate object for SSL. Could be directly the content of a .pfx file or a certificate from a key vault. |
+| dns_name                 | DNS name prefix for the application gateway public IP. |
+| kv_identity_reader       | Identity for reading the key vault certificate (if used). |
+| tags                     | Azure tags. |
 
 * **network**: Deploys `Network Security Groups` and `Virtual Network`
 
 | Variables                | Description |
 | ------------------------ | ----------- |
-| location                 | Azure location |
-| resource_group_name      | Resource Group for deployment |
-| vnet_name                | Virtual Network to create |
-| subnet_app_name          | Subnet for VM & VMSS |
-| subnet_front_name        | Subnet for the Application Gateway |
-| nsg_app_name             | Network Security Group for VM & VMSS  (RDP rule) |
-| nsg_front_name           | Network Security Group for the Application Gateway (HTTPS rule) |
-| tags                     | Azure Tags |
+| location                 | Azure location. |
+| resource_group_name      | Resource Group for deployment. |
+| vnet_name                | Virtual Network to create. |
+| subnet_app_name          | Subnet for VM & VMSS. |
+| subnet_front_name        | Subnet for the application gateway. |
+| nsg_app_name             | Network security group for VM & VMSS  (RDP rule). |
+| nsg_front_name           | Network security group for the application gateway (HTTPS rule). |
+| tags                     | Azure tags. |
 
 * **service**: Deploys a `Key Vault` and a `Storage Account`
 
 | Variables                | Description |
 | ------------------------ | ----------- |
-| location                 | Azure location |
-| resource_group_name      | Resource Group for deployment |
-| kv_name                  | Key Vault to create |
-| st_name                  | Storage Account to create |
-| container_name           | Container in the Storage Account |
-| license                  | Sinequa License to be uploaded in the key vault as secret |
-| blob_sinequa_primary_nodes | Sinequa Cloud Vars for sRPC connection string of primary nodes |
-| blob_sinequa_beta        | Sinequa Cloud Vars for enabling beta features |
-| blob_sinequa_keyvault    | Sinequa Cloud Vars for specifying the Key Vault Url |
-| blob_sinequa_queuecluster | Sinequa Cloud Vars for creating a QueueCluster |
-| tags                     | Azure Tags |
+| location                 | Azure location. |
+| resource_group_name      | Resource group for deployment. |
+| kv_name                  | Key vault to create. |
+| st_name                  | Storage account to create. |
+| container_name           | Container in the storage account. |
+| license                  | Sinequa license to be uploaded in the key vault as secret. |
+| blob_sinequa_primary_nodes | Sinequa Cloud Vars for sRPC connection string of primary nodes. |
+| blob_sinequa_beta        | Sinequa Cloud Vars to enable beta features. |
+| blob_sinequa_keyvault    | Sinequa Cloud Vars to specify the key vault URL. |
+| blob_sinequa_queuecluster | Sinequa Cloud Vars to create a QueueCluster. |
+| tags                     | Azure tags. |
 
 * **service**: Deploys a `Key Vault` and a `Storage Account`
 
 | Variables                | Description |
 | ------------------------ | ----------- |
-| location                 | Azure location |
-| resource_group_name      | Resource Group for deployment |
-| kv_name                  | Key Vault to create |
-| st_name                  | Storage Account to create |
-| container_name           | Container in the Storage Account |
-| license                  | Sinequa License to be uploaded in the key vault as secret |
-| blob_sinequa_primary_nodes | Sinequa Cloud Vars for sRPC connection string of primary nodes |
-| blob_sinequa_beta        | Sinequa Cloud Vars for enabling beta features |
-| blob_sinequa_keyvault    | Sinequa Cloud Vars for specifying the Key Vault Url |
-| blob_sinequa_queuecluster | Sinequa Cloud Vars for creating a QueueCluster |
-| tags                     | Azure Tags |
+| location                 | Azure location. |
+| resource_group_name      | Resource Group for deployment. |
+| kv_name                  | Key Vault to create. |
+| st_name                  | Storage account to create. |
+| container_name           | Container in the storage account. |
+| license                  | Sinequa license to be uploaded in the key vault as secret. |
+| blob_sinequa_primary_nodes | Sinequa Cloud Vars for sRPC connection string of primary nodes. |
+| blob_sinequa_beta        | Sinequa Cloud Vars to enable beta features. |
+| blob_sinequa_keyvault    | Sinequa Cloud Vars to specify the key vault URL. |
+| blob_sinequa_queuecluster | Sinequa Cloud Vars to create a queue cluster. |
+| tags                     | Azure tags |
 
 * **vm**: Deploys a `Virtual Machine`
 
 | Variables                | Description |
 | ------------------------ | ----------- |
-| location                 | Azure location |
-| resource_group_name      | Resource Group for deployment |
-| vm_name                  | Name of the VM |
-| vm_size                  | VM Size |
-| computer_name            | VM OS Computer Name |
-| subnet_id                | Subnet Id of the VM |
-| image_id                 | Sinequa Image to use (Image or Image Definition) for creating the VM |
-| os_disk_type             | OS Disk Type |
-| data_disk_type           | Size of the Data Disk |
-| admin_username           | OS user login |
-| admin_password           | OS user password |
-| key_vault_id             | Key Vault used for Secrets. Needed to grant read Secrets access on the VM identity |
-| storage_account_id       | Storage Account used for Sinequa Cloud Var and Container. Needed to grant read/write access on the VM identity |
-| availability_set_id      | Availaibility Set for the Application Gateway |
-| pip                      | Add a Public IP if needed |
-| linked_to_application_gateway | The VM is linked to an  Application Geteway? |
-| backend_address_pool_id  | Backend Address Pool ID of the Application Geteway. Required for VM with Webapp |
-| network_security_group_id | Network Security Group of the VM |
-| datadisk_ids             | Use existing DataDisk |
-| tags                     | Azure Tags for Specifying Sinequa Roles |
+| location                 | Azure location. |
+| resource_group_name      | Resource group for deployment. |
+| vm_name                  | Name of the VM. |
+| vm_size                  | VM size. |
+| computer_name            | VM OS computer name. |
+| subnet_id                | Subnet ID of the VM. |
+| image_id                 | Sinequa image to use (image or image definition) to create the VM. |
+| os_disk_type             | OS disk type. |
+| data_disk_type           | Size of the data disk. |
+| admin_username           | OS user login. |
+| admin_password           | OS user password. |
+| key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VM identity. |
+| storage_account_id       | Storage account used for Sinequa Cloud Var and Container. Needed to grant read/write access on the VM identity. |
+| availability_set_id      | Availaibility set for the application gateway. |
+| pip                      | Add a public IP if needed. |
+| linked_to_application_gateway | The VM is linked to an application gateway? |
+| backend_address_pool_id  | Backend Address Pool ID of the application gateway. Required for VM with WebApp. |
+| network_security_group_id | Network security group of the VM. |
+| datadisk_ids             | Use existing data disk. |
+| tags                     | Azure tags to specify Sinequa roles. |
 
 * **vmss**: Deploys a `Virtual Machine ScaleSet`
 
 | Variables                | Description |
 | ------------------------ | ----------- |
-| location                 | Azure location |
-| resource_group_name      | Resource Group for deployment |
-| vmss_name                | Name of the VMSS |
-| vmss_size                | VMSS Size |
-| vmss_capacity            | Number of instances of the VMSS |
-| computer_name_prefix     | VMSS OS Computer Name prefix |
-| subnet_id                | Subnet Id of the VM |
-| image_id                 | Sinequa Image to use (Image or Image Definition) for creating the VMSS |
-| os_disk_type             | OS Disk Type |
-| admin_username           | OS user login |
-| admin_password           | OS user password |
-| key_vault_id             | Key Vault used for Secrets. Needed to grant read Secrets access on the VMSS identity |
-| storage_account_id       | Storage Account used for Sinequa Cloud Var and Container. Needed to grant read/write access on the VMSS identity |
-| network_security_group_id | Network Security Group of the VM |
-| tags                     | Azure Tags for Specifying Sinequa Roles |
+| location                 | Azure location. |
+| resource_group_name      | Resource group for deployment. |
+| vmss_name                | Name of the VMSS. |
+| vmss_size                | VMSS size. |
+| vmss_capacity            | Number of instances of the VMSS. |
+| computer_name_prefix     | VMSS OS computer name prefix. |
+| subnet_id                | Subnet ID of the VM. |
+| image_id                 | Sinequa image to use (image or image definition) to create the VMSS. |
+| os_disk_type             | OS disk type. |
+| admin_username           | OS user login. |
+| admin_password           | OS user password. |
+| key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VMSS identity. |
+| storage_account_id       | Storage account used for Sinequa Cloud Var and Container. Needed to grant read/write access on the VMSS identity. |
+| network_security_group_id | Network security group of the VM. |
+| tags                     | Azure tags to specify Sinequa roles. |
 
 ### 2. complete_grid sample <a name="complete_grid">
 
 `complete_grid` is a a deployment of all modules with these objects:
- * 1 Application Gateway
- * 1 Availability Set
- * 1 Keyvault
+ * 1 Application gateway
+ * 1 Availability set
+ * 1 Key vault
  * 2 Network security groups
  * 1 Public IP address
  * 1 Storage account
  * 1 Virtual machine scale sets for Indexer
  * 1 Virtual network
- * 3 Virtual Machines for Primary Nodes
+ * 3 Virtual Machines for primary nodes
 
 
 ```powershell
@@ -151,7 +151,7 @@ PS C:\> .\terraform init
 PS C:\> .\terraform validate
 PS C:\> .\terraform apply
 ```
-#####  2.1. Nodes specialization <a name="specify">
+#####  2.1. Nodes Specialization <a name="specify">
 
 * **Cloud Tags of `vm-node1`**
     | Name                     | Value |
