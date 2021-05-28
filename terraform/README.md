@@ -147,9 +147,9 @@ In the modules folder, scripts are provided to build blocks:
 
 
 ```powershell
-PS C:\> .\terraform init
-PS C:\> .\terraform validate
-PS C:\> .\terraform apply
+PS C:\S4A\terraform\confs\complete_grid> .\terraform init
+PS C:\S4A\terraform\confs\complete_grid> .\terraform validate
+PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
 #####  2.1. Nodes Specialization <a name="specify">
 
@@ -248,7 +248,7 @@ module "vm-node4" {
 ```
 
 ```powershell
-PS C:\> .\terraform apply
+PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
 
 
@@ -281,14 +281,18 @@ module "vmss-connectors" {
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
 }
 ```
+```powershell
+PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
+```
+
 
 ### 2.2.3. Update a Sinequa Grid <a name="update"> 
-To update a complete grid, just change the `local.image_id` with the new version, then re-deploy.
+To update a complete grid, just change the `local.image_id` of the `conf.tf` with the new version, then re-deploy.
 
 ```terraform
 image_id                = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/6.1.42"
 ```
 
 ```powershell
-PS C:\> .\terraform apply
+PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
