@@ -2,7 +2,7 @@
 
 Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sinequa ES grid deployment.
 
-#### Table of contents
+#### Table of Contents
 0. [Prerequisite](#prerequisite)<br>
 1. [Terraform Modules](#modules)<br>
 2. [complete_grid Sample](#complete_grid)<br>
@@ -28,7 +28,7 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sineq
 
 In the modules folder, scripts are provided to build blocks:
 
-* **frontend**: Deploys an `application gateway` with a `public IP`.
+* **frontend**: Deploys an application gateway with a public IP.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -42,7 +42,7 @@ In the modules folder, scripts are provided to build blocks:
 | kv_identity_reader       | Identity for reading the key vault certificate (if used). |
 | tags                     | Azure tags. |
 
-* **network**: Deploys `network security groups` and `virtual network`.
+* **network**: Deploys network security groups and virtual network.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -55,7 +55,7 @@ In the modules folder, scripts are provided to build blocks:
 | nsg_front_name           | Network security group for the application gateway (HTTPS rule). |
 | tags                     | Azure tags. |
 
-* **service**: Deploys a `key vault` and a `storage account`.
+* **service**: Deploys a key vault and a storage account.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -65,29 +65,13 @@ In the modules folder, scripts are provided to build blocks:
 | st_name                  | Storage account to create. |
 | container_name           | Container in the storage account. |
 | license                  | Sinequa license to be uploaded in the key vault as secret. |
-| blob_sinequa_primary_nodes | Sinequa cloud variable for sRPC connection string of primary nodes. |
+| blob_sinequa_primary_nodes | Sinequa cloud variable for sRPC connection string of [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html). |
 | blob_sinequa_beta        | Sinequa cloud variable to enable beta features. |
 | blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
-| blob_sinequa_queuecluster | Sinequa cloud variable to create a queue cluster. |
-| tags                     | Azure tags. |
-
-* **service**: Deploys a `key vault` and a `storage account`.
-
-| Variables                | Description |
-| ------------------------ | ----------- |
-| location                 | Azure location. |
-| resource_group_name      | Resource group for deployment. |
-| kv_name                  | Key vault to create. |
-| st_name                  | Storage account to create. |
-| container_name           | Container in the storage account. |
-| license                  | Sinequa license to be uploaded in the key vault as secret. |
-| blob_sinequa_primary_nodes | Sinequa cloud variable for sRPC connection string of primary nodes. |
-| blob_sinequa_beta        | Sinequa cloud variable to enable beta features. |
-| blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
-| blob_sinequa_queuecluster | Sinequa cloud variable to create a queue cluster. |
+| blob_sinequa_queuecluster | Sinequa cloud variable to create a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). |
 | tags                     | Azure tags |
 
-* **vm**: Deploys a `virtual machine`.
+* **vm**: Deploys a virtual machine.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -112,7 +96,7 @@ In the modules folder, scripts are provided to build blocks:
 | datadisk_ids             | Use existing data disk. |
 | tags                     | Azure tags to specify Sinequa roles. |
 
-* **vmss**: Deploys a `virtual machine scale set`.
+* **vmss**: Deploys a virtual machine scale set.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -132,18 +116,18 @@ In the modules folder, scripts are provided to build blocks:
 | network_security_group_id | Network security group of the VM. |
 | tags                     | Azure tags to specify Sinequa roles. |
 
-### 2. complete_grid sample <a name="complete_grid">
+### 2. complete_grid Sample <a name="complete_grid">
 
-`complete_grid\conf.tf` is a a deployment of all modules with these objects:
- * 1 Application gateway
- * 1 Availability set
- * 1 Key vault
- * 2 Network security groups
- * 1 Public IP address
- * 1 Storage account
- * 1 Virtual machine scale sets for indexer
- * 1 Virtual network
- * 3 Virtual machines for primary nodes
+`complete_grid\conf.tf` is a deployment of all modules with these objects:
+ * 1 application gateway
+ * 1 availability set
+ * 1 key vault
+ * 2 network security groups
+ * 1 public IP address
+ * 1 storage account
+ * 1 virtual machine scale sets for indexer
+ * 1 virtual network
+ * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
 
 
 ```powershell
@@ -153,7 +137,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
 #####  2.1. Nodes Specialization <a name="specify">
 
-* **Cloud Tags of `vm-node1`**
+* **Cloud tags of `vm-node1`**:
     | Name                     | Value |
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
@@ -164,7 +148,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 	| sinequa-webapp 		   | webapp1 | 
 	| sinequa-engine		   | engine1 |
 
-* **Cloud Tags of `vm-node2`**
+* **Cloud tags of `vm-node2`**:
     | Name                     | Value |
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
@@ -175,7 +159,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 	| sinequa-webapp 		   | webapp2 |
 	| sinequa-engine		   | engine2 |
 
-* **Cloud Tags of `vm-node3`**
+* **Cloud tags of `vm-node3`**:
     | Name                     | Value |
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
@@ -185,7 +169,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 	| sinequa-node	           | vm-node3 |
 	| sinequa-webapp 		   | webapp3 |
 
-* **Cloud Tags of `vmss-indexer`**
+* **Cloud tags of `vmss-indexer`**:
     | Name                     | Value |
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
@@ -194,7 +178,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 	| sinequa-node	           | vm-indexer |
 	| sinequa-webapp 		   | indexer1 |
 
-* **Cloud Vars (in Storage Account)**
+* **Cloud variables (in Storage account)**:
     | Name                     | Value |
     | ------------------------ | ----- |
 	| sinequa-primary-nodes    | 1=srpc://vm-node1:10300;2=srpc://vm-node2:10300;3=srpc://vm-node3=10300 |
@@ -202,17 +186,17 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 	| sinequa-keyvault 	       | `{Key Vault Name}` |
 	| sinequa-queue-cluster    | QueueCluster1(vm-node1,vm-node2,vm-node3) |
 	
-* **Cloud secrets (Secrets in Key Vault)**
+* **Cloud secrets (secrets in key vault)**:
     | Name                     | Value |
     | ------------------------ | ----- |
 	| sinequa-license		   | `{License}` |
 
-### 2.2. Add nodes to a Sinequa Grid <a name="add">	
+### 2.2. Add Nodes to a Sinequa Grid <a name="add">	
 #### 2.2.1 Add a VM Node <a name="add_vm"> 
-In `conf.tf` add a new resource using the `vm` module and re-deploy.
+In `conf.tf`, add a new resource using the `vm` module and re-deploy.
 
 ```terraform
-// Create VM Node 4
+// Create VM node 4
 
 locals  {
     node4_name          = "node4"
