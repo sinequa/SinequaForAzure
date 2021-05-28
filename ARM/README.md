@@ -2,7 +2,7 @@
 
 Sinequa For Azure (S4A) ARM is a set of ARM templates used for a Sinequa ES grid deployment.
 
-#### Table of contents
+#### Table of Contents
 1. [Deploy a Sinequa Grid](#deploy)<br>
 2. [Node Specialization](#specify)<br>
 3. [Add a Node to a Sinequa Grid](#add)<br>
@@ -64,7 +64,7 @@ This script deploys the following files:
 | adminPassword 	     |                                | Windows user password. |
 | vmSize 		     |                                | vmSize of primary nodes. |
 | vmIndexerSize 	     |                                | vmSize of the indexer scale set. Default |
-| vmIndexerScaleSetSize	     | 1                              | Indexer Scale Set size (instances). |
+| vmIndexerScaleSetSize	     | 1                              | Indexer scale set size (instances). |
 | primaryNodeCount 	     | 3                              | Number of primary nodes (1 or 3). |
 | certificateBase64          |                                | Certificate file (.pfx) in base64 format for HTTPS. |
 | certificatePassword        |                                | Password of the certificate. |
@@ -81,7 +81,7 @@ Note: Some variables could be change like:
 
 ### 2. Node Specialization <a name="specify">
 
-* **Cloud Tags of `vm-node1`**
+* **Cloud tags of `vm-node1`**:
     | Name                     | Value |
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
@@ -92,7 +92,7 @@ Note: Some variables could be change like:
 	| sinequa-webapp 		   | webapp1 | 
 	| sinequa-engine		   | engine1 |
 
-* **Cloud Tags of `vm-node2`**
+* **Cloud tags of `vm-node2`**:
     | Name                     | Value |
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
@@ -103,7 +103,7 @@ Note: Some variables could be change like:
 	| sinequa-webapp 		   | webapp2 |
 	| sinequa-engine		   | engine2 |
 
-* **Cloud Tags of `vm-node3`**
+* **Cloud tags of `vm-node3`**:
     | Name                     | Value |
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
@@ -113,7 +113,7 @@ Note: Some variables could be change like:
 	| sinequa-node	           | vm-node3 |
 	| sinequa-webapp 		   | webapp3 |
 
-* **Cloud Tags of `vmss-indexer`**
+* **Cloud tags of `vmss-indexer`**:
     | Name                     | Value |
     | ------------------------ | ----- |
     | sinequa-auto-disk	       | auto |
@@ -122,7 +122,7 @@ Note: Some variables could be change like:
 	| sinequa-node	           | vm-indexer |
 	| sinequa-webapp 		   | indexer1 |
 
-* **Cloud Vars (in Storage Account)**
+* **Cloud variables (in Storage account)**:
     | Name                     | Value |
     | ------------------------ | ----- |
 	| sinequa-primary-nodes    | 1=srpc://vm-node1:10300;2=srpc://vm-node2:10300;3=srpc://vm-node3=10300 |
@@ -130,7 +130,7 @@ Note: Some variables could be change like:
 	| sinequa-keyvault 	       | `{Key Vault Name}` |
 	| sinequa-queue-cluster    | QueueCluster1(vm-node1,vm-node2,vm-node3) |
 	
-* **Cloud secrets (Secrets in Key Vault)**
+* **Cloud secrets (Secrets in key vault)**:
     | Name                     | Value |
     | ------------------------ | ----- |
 	| sinequa-license		   | `{License}` |
@@ -145,7 +145,7 @@ In `mainTemplate.json`, add a new resource using the nested template named `vmss
 
 ### 4. Update a Sinequa Grid <a name="update"> 
 #### 4.1. Update a VM Node <a name="update_vm">   
-This is not possible via ARM. You have to update your VM manually via a classical Sinequa update inside the VM.
+This is not possible via ARM. You have to update your VM manually via a classical [Sinequa update](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.managingSolution.update.html) inside the VM.
 
 #### 4.2. Update a VMSS Node <a name="update_vmss">    
 This is not possible via ARM. You have to update your VMSS manually by deleting the VMSS and execute a new deployment.
