@@ -2,7 +2,7 @@
 
 Sinequa For Azure (S4A) Image is a set of scripts for creating your own Sinequa image on Azure.
 
-#### Table of contents
+#### Table of Contents
 1. [Create the Base Image](#ownimage_base)<br>
 2. [Create a Sinequa Version Image](#ownimage_version)<br>
 3. [Publish an Image in a Shared Image Gallery (Optional)](#ownimage_shared)<br>
@@ -66,7 +66,7 @@ This script runs the following custom script extensions:
 * `sinequa-az-cse-windows-update.ps1` to apply Windows updates.
 
 #### 2. Create a Sinequa Version Image <a name="ownimage_version">
-Create a **Sinequa Image** from a **distribution file** (sinequa.11.zip). This script installs Sinequa (unzip & install Services) that can be specialized (engine, indexer, .. roles) during the first init (i.e. deployment).
+Create a **Sinequa image** from a **distribution file** (sinequa.11.zip). This script installs Sinequa (unzip & install services) that can be specialized (engine, indexer, .. roles) upon first init (i.e. deployment).
 * You must set `localFile` or `fileUrl`.
 
 ```powershell
