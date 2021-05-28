@@ -29,7 +29,7 @@ The cloud init features are some capabilities used upon VM deployment to initial
 
 #### 2.1.1. Environment Variable <a name="envvars">
 
-You must set the **SINEQUA_CLOUD** `environment variable` before starting the Sinequa service to enable **cloud init** features.
+You must set the **SINEQUA_CLOUD** environment variable before starting the Sinequa service to enable **cloud init** features.
 
 | Name                     | Value                                | Description                          |
 | ------------------------ | ------------------------------------ | ------------------------------------ |
@@ -80,7 +80,7 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 
 To reduce the cost of the disk usage and have a better reliability and availabilty on data, an Azure Blob storage account is broadly used for all data that do not require high I/O performances.
 
-If a `sinequa-data-storage-url` cloud tag is provided, the components below will automatically switch from data disk to Storage account.
+If a `sinequa-data-storage-url` cloud tag is provided, the components below will automatically switch from data disk to Azure Storage account.
 
 It concerns:
 * Document cache store
