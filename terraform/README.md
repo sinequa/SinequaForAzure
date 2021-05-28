@@ -6,7 +6,7 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sineq
 0. [Prerequisite](#prerequisite)<br>
 1. [Terraform Modules](#modules)<br>
 2. [complete_grid Sample](#complete_grid)<br>
-2.1. [Nodes specialization](#specify)<br>
+2.1. [Nodes Specialization](#specify)<br>
 2.2. [Add Nodes to a Sinequa Grid](#add)<br>
 2.2.1.  [Add a VM Node](#add_vm)<br>
 2.2.2.  [Add a VMSS Node](#add_vmss)<br>
@@ -28,7 +28,7 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sineq
 
 In the modules folder, scripts are provided to build blocks:
 
-* **frontend**: Deploys an `Application Gateway` with a `Public IP`
+* **frontend**: Deploys an `application gateway` with a `public IP`.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -42,20 +42,20 @@ In the modules folder, scripts are provided to build blocks:
 | kv_identity_reader       | Identity for reading the key vault certificate (if used). |
 | tags                     | Azure tags. |
 
-* **network**: Deploys `Network Security Groups` and `Virtual Network`
+* **network**: Deploys `network security groups` and `virtual network`.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location. |
-| resource_group_name      | Resource Group for deployment. |
-| vnet_name                | Virtual Network to create. |
+| resource_group_name      | Resource group for deployment. |
+| vnet_name                | Virtual network to create. |
 | subnet_app_name          | Subnet for VM & VMSS. |
 | subnet_front_name        | Subnet for the application gateway. |
-| nsg_app_name             | Network security group for VM & VMSS  (RDP rule). |
+| nsg_app_name             | Network security group for VM & VMSS (RDP rule). |
 | nsg_front_name           | Network security group for the application gateway (HTTPS rule). |
 | tags                     | Azure tags. |
 
-* **service**: Deploys a `Key Vault` and a `Storage Account`
+* **service**: Deploys a `key vault` and a `storage account`.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -65,29 +65,29 @@ In the modules folder, scripts are provided to build blocks:
 | st_name                  | Storage account to create. |
 | container_name           | Container in the storage account. |
 | license                  | Sinequa license to be uploaded in the key vault as secret. |
-| blob_sinequa_primary_nodes | Sinequa Cloud Vars for sRPC connection string of primary nodes. |
-| blob_sinequa_beta        | Sinequa Cloud Vars to enable beta features. |
-| blob_sinequa_keyvault    | Sinequa Cloud Vars to specify the key vault URL. |
-| blob_sinequa_queuecluster | Sinequa Cloud Vars to create a QueueCluster. |
+| blob_sinequa_primary_nodes | Sinequa cloud variable for sRPC connection string of primary nodes. |
+| blob_sinequa_beta        | Sinequa cloud variable to enable beta features. |
+| blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
+| blob_sinequa_queuecluster | Sinequa cloud variable to create a queue cluster. |
 | tags                     | Azure tags. |
 
-* **service**: Deploys a `Key Vault` and a `Storage Account`
+* **service**: Deploys a `key vault` and a `storage account`.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location. |
-| resource_group_name      | Resource Group for deployment. |
-| kv_name                  | Key Vault to create. |
+| resource_group_name      | Resource group for deployment. |
+| kv_name                  | Key vault to create. |
 | st_name                  | Storage account to create. |
 | container_name           | Container in the storage account. |
 | license                  | Sinequa license to be uploaded in the key vault as secret. |
-| blob_sinequa_primary_nodes | Sinequa Cloud Vars for sRPC connection string of primary nodes. |
-| blob_sinequa_beta        | Sinequa Cloud Vars to enable beta features. |
-| blob_sinequa_keyvault    | Sinequa Cloud Vars to specify the key vault URL. |
-| blob_sinequa_queuecluster | Sinequa Cloud Vars to create a queue cluster. |
+| blob_sinequa_primary_nodes | Sinequa cloud variable for sRPC connection string of primary nodes. |
+| blob_sinequa_beta        | Sinequa cloud variable to enable beta features. |
+| blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
+| blob_sinequa_queuecluster | Sinequa cloud variable to create a queue cluster. |
 | tags                     | Azure tags |
 
-* **vm**: Deploys a `Virtual Machine`
+* **vm**: Deploys a `virtual machine`.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -103,16 +103,16 @@ In the modules folder, scripts are provided to build blocks:
 | admin_username           | OS user login. |
 | admin_password           | OS user password. |
 | key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VM identity. |
-| storage_account_id       | Storage account used for Sinequa Cloud Var and Container. Needed to grant read/write access on the VM identity. |
-| availability_set_id      | Availaibility set for the application gateway. |
+| storage_account_id       | Storage account used for Sinequa cloud variable and container. Needed to grant read/write access on the VM identity. |
+| availability_set_id      | Availability set for the application gateway. |
 | pip                      | Add a public IP if needed. |
-| linked_to_application_gateway | The VM is linked to an application gateway? |
-| backend_address_pool_id  | Backend Address Pool ID of the application gateway. Required for VM with WebApp. |
+| linked_to_application_gateway | The VM is linked to an application gateway. |
+| backend_address_pool_id  | Backend address pool ID of the application gateway. Required for VM with WebApp. |
 | network_security_group_id | Network security group of the VM. |
 | datadisk_ids             | Use existing data disk. |
 | tags                     | Azure tags to specify Sinequa roles. |
 
-* **vmss**: Deploys a `Virtual Machine ScaleSet`
+* **vmss**: Deploys a `virtual machine scale set`.
 
 | Variables                | Description |
 | ------------------------ | ----------- |
@@ -128,7 +128,7 @@ In the modules folder, scripts are provided to build blocks:
 | admin_username           | OS user login. |
 | admin_password           | OS user password. |
 | key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VMSS identity. |
-| storage_account_id       | Storage account used for Sinequa Cloud Var and Container. Needed to grant read/write access on the VMSS identity. |
+| storage_account_id       | Storage account used for Sinequa cloud variable and container. Needed to grant read/write access on the VMSS identity. |
 | network_security_group_id | Network security group of the VM. |
 | tags                     | Azure tags to specify Sinequa roles. |
 
@@ -141,9 +141,9 @@ In the modules folder, scripts are provided to build blocks:
  * 2 Network security groups
  * 1 Public IP address
  * 1 Storage account
- * 1 Virtual machine scale sets for Indexer
+ * 1 Virtual machine scale sets for indexer
  * 1 Virtual network
- * 3 Virtual Machines for primary nodes
+ * 3 Virtual machines for primary nodes
 
 
 ```powershell
@@ -253,10 +253,10 @@ PS C:\> .\terraform apply
 
 
 #### 2.2.2 Add a VMSS Node <a name="add_vmss"> 
-In `conf.tf` add a new resource using the `vmss` module and re-deploy.
+In `conf.tf`, add a new resource using the `vmss` module and re-deploy.
 
 ```terraform
-// Create Connector Scale Set
+// Create connector scale set
 module "vmss-connectors" {
   source                = "../../modules/vmss"
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
@@ -283,7 +283,7 @@ module "vmss-connectors" {
 ```
 
 ### 2.2.3. Update a Sinequa Grid <a name="update"> 
-For updating a complete grid, just change the `local.image_id` with the new version, and re-deploy
+To update a complete grid, just change the `local.image_id` with the new version, then re-deploy.
 
 ```terraform
 image_id                = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/6.1.42"
