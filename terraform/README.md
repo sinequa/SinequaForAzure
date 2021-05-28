@@ -134,7 +134,7 @@ In the modules folder, scripts are provided to build blocks:
 
 ### 2. complete_grid sample <a name="complete_grid">
 
-`complete_grid` is a a deployment of all modules with these objects:
+`complete_grid\conf.tf` is a a deployment of all modules with these objects:
  * 1 Application gateway
  * 1 Availability set
  * 1 Key vault
