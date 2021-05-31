@@ -5,16 +5,20 @@ resource "azurerm_virtual_network" "sinequa_vnet" {
   location                  = var.location
   resource_group_name       = var.resource_group_name
   tags                      = var.tags
+}
 
-  subnet {
-    name           = var.subnet_app_name
-    address_prefix = "10.3.1.0/24"
-  }
+resource "azurerm_subnet" "subnet_app" {
+  name                 = var.subnet_app_name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.sinequa_vnet.name
+  address_prefixes     = ["10.3.1.0/24"]
+}
 
-  subnet {
-    name           = var.subnet_front_name
-    address_prefix = "10.3.2.0/24"
-  }
+resource "azurerm_subnet" "subnet_front" {
+  name                 = var.subnet_front_name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.sinequa_vnet.name
+  address_prefixes     = ["10.3.2.0/24"]
 }
 
 resource "azurerm_network_security_group" "sinequa_nsg_front" {
@@ -88,12 +92,12 @@ resource "azurerm_network_security_group" "sinequa_nsg_app" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "sinequa_subnet_nsg_app" {
-  subnet_id                 = azurerm_virtual_network.sinequa_vnet.subnet.*.id[0]
+  subnet_id                 = azurerm_subnet.subnet_app.id
   network_security_group_id = azurerm_network_security_group.sinequa_nsg_app.id
 }
 
 resource "azurerm_subnet_network_security_group_association" "sinequa_subnet_nsg_front" {
-  subnet_id                 = azurerm_virtual_network.sinequa_vnet.subnet.*.id[1]
+  subnet_id                 = azurerm_subnet.subnet_front.id
   network_security_group_id = azurerm_network_security_group.sinequa_nsg_front.id
 }
 

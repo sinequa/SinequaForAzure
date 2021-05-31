@@ -28,6 +28,11 @@ variable "license" {
     type            = string
 }
 
+variable "admin_password" {
+    type            = string
+    default         = ""
+}
+
 variable "blob_sinequa_primary_nodes" {
     type            = string
 }

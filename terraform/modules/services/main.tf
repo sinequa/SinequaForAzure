@@ -26,6 +26,15 @@ resource "azurerm_key_vault_secret" "sinequa_kv_secret_sinequa_license" {
   depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
 }
 
+resource "azurerm_key_vault_secret" "sinequa_kv_secret_password" {
+  name         = "os-password"
+  value        = var.admin_password
+  key_vault_id = azurerm_key_vault.sinequa_kv.id
+
+  depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
+}
+
+
 resource "azurerm_storage_account" "sinequa_st" {
   name                     = var.st_name
   location                 = var.location

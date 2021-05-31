@@ -26,14 +26,6 @@ provider "azurerm" {
 
 data "azurerm_client_config" "current" {}
 
-resource "random_password" "passwd" {
-  length      = 24
-  min_upper   = 4
-  min_lower   = 2
-  min_numeric = 4
-  special     = false
-}
-
 locals {
   region                  = "francecentral"
   resource_group_name     = "test_complete_grid"
@@ -59,6 +51,19 @@ locals {
     "password"              = "sinequa"
     "key_vault_secret_id"   = null
   }  
+}
+
+
+resource "random_password" "passwd" {
+  length      = 24
+  min_upper   = 4
+  min_lower   = 2
+  min_numeric = 4
+  special     = false
+
+  keepers = {
+    domain_name_label = local.prefix
+  }
 }
 
 
@@ -96,7 +101,7 @@ module "frontend" {
   location              = azurerm_resource_group.sinequa_rg.location
   availability_set_name = "as-${local.prefix}"
   application_gateway_name = "ag-${local.prefix}"
-  subnet_id             = module.network.vnet.subnet.*.id[1]
+  subnet_id             = module.network.subnet_front.id
   certificate           = local.ssl_certificate
 
   tags = {
@@ -115,6 +120,7 @@ module "kv_st_services" {
   st_name               = local.st_name
   license               = local.license
   container_name        = local.st_container_name
+  admin_password        = local.os_admin_password
 
   blob_sinequa_primary_nodes = local.primary_nodes 
   blob_sinequa_beta          = true
@@ -132,7 +138,7 @@ module "vm-primary-node1" {
   vm_name               = "vm-${local.prefix}-${local.node1_name}"
   computer_name         = local.node1_name
   vm_size               = "Standard_E8s_v3"
-  subnet_id             = module.network.vnet.subnet.*.id[0]
+  subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
@@ -166,7 +172,7 @@ module "vm-primary-node2" {
   vm_name               = "vm-${local.prefix}-${local.node2_name}"
   computer_name         = local.node2_name
   vm_size               = "Standard_E8s_v3"
-  subnet_id             = module.network.vnet.subnet.*.id[0]
+  subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
@@ -200,7 +206,7 @@ module "vm-primary-node3" {
   vm_name               = "vm-${local.prefix}-${local.node3_name}"
   computer_name         = local.node3_name
   vm_size               = "Standard_E8s_v3"
-  subnet_id             = module.network.vnet.subnet.*.id[0]
+  subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
@@ -234,7 +240,7 @@ module "vmss-indexer1" {
   vmss_name             = "vmss-${local.prefix}-indexer"
   computer_name_prefix  = "indexer"
   vmss_size             = "Standard_B2s"
-  subnet_id             = module.network.vnet.subnet.*.id[0]
+  subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
