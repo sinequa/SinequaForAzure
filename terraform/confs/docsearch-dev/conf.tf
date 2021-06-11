@@ -61,7 +61,7 @@ locals {
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
   st_container_name       = "sinequa"
   data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name])
-  image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/6.1.63"
+  image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
   //ag_pip_dns_name         = "docsearch-dev-sinequa"
   queue_cluster           = null
 

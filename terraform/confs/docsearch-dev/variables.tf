@@ -12,3 +12,11 @@ variable "location" {
 }
 
 
+variable "repo" {
+  type        = string
+  default     = "nighlty"
+}
+
+variable "version_number" {
+  type        = string
+}
