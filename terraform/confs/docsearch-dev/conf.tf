@@ -12,8 +12,6 @@ provider "azuread" {}
 provider "azurerm" {
   partner_id = "947f5924-5e20-4f0a-96eb-808371995ac8" // Sinequa Tracking ID
   subscription_id = var.sub_www_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
   tenant_id       = var.tenant_id
   features {
     key_vault {
