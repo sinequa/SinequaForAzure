@@ -10,7 +10,7 @@ resource "azurerm_virtual_machine_extension" "join_ad" {
   {
       "Name": "${var.active_directory_name}",
       "User": "${var.ad_login}",
-      "Restart": "true",
+      "Restart": "false",
       "Options": "3"
   }
   SETTINGS
