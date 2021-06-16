@@ -90,6 +90,8 @@ It concerns:
 * Audit store
 * Log store
 
+![Storage Account](../images/S4A_Storage.png)
+
 **WIP for 11.7.0**
 
 ### 2.3. Leverage Scale Set for Elasticity <a name="scaleset"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0%2B&color=9cf">
