@@ -22,12 +22,12 @@ This repository contains:
 
 ## 2. Sinequa Azure Features <a name="features">
 
-### 2.1. Cloud Init <a name="cloudinit"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0%2B&color=9cf">
+### 2.1. Cloud Init <a name="cloudinit"> <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1%2B&color=9cf">
 
 The cloud init features are some capabilities used upon VM deployment to initialize an out-of-the-box Sinequa node that is automaticaly registered into a grid with some roles enabled (like engine, indexer, etc.).
 
 
-#### 2.1.1. Environment Variable <a name="envvars"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0%2B&color=9cf">
+#### 2.1.1. Environment Variable <a name="envvars"> <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1%2B&color=9cf">
 
 You must set the **SINEQUA_CLOUD** environment variable before starting the Sinequa service to enable **cloud init** features.
 
@@ -36,7 +36,7 @@ You must set the **SINEQUA_CLOUD** environment variable before starting the Sine
 |	SINEQUA_CLOUD            | "Azure"                              | Enable cloud init features.          |
 
 
-#### 2.1.2. Cloud Tags <a name="cloudtags"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0%2B&color=9cf">
+#### 2.1.2. Cloud Tags <a name="cloudtags"> <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1%2B&color=9cf">
 
 Cloud tags are Azure tags used on Azure resources. They are used to run some specific init tasks for a particular VM or VMSS. 
 
@@ -53,7 +53,7 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 |	sinequa-indexer		        | "indexer1"                          | Name of the [indexer](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-indexers.html) to be created and started on this node. |
 
 
-#### 2.1.3. Cloud Variables & Cloud Secrets <a name="cloudvars"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0%2B&color=9cf">
+#### 2.1.3. Cloud Variables & Cloud Secrets <a name="cloudvars"> <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1%2B&color=9cf">
 
 * Cloud variables are Azure blobs stored in the storage account. They are used to declare global variables in the configuration.
 * Cloud secrets are secrets stored in the key vault defined in cloud variables. They are used to store sensitive data.
@@ -92,13 +92,12 @@ It concerns:
 
 ![Storage Account](./images/S4A_Storage.png)
 
-**WIP for 11.7.0**
 
 ### 2.3. Leverage Scale Set for Elasticity <a name="scaleset"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0%2B&color=9cf">
 
 To reduce the cost of VM usage and control the indexing workload, scale set is used to scale up & down the number of indexers based on the indexing workload.
 
-**WIP for 11.7.0**
+![Indexing Scale Set](./images/S4A_Indexing_ScaleSet.png)
 
 ### 2.4. Back Up and Restore the Application <a name="backup"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0%2B&color=9cf">
 
