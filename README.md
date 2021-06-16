@@ -90,7 +90,7 @@ It concerns:
 * Audit store
 * Log store
 
-![Storage Account](../images/S4A_Storage.png)
+![Storage Account](./images/S4A_Storage.png)
 
 **WIP for 11.7.0**
 
