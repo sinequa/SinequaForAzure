@@ -101,10 +101,18 @@ To reduce the cost of VM usage and control the indexing workload, scale set is u
 
 ### 2.4. Back Up and Restore the Application <a name="backup"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0%2B&color=9cf">
 
-Thanks to [Storage Accounts](#storageaccount), you can easily back up and restore all stores. 
+Thanks to [Storage Accounts](#storageaccount), you can easily back up and restore a complete grid with consistency between components. 
 
 * You can back up the engine directly into an Azure Storage acccount.
-* You can automatically restore the engine from Azure Storage account if indexes disappears (due to NVMe disk Azure policy).
-* ...
 
-**WIP for 11.7.0**
+![Backup](./images/S4A_Backup.png)
+
+*  and restore 
+
+![Restore](./images/S4A_Restore.png)
+
+* You can automatically restore the engine from Azure Storage account if indexes disappears (due to NVMe disk Azure policy).
+
+![Restore NVMe](./images/S4A_Restore_NVMe.png)
+
+
