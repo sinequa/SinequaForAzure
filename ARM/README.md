@@ -1,4 +1,4 @@
-# ARM
+# ARM <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1&color=9cf">
 
 Sinequa For Azure (S4A) ARM is a set of ARM templates used for a Sinequa ES grid deployment.
 
