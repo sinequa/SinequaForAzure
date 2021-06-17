@@ -54,8 +54,10 @@ locals {
   os_admin_username       = "sinequa"
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0)
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""
-  node1_name              = "docsearch-dev1"  
-  node2_name              = "docsearch-dev2"  
+  node1_osname            = "docsearch-dev1"  
+  node1_name              = "docsearch-1"  
+  node2_osname            = "docsearch-dev2"  
+  node2_name              = "docsearch-2"  
   primary_nodes           = join("",["1=srpc://", local.node1_name ,":10301"])
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24)
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
@@ -129,7 +131,7 @@ module "vm_primary_node1" {
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node1_name}"
-  computer_name         = local.node1_name
+  computer_name         = local.node1_osname
   vm_size               = "Standard_D4s_v3"
   subnet_id             = data.azurerm_subnet.subnet_app.id
   image_id              = local.image_id
@@ -150,7 +152,7 @@ module "vm_primary_node1" {
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-primary-node-id"             = "1"
     "sinequa-node"                        = local.node1_name
-    "sinequa-webapp"                      = "WebAppDocDev"
+    "sinequa-webapp"                      = "WebAppDoc"
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]
@@ -163,7 +165,7 @@ module "vm_node2" {
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node2_name}"
-  computer_name         = local.node2_name
+  computer_name         = local.node2_osname
   vm_size               = "Standard_D4s_v3"
   subnet_id             = data.azurerm_subnet.subnet_app.id
   image_id              = local.image_id
@@ -183,7 +185,7 @@ module "vm_node2" {
     "sinequa-path"                        = "F:\\sinequa"
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-node"                        = local.node2_name
-    "sinequa-webapp"                      = "WebAppDocInternalDev"
+    "sinequa-webapp"                      = "WebAppDocInternal"
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]

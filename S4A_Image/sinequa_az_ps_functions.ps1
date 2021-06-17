@@ -6,7 +6,7 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 
 
 $startupScript = $null; #"sinequa-az-startup.ps1"
-function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$password) {
+function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$password, $servicePrincipalID, [securestring] $servicePrincipalSecret) {
     <#
     .SYNOPSIS
         Login on Azure with login and password
@@ -19,11 +19,15 @@ function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$passwo
     .PARAMETER password
         User password
     #>
-    if ($user.length -gt 0 -and $password.length -gt 0) 
+    if ($user -and $user.length -gt 0 -and $password -and $password.length -gt 0) 
     {
         $Credential = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $user,$password
         Connect-AzAccount -Credential $Credential -Tenant $tenantId -Subscription $subscriptionId
-    }   
+    } elseif ($servicePrincipalID -and $servicePrincipalID.length -gt 0 -and $servicePrincipalSecret -and $servicePrincipalSecret.length -gt 0) 
+    {
+        $pscredential = New-Object -TypeName System.Management.Automation.PSCredential($servicePrincipalID, $servicePrincipalSecret)
+        Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $tenantId
+    }
     WriteLog "Use Subscription ID: $subscriptionId"
     return Set-AzContext -SubscriptionId $subscriptionId
 }
