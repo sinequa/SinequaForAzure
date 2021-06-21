@@ -159,38 +159,6 @@ module "vm_primary_node1" {
 }
 
 
-// Create Primary Node2
-module "vm_node2" {
-  source                = "../../modules/vm"
-  resource_group_name   = azurerm_resource_group.sinequa_rg.name
-  location              = azurerm_resource_group.sinequa_rg.location
-  vm_name               = "vm-${local.prefix}-${local.node2_name}"
-  computer_name         = local.node2_osname
-  vm_size               = "Standard_D4s_v3"
-  subnet_id             = data.azurerm_subnet.subnet_app.id
-  image_id              = local.image_id
-  admin_username        = local.os_admin_username
-  admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
-  linked_to_application_gateway = false
-  #availability_set_id   = null #data.azurerm_availability_set.sinequa_as.id
-  #backend_address_pool_id = "" #data.azurerm_application_gateway.sinequa_ag.backend_address_pool[0].id
-  network_security_group_id = data.azurerm_network_security_group.nsg_back.id
-  pip                   = false
-
-  tags = {
-    "sinequa-grid"                        = local.prefix
-    "sinequa-auto-disk"                   = "auto"
-    "sinequa-path"                        = "F:\\sinequa"
-    "sinequa-data-storage-url"            = local.data_storage_url
-    "sinequa-node"                        = local.node2_name
-    "sinequa-webapp"                      = "WebAppDocInternal"
-  }
-
-  depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]
-}
-
 
 // vm-primary-node1 : Join AD 
 module "vm_primary_node1_ad" {
@@ -202,19 +170,6 @@ module "vm_primary_node1_ad" {
   local_admins          = local.local_admins
 
   depends_on = [module.vm_primary_node1]
-}
-
-
-// vm-node2 : Join AD 
-module "vm_node2_ad" {
-  source                = "../../modules/ad"
-  active_directory_name = local.win_ad_name
-  ad_login              = local.win_ad_login
-  ad_password           = local.win_ad_pass
-  virtual_machine_id    = module.vm_node2.vm.id
-  local_admins          = local.local_admins
-
-  depends_on = [module.vm_node2]
 }
 
 
