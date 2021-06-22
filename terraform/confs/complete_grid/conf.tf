@@ -16,7 +16,8 @@ terraform {
 
 provider "azurerm" {
   partner_id = "947f5924-5e20-4f0a-96eb-808371995ac8" // Sinequa Tracking ID
-  subscription_id = "8a9fc7e2-ac08-4009-8498-2026cb37bb25" // sub-snqa-sandbox
+  subscription_id = var.sub_www_id
+  tenant_id       = var.tenant_id
   features {
     key_vault {
       purge_soft_delete_on_destroy = true
@@ -43,7 +44,7 @@ locals {
   queue_cluster           = join("",["QueueCluster1('",local.node1_name,"')"])
   st_container_name       = "sinequa"
   data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name])
-  image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/6.1.55"
+  image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
   
   ssl_certificate = {
     "name"                  = "SinequaSSL"
