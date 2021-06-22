@@ -7,7 +7,7 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name   = "tstate"
+    resource_group_name   = "tfstate"
     storage_account_name  = "sinequatfstate"
     container_name        = "tstate"
     key                   = "dev.complete_grid.terraform.tfstate"
