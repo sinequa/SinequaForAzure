@@ -36,9 +36,12 @@ locals {
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0)
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""
   node1_name              = "node1"  
+  node1_osname            = "node1"  
   node2_name              = "node2"  
+  node2_osname            = "node2"    
   node3_name              = "node3"  
-  primary_nodes           = join("",["1=srpc://", local.node1_name ,":10301"])
+  node3_osname              = "node3"  
+  primary_nodes           = join("",["1=srpc://", local.node1_osname ,":10301"])
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24)
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = join("",["QueueCluster1('",local.node1_name,"')"])
@@ -137,7 +140,7 @@ module "vm-primary-node1" {
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node1_name}"
-  computer_name         = local.node1_name
+  computer_name         = local.node1_osname
   vm_size               = "Standard_E8s_v3"
   subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
@@ -171,7 +174,7 @@ module "vm-primary-node2" {
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node2_name}"
-  computer_name         = local.node2_name
+  computer_name         = local.node2_osname
   vm_size               = "Standard_E8s_v3"
   subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
@@ -205,7 +208,7 @@ module "vm-primary-node3" {
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node3_name}"
-  computer_name         = local.node3_name
+  computer_name         = local.node3_osname
   vm_size               = "Standard_E8s_v3"
   subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id

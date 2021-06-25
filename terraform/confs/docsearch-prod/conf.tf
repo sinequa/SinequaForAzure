@@ -3,7 +3,7 @@ terraform {
     resource_group_name = "rg-www-tf"
     storage_account_name  = "satfwwwsnqa"
     container_name  = "terraform"
-    key = "tf.docsearch-dev.tfstate"
+    key = "tf.docsearch-prd.tfstate"
   }
 }
 
@@ -49,14 +49,14 @@ data "azurerm_key_vault_secret" "sinequa_ad_secret" {
 
 locals {
   region                  = "francecentral"
-  resource_group_name     = "rg-www-docsearch-dev"
+  resource_group_name     = "rg-www-docsearch-prd"
   prefix                  = "doc"
   os_admin_username       = "sinequa"
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0)
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""
-  node1_osname            = "docsearch-dev1"  
+  node1_osname            = "docsearch-prd1"  
   node1_name              = "docsearch-1"  
-  node2_osname            = "docsearch-dev2"  
+  node2_osname            = "docsearch-prd2"  
   node2_name              = "docsearch-2"  
   primary_nodes           = join("",["1=srpc://", local.node1_osname ,":10301"])
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24)
@@ -130,7 +130,7 @@ module "vm_primary_node1" {
   source                = "../../modules/vm"
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
-  vm_name               = "vm-${local.prefix}-${local.node1_name}"
+  vm_name               = "vm-${local.prefix}-${local.node1_osname}"
   computer_name         = local.node1_osname
   vm_size               = "Standard_D4s_v3"
   subnet_id             = data.azurerm_subnet.subnet_app.id
