@@ -132,7 +132,7 @@ module "vm_primary_node1" {
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node1_name}"
   computer_name         = local.node1_osname
-  vm_size               = "Standard_B2s"
+  vm_size               = "Standard_B2ms"
   subnet_id             = data.azurerm_subnet.subnet_app.id
   image_id              = local.image_id
   admin_username        = local.os_admin_username
