@@ -1,4 +1,4 @@
-# ARM <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1&color=9cf">
+# ARM (Azure Resource Manager) <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1&color=9cf">
 
 Sinequa For Azure (S4A) ARM is a set of ARM templates used for a Sinequa ES grid deployment.
 
@@ -25,7 +25,7 @@ Note: These ARM templates are those used for the Azure Marketplace. They are des
 
 ### 1. Deploy a Sinequa Grid <a name="deploy">
 
-ARM (Azure Resource Manager) deployment is used to deploy a grid from the Marketplace or from your own image.
+ARM deployment is used to deploy a grid from the Marketplace or from your own image.
 
 ```powershell
 sinequa-for-azure-deploy-grid.ps1
