@@ -3,12 +3,18 @@
 Sinequa For Azure (S4A) is a set of capabilities and dedicated features designed for Azure.
 
 #### Table of Contents
+0. [Prerequisiste](#prerequisite)<br>
 1. [Repository Content](#content)<br>
 2. [Sinequa Azure Features](#features)<br>
 2.1. [Cloud Init](#cloudinit)<br>
 2.2. [Leverage Storage Account](#storageaccount)<br>
 2.3. [Leverage Scale Set for Elasticity](#scaleset)<br>
 2.4. [Back Up and Restore the Application](#backup)<br>
+  
+## 0. Prerequisite <a name="prerequisite">
+* Install Azure CLI: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli
+* Install Azure Powershell: https://docs.microsoft.com/fr-fr/powershell/azure/install-az-ps
+* Install terraform: https://www.terraform.io/downloads.html
   
 ## 1. Repository Content <a name="content">
 
