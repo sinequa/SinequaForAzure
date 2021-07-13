@@ -12,6 +12,7 @@ Sinequa For Azure (S4A) is a set of capabilities and dedicated features designed
 2.4. [Back Up and Restore the Application](#backup)<br>
   
 ## 0. Prerequisites <a name="prerequisites">
+* Access to https://portal.azure.com
 * Install Azure CLI: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli
 * Install Azure Powershell: https://docs.microsoft.com/fr-fr/powershell/azure/install-az-ps
 * Install Terraform: https://www.terraform.io/downloads.html
