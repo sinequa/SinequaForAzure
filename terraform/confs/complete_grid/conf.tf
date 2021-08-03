@@ -195,8 +195,8 @@ module "vm-primary-node2" {
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-primary-node-id"             = "2"
     "sinequa-node"                        = local.node2_name
-    "sinequa-webapp"                      = "webApp1"
-    "sinequa-engine"                      = "engine1"
+    "sinequa-webapp"                      = "webApp2"
+    "sinequa-engine"                      = "engine2"
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
@@ -229,8 +229,7 @@ module "vm-primary-node3" {
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-primary-node-id"             = "3"
     "sinequa-node"                        = local.node3_name
-    "sinequa-webapp"                      = "webApp1"
-    "sinequa-engine"                      = "engine1"
+    "sinequa-indexer"                     = "indexer1"
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
@@ -256,7 +255,7 @@ module "vmss-indexer1" {
     "sinequa-grid"                        = local.prefix
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-node"                        = "indexer1"
-    "sinequa-indexer"                     = "indexer1"
+    "sinequa-indexer"                     = "indexer-dynamic"
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
