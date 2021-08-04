@@ -36,11 +36,11 @@ locals {
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0)
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""
   node1_name              = "node1"  
-  node1_osname            = "node1"  
+  node1_osname            = "vm-node1"  
   node2_name              = "node2"  
-  node2_osname            = "node2"    
+  node2_osname            = "vm-node2"    
   node3_name              = "node3"  
-  node3_osname              = "node3"  
+  node3_osname            = "vm-node3"  
   primary_nodes           = join("",["1=srpc://", local.node1_osname ,":10301",";2=srpc://", local.node2_osname ,":10301",";3=srpc://", local.node3_osname ,":10301"])
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24)
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
