@@ -18,7 +18,7 @@ variable "location" {
 variable "repo" {
   description = "Sinequa - Type of build"
   type        = string
-  default     = "nighlty"
+  default     = "nightly"
 }
 
 variable "version_number" {
