@@ -1,11 +1,4 @@
 terraform {
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-      version = "~>2.0"
-    }
-  }
-
   backend "azurerm" {
     resource_group_name   = "tfstate"
     storage_account_name  = "sinequatfstate"
@@ -29,7 +22,7 @@ data "azurerm_client_config" "current" {}
 
 locals {
   region                  = "francecentral"
-  resource_group_name     = "test_complete_grid"
+  resource_group_name     = var.resource_group_name
   prefix                  = "sq"
   sinequa_grid            = "test"
   os_admin_username       = "sinequa"
