@@ -61,6 +61,10 @@ WriteLog "Install 7zip"
 Invoke-WebRequest "https://www.7-zip.org/a/7z1900-x64.exe" -OutFile "$tempDrive\7zsetup.exe"
 Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 
+# Setting the NLA information to Disabled
+(Get-WmiObject -class "Win32_TSGeneralSetting" -Namespace root\cimv2\terminalservices -ComputerName $env:COMPUTERNAME -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(0)
+
+
 ########Install Optional programs
 
 # Google Chrome (can be removed)

@@ -104,11 +104,11 @@
                             "allowedValues": [
                                 {
                                     "label": "Single Server (1 Primary Node + 1 Indexer ScaleSet + 1 Connector ScaleSet)",
-                                    "value": "{\"ServerPlan\":\"Single\",\"host\":1}"
+                                    "value": 1
                                 },
                                 {
                                     "label": "High Availability (3 Primary Nodes + 1 Indexer ScaleSet + 1 Connector ScaleSet)",
-                                    "value": "{\"ServerPlan\":\"HA\",\"host\":3}"
+                                    "value": 3
                                 }
                             ],
                             "required": true
@@ -129,7 +129,7 @@
                             "offer": "WindowsServer",
                             "sku": "2012-R2-Datacenter"
                         },
-                        "count": "[parse(steps('sinequa').ServerPlan).host]",
+                        "count": "[steps('sinequa').ServerPlan]",
                         "visible": true
                     },
                     {
@@ -273,7 +273,7 @@
             "vmIndexerScaleSetSize": "[parse(steps('sinequa').sinequaIndexerScaleSetSize)]",            
             "certificateBase64": "[steps('VirtualMachineConfig').certificate]",
             "certificatePassword": "[steps('VirtualMachineConfig').certificatePassword]",
-            "primaryNodeCount": "[parse(steps('sinequa').ServerPlan).host]",
+            "primaryNodeCount": "[steps('sinequa').ServerPlan]",
             "imageReferenceId": "none",
             "virtualNetwork": "[steps('VirtualMachineConfig').virtualNetwork]"
         }

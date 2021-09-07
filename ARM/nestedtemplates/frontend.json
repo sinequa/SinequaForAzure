@@ -32,7 +32,7 @@
         {
             "name": "[parameters('availability_set_name')]",
             "type": "Microsoft.Compute/availabilitySets",
-            "apiVersion": "2019-07-01",
+            "apiVersion": "2021-07-01",
             "tags": "[parameters('tags')]",
             "location": "[parameters('location')]",
             "properties": {
@@ -59,7 +59,7 @@
         {
             "name": "[parameters('application_gateway_name')]",
             "type": "Microsoft.Network/applicationGateways",
-            "apiVersion": "2019-09-01",
+            "apiVersion": "2021-03-01",
             "location": "[parameters('location')]",
             "tags": "[parameters('tags')]",
             "dependsOn": [

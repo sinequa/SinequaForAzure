@@ -24,7 +24,7 @@
             "condition": "[equals(parameters('vnet').newOrExisting,'new')]",
             "name": "[parameters('vnet').name]",
             "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2019-09-01",
+            "apiVersion": "2021-03-01",
             "tags": "[parameters('tags')]",
             "location": "[parameters('location')]",
 

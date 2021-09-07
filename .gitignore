@@ -3,15 +3,17 @@
 
 **/.terraform*
 
-# .tfstate files
+# .tf files
 *.tfstate
 *.tfstate.*
+**/*.tfvars
 
 # .zip files
 *.zip
 
 # .log files
 *.log
+
 
 terraform/confs/sinequa.license.txt
 

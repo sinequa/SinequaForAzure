@@ -60,8 +60,8 @@
             "sku": "nightly",
             "version": "latest"
         },
-        "keyVaultSecretsOfficer": "[concat('/subscriptions/', subscription().subscriptionId,        '/providers/Microsoft.Authorization/roleDefinitions/', 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7')]",
-        "storageBlobDataContributor": "[concat('/subscriptions/', subscription().subscriptionId,    '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
+        "keyVaultSecretsOfficer": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7')]",
+        "storageBlobDataContributor": "[resourceId('Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
     },
     "resources": [      
        {

@@ -82,8 +82,8 @@
             "sku": "nightly",
             "version": "latest"
         },
-        "keyVaultSecretsOfficer": "[concat('/subscriptions/', subscription().subscriptionId,        '/providers/Microsoft.Authorization/roleDefinitions/', 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7')]",
-        "storageBlobDataContributor": "[concat('/subscriptions/', subscription().subscriptionId,    '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
+        "keyVaultSecretsOfficer": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7')]",
+        "storageBlobDataContributor": "[resourceId('Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
     },
     "resources": [      
         {
@@ -206,7 +206,7 @@
             "name": "[guid(resourceGroup().id, concat('keyVaultSecretsOfficer', parameters('vm_name')))]",
             "properties": {
                 "roleDefinitionId": "[variables('keyVaultSecretsOfficer')]",
-                "principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', parameters('vm_name')), '2020-06-01', 'Full').identity.principalId]",
+                "principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', parameters('vm_name')), '2020-06-01', 'Full').identity.principalId]",
                 "scope": "[resourceGroup().id]"
             },
             "dependsOn": [
@@ -219,7 +219,7 @@
             "name": "[guid(resourceGroup().id, concat('storageBlobDataContributor', parameters('vm_name')))]",
             "properties": {
                 "roleDefinitionId": "[variables('storageBlobDataContributor')]",
-                "principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', parameters('vm_name')), '2020-06-01', 'Full').identity.principalId]",
+                "principalId": "[reference(resourceId('Microsoft.Compute/virtualMachines', parameters('vm_name')), '2020-06-01', 'Full').identity.principalId]",
                 "scope": "[resourceGroup().id]"
             },
             "dependsOn": [

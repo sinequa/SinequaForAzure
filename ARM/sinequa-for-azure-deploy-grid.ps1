@@ -37,7 +37,7 @@ $StartTime = Get-Date
 
 
 #Connect-AzAccount
-Set-AzContext $subscriptionId 
+Set-AzContext -Subscription $subscriptionId 
 
 $publisher = "sinequa"
 $product = "sinequa_virtual_machine"
