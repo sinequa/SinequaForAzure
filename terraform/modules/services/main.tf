@@ -79,7 +79,7 @@ resource "azurerm_storage_blob" "sinequa-keyvault" {
 
 resource "azurerm_storage_blob" "sinequa_queuecluster" {
   count                  = var.blob_sinequa_queuecluster != ""?1:0
-  name                   = "var/sinequa-queuecluster"
+  name                   = "var/sinequa-queue-cluster"
   storage_account_name   = azurerm_storage_account.sinequa_st.name
   storage_container_name = azurerm_storage_container.sinequa_st_container.name
   type                   = "Block"

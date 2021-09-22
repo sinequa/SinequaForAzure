@@ -97,6 +97,12 @@ variable "datadisk_ids" {
     default         = []
 }
 
+variable "private_ip_address" {
+    description     = "Static Private Address. Leave empty for Dynamic"
+    type            = string  
+    default         = ""
+} 
+
 variable "tags" {
   type = map
 }
