@@ -69,6 +69,11 @@ variable "network_security_group_id" {
     type            = string
 }
 
+variable "primary_node_vm_principal_ids" {
+    type            = list(string)
+    default         = []
+}
+
 variable "tags" {
   type = map
 }
