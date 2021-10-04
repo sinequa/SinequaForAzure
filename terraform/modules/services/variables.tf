@@ -50,6 +50,11 @@ variable "blob_sinequa_queuecluster" {
     default         = ""
 }
 
+variable "blob_sinequa_authentication_secret" {
+    type            = string
+    default         = ""
+}
+
 variable "tags" {
   type              = map
   default           = {}

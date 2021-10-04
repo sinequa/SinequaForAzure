@@ -34,6 +34,15 @@ resource "azurerm_key_vault_secret" "sinequa_kv_secret_password" {
   depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
 }
 
+resource "azurerm_key_vault_secret" "sinequa_authentication_secret" {
+  count                  = var.blob_sinequa_authentication_secret != ""?1:0
+  name                   = "sinequa-authentication-secret"
+  value                  = var.blob_sinequa_authentication_secret
+  key_vault_id           = azurerm_key_vault.sinequa_kv.id
+
+  depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
+}
+
 
 resource "azurerm_storage_account" "sinequa_st" {
   name                     = var.st_name
@@ -58,6 +67,17 @@ resource "azurerm_storage_blob" "sinequa_primary_nodes" {
   content_type           = "text/plain"
   source_content         = var.blob_sinequa_primary_nodes
 }
+
+resource "azurerm_storage_blob" "sinequa_authentication_enabled" {
+  count                  = var.blob_sinequa_authentication_secret != ""?1:0
+  name                   = "var/sinequa-authentication-enabled"
+  storage_account_name   = azurerm_storage_account.sinequa_st.name
+  storage_container_name = azurerm_storage_container.sinequa_st_container.name
+  type                   = "Block"
+  content_type           = "text/plain"
+  source_content         = "true"
+}
+
 
 resource "azurerm_storage_blob" "sinequa_beta" {
   name                   = "var/sinequa-beta"
@@ -86,3 +106,4 @@ resource "azurerm_storage_blob" "sinequa_queuecluster" {
   content_type           = "text/plain"
   source_content         = var.blob_sinequa_queuecluster
 }
+

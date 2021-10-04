@@ -33,6 +33,18 @@ resource "random_password" "passwd" {
   }
 }
 
+resource "random_password" "srpc" {
+  length      = 24
+  min_upper   = 4
+  min_lower   = 2
+  min_numeric = 4
+  special     = false
+
+  keepers = {
+    domain_name_label = local.prefix
+  }
+}
+
 data "azurerm_client_config" "current" {}
 
 // Specify an existing subnet of a virtual network
@@ -49,17 +61,23 @@ locals {
   prefix                  = "sq"
   os_admin_username       = "sinequa"
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0)
+
+  srpc_secret             = element(concat(random_password.srpc.*.result, [""]), 0)
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""
   node1_name              = "insight-1"  
   node1_osname            = "vm-insight-dev1"
+  node1_fqdn              = local.node1_osname + "sinequa.local"
   node1_private_ip_address= "10.200.5.11"  
   node2_name              = "insight-2"  
   node2_osname            = "vm-insight-dev2"    
+  node2_fqdn              = local.node2_osname + "sinequa.local"
   node2_private_ip_address= "10.200.5.12"  
   node3_name              = "insight-3"  
-  node3_osname            = "vm-insight-dev3"  
+  node3_osname            = "vm-insight-dev3"
+  node3_fqdn              = local.node3_osname + "sinequa.local"
+  
   node3_private_ip_address= "10.200.5.13"  
-  primary_nodes           = join("",["1=srpc://", local.node1_osname ,".sinequa.local:10301",";2=srpc://", local.node2_osname ,".sinequa.local:10301",";3=srpc://", local.node3_osname ,".sinequa.local:10301"])
+  primary_nodes           = join("",["1=srpc://", local.node1_fqdn ,":10301",";2=srpc://", local.node2_fqdn ,":10301",";3=srpc://", local.node3_fqdn ,":10301"])
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24)
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = join("",["QueueCluster('",local.node1_name,"','",local.node2_name,"','",local.node3_name,"')"])
@@ -119,6 +137,7 @@ module "kv_st_services" {
   blob_sinequa_beta          = true
   blob_sinequa_keyvault      = local.kv_name
   blob_sinequa_queuecluster  = local.queue_cluster
+  blob_sinequa_authentication_secret = local.srpc_secret
 
   depends_on = [azurerm_resource_group.sinequa_rg]
 }
@@ -151,6 +170,7 @@ module "vm-primary-node1" {
     "sinequa-node"                        = local.node1_name
     "sinequa-webapp"                      = "WebApp1"
     "sinequa-alpha"                       = "true"
+    "sinequa-hostname-override"           = local.node1_fqdn
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]
@@ -193,6 +213,7 @@ module "vm-primary-node2" {
     "sinequa-node"                        = local.node2_name
     "sinequa-webapp"                      = "WebApp2"
     "sinequa-alpha"                       = "true"
+    "sinequa-hostname-override"           = local.node2_fqdn
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]
@@ -235,6 +256,8 @@ module "vm-primary-node3" {
     "sinequa-primary-node-id"             = "3"
     "sinequa-node"                        = local.node3_name
     "sinequa-alpha"                       = "true"
+    "sinequa-hostname-override"           = local.node3_fqdn
+    "sinequa-authentication-enabled"      = "true"
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]

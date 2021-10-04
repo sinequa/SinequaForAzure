@@ -208,7 +208,7 @@ module "vm-node4" {
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node4_name}"
   computer_name         = local.node4_name
-  vm_size               = "Standard_E8s_v3"
+  vm_size               = "Standard_B2s"
   subnet_id             = module.network.vnet.subnet.*.id[0]
   image_id              = local.image_id
   admin_username        = local.os_admin_username

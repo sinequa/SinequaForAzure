@@ -134,7 +134,7 @@ module "vm-primary-node1" {
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node1_name}"
   computer_name         = local.node1_osname
-  vm_size               = "Standard_E8s_v3"
+  vm_size               = "Standard_B2s"
   subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
   admin_username        = local.os_admin_username
@@ -168,7 +168,7 @@ module "vm-primary-node2" {
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node2_name}"
   computer_name         = local.node2_osname
-  vm_size               = "Standard_E8s_v3"
+  vm_size               = "Standard_B2s"
   subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
   admin_username        = local.os_admin_username
@@ -202,7 +202,7 @@ module "vm-primary-node3" {
   location              = azurerm_resource_group.sinequa_rg.location
   vm_name               = "vm-${local.prefix}-${local.node3_name}"
   computer_name         = local.node3_osname
-  vm_size               = "Standard_E8s_v3"
+  vm_size               = "Standard_B2s"
   subnet_id             = module.network.subnet_app.id
   image_id              = local.image_id
   admin_username        = local.os_admin_username
