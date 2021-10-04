@@ -50,6 +50,6 @@ resource "azurerm_role_assignment" "sinequa_vmss_role_vm" {
   for_each              = toset(var.primary_node_vm_principal_ids)
   scope                 = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.id
   role_definition_name  = "Contributor"
-  principal_id          = index(var.primary_node_vm_principal_ids, each.key)
+  principal_id          = each.value
 }
 
