@@ -66,15 +66,15 @@ locals {
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""
   node1_name              = "insight-1"  
   node1_osname            = "vm-insight-dev1"
-  node1_fqdn              = local.node1_osname + "sinequa.local"
+  node1_fqdn              = join("",[local.node1_osname, ".sinequa.local"])
   node1_private_ip_address= "10.200.5.11"  
   node2_name              = "insight-2"  
   node2_osname            = "vm-insight-dev2"    
-  node2_fqdn              = local.node2_osname + "sinequa.local"
+  node2_fqdn              = join("",[local.node2_osname, ".sinequa.local"])
   node2_private_ip_address= "10.200.5.12"  
   node3_name              = "insight-3"  
   node3_osname            = "vm-insight-dev3"
-  node3_fqdn              = local.node3_osname + "sinequa.local"
+  node3_fqdn              = join("",[local.node3_osname,".sinequa.local"])
   
   node3_private_ip_address= "10.200.5.13"  
   primary_nodes           = join("",["1=srpc://", local.node1_fqdn ,":10301",";2=srpc://", local.node2_fqdn ,":10301",";3=srpc://", local.node3_fqdn ,":10301"])
