@@ -245,6 +245,7 @@ module "vmss-indexer1" {
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
   network_security_group_id = module.network.nsg_app.id
+  primary_node_vm_principal_ids = [module.vm-primary-node1.vm.identity[0].principal_id,module.vm-primary-node2.vm.identity[0].principal_id,module.vm-primary-node3.vm.identity[0].principal_id]
 
   tags = {
     "sinequa-grid"                        = local.prefix
