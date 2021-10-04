@@ -91,6 +91,7 @@ module "network" {
 }
 
 
+/* Disabled for tests (due to cost)
 // Create Frontend (application gateway)
 module "frontend" {
   source                = "../../modules/frontend"
@@ -107,6 +108,7 @@ module "frontend" {
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network]
 }
+*/
 
 // Create Key Vault & Storage Account
 module "kv_st_services" {
@@ -141,7 +143,7 @@ module "vm-primary-node1" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
-  availability_set_id   = module.frontend.as.id
+  //availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
   backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
@@ -175,9 +177,9 @@ module "vm-primary-node2" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
-  availability_set_id   = module.frontend.as.id
+  //availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
-  backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
+  //backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
 
@@ -192,7 +194,7 @@ module "vm-primary-node2" {
     "sinequa-engine"                      = "engine2"
   }
 
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
+  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services] //module.frontend
 }
 
 // Create Primary Node3
@@ -209,9 +211,9 @@ module "vm-primary-node3" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
-  availability_set_id   = module.frontend.as.id
+  //availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
-  backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
+  //backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
 
@@ -225,7 +227,7 @@ module "vm-primary-node3" {
     "sinequa-indexer"                     = "indexer1"
   }
 
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
+  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services] //module.frontend
 }
 
 // Create Indexer Scale Set
@@ -255,5 +257,6 @@ module "vmss-indexer1" {
 }
 
 output "sinequa_admin_url" {
-  value = "https://${module.frontend.pip.ip_address}/admin"
+  //value = "https://${module.frontend.pip.ip_address}/admin"
+  value = "https://${module.vm-primary-node1.pip.ip_address}/admin"
 }
