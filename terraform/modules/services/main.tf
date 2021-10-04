@@ -35,7 +35,7 @@ resource "azurerm_key_vault_secret" "sinequa_kv_secret_password" {
 }
 
 resource "azurerm_key_vault_secret" "sinequa_authentication_secret" {
-  count                  = var.blob_sinequa_authentication_secret != ""?1:0
+  count                  = var.blob_sinequa_authentication_enabled?1:0
   name                   = "sinequa-authentication-secret"
   value                  = var.blob_sinequa_authentication_secret
   key_vault_id           = azurerm_key_vault.sinequa_kv.id
@@ -69,7 +69,7 @@ resource "azurerm_storage_blob" "sinequa_primary_nodes" {
 }
 
 resource "azurerm_storage_blob" "sinequa_authentication_enabled" {
-  count                  = var.blob_sinequa_authentication_secret != ""?1:0
+  count                  = var.blob_sinequa_authentication_enabled?1:0
   name                   = "var/sinequa-authentication-enabled"
   storage_account_name   = azurerm_storage_account.sinequa_st.name
   storage_container_name = azurerm_storage_container.sinequa_st_container.name

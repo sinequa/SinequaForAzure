@@ -55,6 +55,11 @@ variable "blob_sinequa_authentication_secret" {
     default         = ""
 }
 
+variable "blob_sinequa_authentication_enabled" {
+    type            = bool
+    default         = false
+}
+
 variable "tags" {
   type              = map
   default           = {}
