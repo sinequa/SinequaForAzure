@@ -138,6 +138,7 @@ module "kv_st_services" {
   blob_sinequa_keyvault      = local.kv_name
   blob_sinequa_queuecluster  = local.queue_cluster
   blob_sinequa_authentication_secret = local.srpc_secret
+  blob_sinequa_authentication_enabled = true
 
   depends_on = [azurerm_resource_group.sinequa_rg]
 }
