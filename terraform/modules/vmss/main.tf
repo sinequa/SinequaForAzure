@@ -47,7 +47,7 @@ resource "azurerm_role_assignment" "storage_account_id" {
 }
 
 resource "azurerm_role_assignment" "sinequa_vmss_role_vm" {
-  for_each              = toset(var.primary_node_vm_principal_ids)
+  for_each              = var.primary_node_vm_principal_ids
   scope                 = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.id
   role_definition_name  = "Contributor"
   principal_id          = each.value

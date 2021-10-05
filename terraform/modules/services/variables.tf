@@ -24,6 +24,12 @@ variable "container_name" {
   type              = string
 }
 
+variable "data_storage_root" {
+    description     = "Root folder after the container name"
+    type            = string
+    default         = "" 
+}
+
 variable "license" {
     type            = string
 }

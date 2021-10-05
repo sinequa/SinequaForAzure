@@ -11,6 +11,7 @@ resource "azurerm_key_vault" "sinequa_kv" {
   tags                        = var.tags
 }
 
+
 resource "azurerm_role_assignment" "sinequa_kv_role_for_me" {
   scope                = azurerm_key_vault.sinequa_kv.id
   role_definition_name = "Key Vault Secrets Officer"
@@ -60,7 +61,7 @@ resource "azurerm_storage_container" "sinequa_st_container" {
 }
 
 resource "azurerm_storage_blob" "sinequa_primary_nodes" {
-  name                   = "var/sinequa-primary-nodes"
+  name                   = join("",[var.data_storage_root, "var/sinequa-primary-nodes"])
   storage_account_name   = azurerm_storage_account.sinequa_st.name
   storage_container_name = azurerm_storage_container.sinequa_st_container.name
   type                   = "Block"
@@ -70,7 +71,7 @@ resource "azurerm_storage_blob" "sinequa_primary_nodes" {
 
 resource "azurerm_storage_blob" "sinequa_authentication_enabled" {
   count                  = var.blob_sinequa_authentication_enabled?1:0
-  name                   = "var/sinequa-authentication-enabled"
+  name                   = join("",[var.data_storage_root, "var/sinequa-authentication-enabled"])
   storage_account_name   = azurerm_storage_account.sinequa_st.name
   storage_container_name = azurerm_storage_container.sinequa_st_container.name
   type                   = "Block"
@@ -80,7 +81,7 @@ resource "azurerm_storage_blob" "sinequa_authentication_enabled" {
 
 
 resource "azurerm_storage_blob" "sinequa_beta" {
-  name                   = "var/sinequa-beta"
+  name                   = join("",[var.data_storage_root, "var/sinequa-beta"])
   storage_account_name   = azurerm_storage_account.sinequa_st.name
   storage_container_name = azurerm_storage_container.sinequa_st_container.name
   type                   = "Block"
@@ -89,7 +90,7 @@ resource "azurerm_storage_blob" "sinequa_beta" {
 }
 
 resource "azurerm_storage_blob" "sinequa-keyvault" {
-  name                   = "var/sinequa-keyvault"
+  name                   = join("",[var.data_storage_root, "var/sinequa-keyvault"])
   storage_account_name   = azurerm_storage_account.sinequa_st.name
   storage_container_name = azurerm_storage_container.sinequa_st_container.name
   type                   = "Block"
@@ -99,7 +100,7 @@ resource "azurerm_storage_blob" "sinequa-keyvault" {
 
 resource "azurerm_storage_blob" "sinequa_queuecluster" {
   count                  = var.blob_sinequa_queuecluster != ""?1:0
-  name                   = "var/sinequa-queue-cluster"
+  name                   = join("",[var.data_storage_root, "var/sinequa-queue-cluster"])
   storage_account_name   = azurerm_storage_account.sinequa_st.name
   storage_container_name = azurerm_storage_container.sinequa_st_container.name
   type                   = "Block"

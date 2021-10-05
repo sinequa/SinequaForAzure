@@ -82,10 +82,13 @@ locals {
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = join("",["QueueCluster('",local.node1_name,"','",local.node2_name,"','",local.node3_name,"')"])
   st_container_name       = "sinequa"
-  data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name, "/grids/insight-dev"])
+  data_storage_root       = "grids/insight-dev/"
+
+  data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name,"/", local.data_storage_root])
   image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
   
   local_admins            = ["larde@sinequa.com","csest@sinequa.com","manigot@sinequa.com"]
+  vmss_indeder_capacity   = 3
 }
 
 
@@ -132,6 +135,7 @@ module "kv_st_services" {
   license               = local.license
   container_name        = local.st_container_name
   admin_password        = local.os_admin_password
+  data_storage_root     = local.data_storage_root
 
   blob_sinequa_primary_nodes = local.primary_nodes 
   blob_sinequa_beta          = true
@@ -289,6 +293,7 @@ module "vmss-indexer1" {
   storage_account_id    = module.kv_st_services.st.id
   network_security_group_id = data.azurerm_network_security_group.nsg_back.id
   primary_node_vm_principal_ids = [module.vm-primary-node1.vm.identity[0].principal_id,module.vm-primary-node2.vm.identity[0].principal_id,module.vm-primary-node3.vm.identity[0].principal_id]
+  vmss_capacity         = local.vmss_indeder_capacity
 
   tags = {
     "sinequa-grid"                        = local.prefix

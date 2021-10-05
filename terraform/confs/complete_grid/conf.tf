@@ -39,7 +39,10 @@ locals {
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = join("",["QueueCluster1('",local.node1_name,"')"])
   st_container_name       = "sinequa"
+  data_storage_root       =  join("",["grids/",var.resource_group_name,"/"])
+  
   data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name])
+
   image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
   
   ssl_certificate = {
@@ -120,6 +123,7 @@ module "kv_st_services" {
   license               = local.license
   container_name        = local.st_container_name
   admin_password        = local.os_admin_password
+  data_storage_root     = local.data_storage_root
 
   blob_sinequa_primary_nodes = local.primary_nodes 
   blob_sinequa_beta          = true
@@ -144,8 +148,8 @@ module "vm-primary-node1" {
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
   //availability_set_id   = module.frontend.as.id
-  linked_to_application_gateway = true
-  backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
+  linked_to_application_gateway = false
+  //backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
 
@@ -160,7 +164,7 @@ module "vm-primary-node1" {
     "sinequa-engine"                      = "engine1"
   }
 
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services, module.frontend]
+  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services] //, module.frontend
 }
 
 // Create Primary Node2
@@ -178,7 +182,7 @@ module "vm-primary-node2" {
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
   //availability_set_id   = module.frontend.as.id
-  linked_to_application_gateway = true
+  linked_to_application_gateway = false
   //backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
@@ -212,7 +216,7 @@ module "vm-primary-node3" {
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
   //availability_set_id   = module.frontend.as.id
-  linked_to_application_gateway = true
+  linked_to_application_gateway = false
   //backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
@@ -245,7 +249,12 @@ module "vmss-indexer1" {
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
   network_security_group_id = module.network.nsg_app.id
-  primary_node_vm_principal_ids = [module.vm-primary-node1.vm.identity[0].principal_id,module.vm-primary-node2.vm.identity[0].principal_id,module.vm-primary-node3.vm.identity[0].principal_id]
+  
+  primary_node_vm_principal_ids = {
+    "1" = module.vm-primary-node1.vm.identity[0].principal_id
+    "2" = module.vm-primary-node2.vm.identity[0].principal_id
+    "3" = module.vm-primary-node3.vm.identity[0].principal_id
+  }
 
   tags = {
     "sinequa-grid"                        = local.prefix
@@ -254,10 +263,10 @@ module "vmss-indexer1" {
     "sinequa-indexer"                     = "indexer-dynamic"
   }
 
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
+  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services,module.vm-primary-node1,module.vm-primary-node2,module.vm-primary-node3]
 }
-
+/*
 output "sinequa_admin_url" {
   //value = "https://${module.frontend.pip.ip_address}/admin"
-  value = "https://${module.vm-primary-node1.pip.ip_address}/admin"
-}
+  //value = "https://${module.vm-primary-node1.pip.ip_address}/admin"
+}*/
