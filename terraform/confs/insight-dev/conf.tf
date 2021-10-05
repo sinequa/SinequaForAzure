@@ -292,7 +292,13 @@ module "vmss-indexer1" {
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
   network_security_group_id = data.azurerm_network_security_group.nsg_back.id
-  primary_node_vm_principal_ids = [module.vm-primary-node1.vm.identity[0].principal_id,module.vm-primary-node2.vm.identity[0].principal_id,module.vm-primary-node3.vm.identity[0].principal_id]
+
+  primary_node_vm_principal_ids = {
+    "1" = module.vm-primary-node1.vm.identity[0].principal_id
+    "2" = module.vm-primary-node2.vm.identity[0].principal_id
+    "3" = module.vm-primary-node3.vm.identity[0].principal_id
+  }
+
   vmss_capacity         = local.vmss_indeder_capacity
 
   tags = {
@@ -303,7 +309,7 @@ module "vmss-indexer1" {
     "sinequa-alpha"                       = "true"
   }
 
-  depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]
+  depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services,module.vm-primary-node1,module.vm-primary-node2,module.vm-primary-node3]
 }
 
 
