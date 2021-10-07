@@ -4,7 +4,7 @@ terraform {
     storage_account_name  = "sinequatfstate"
     container_name        = "tstate"
     key                   = "dev.complete_grid.terraform.tfstate"
-  }
+  } 
 }
 
 provider "azurerm" {
@@ -41,7 +41,7 @@ locals {
   st_container_name       = "sinequa"
   data_storage_root       =  join("",["grids/",var.resource_group_name,"/"])
   
-  data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name])
+  data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name,"/", local.data_storage_root])
 
   image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
   
@@ -265,6 +265,7 @@ module "vmss-indexer1" {
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services,module.vm-primary-node1,module.vm-primary-node2,module.vm-primary-node3]
 }
+
 /*
 output "sinequa_admin_url" {
   //value = "https://${module.frontend.pip.ip_address}/admin"
