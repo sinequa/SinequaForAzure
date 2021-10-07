@@ -1,10 +1,14 @@
 terraform {
+  /*
+  // Not Needed for Testing
+  // Usefull for Production in order to persist Terraform State in Azure
   backend "azurerm" {
-    resource_group_name   = "tfstate"
-    storage_account_name  = "sinequatfstate"
-    container_name        = "tstate"
-    key                   = "dev.complete_grid.terraform.tfstate"
+    resource_group_name   = "<resource group name for storing the tfstate>"
+    storage_account_name  = "<storage account name for storing the tfstate>"
+    container_name        = "<container name for storing the tfstate>"
+    key                   = "<key name>" // e.g. dev.my_deployment.terraform.tfstate
   } 
+  */
 }
 
 provider "azurerm" {
@@ -34,14 +38,14 @@ locals {
   node2_osname            = "vm-node2"    
   node3_name              = "node3"  
   node3_osname            = "vm-node3"  
-  primary_nodes           = join("",["1=srpc://", local.node1_osname ,":10301",";2=srpc://", local.node2_osname ,":10301",";3=srpc://", local.node3_osname ,":10301"])
+  primary_nodes           = "1=srpc://${local.node1_osname}:10301;2=srpc://${local.node2_osname}:10301;3=srpc://${local.node3_osname}:10301"
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24)
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
-  queue_cluster           = join("",["QueueCluster1('",local.node1_name,"')"])
+  queue_cluster           = "QueueCluster1('${local.node1_name}')"
   st_container_name       = "sinequa"
-  data_storage_root       =  join("",["grids/",var.resource_group_name,"/"])
+  data_storage_root       = "grids/${var.resource_group_name}/"
   
-  data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name,"/", local.data_storage_root])
+  data_storage_url        = "https://${local.st_name}.blob.core.windows.net/${local.st_container_name}/${local.data_storage_root}"
 
   image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
   
@@ -259,7 +263,7 @@ module "vmss-indexer1" {
   tags = {
     "sinequa-grid"                        = local.prefix
     "sinequa-data-storage-url"            = local.data_storage_url
-    "sinequa-node"                        = "indexer1"
+    "sinequa-node"                        = "vmss-indexer"
     "sinequa-indexer"                     = "indexer-dynamic"
   }
 

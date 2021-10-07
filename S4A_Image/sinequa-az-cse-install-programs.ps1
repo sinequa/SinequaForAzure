@@ -74,8 +74,9 @@ Start-Process -FilePath "chrome_installer.exe" -Args "/silent /install" -Verb Ru
 
 # NotePad++ (can be removed)
 WriteLog "Install Notepad++"
-Invoke-WebRequest "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.9/npp.7.9.Installer.exe" -OutFile "$tempDrive\npp.7.9.Installer.exe"
-Start-Process -FilePath "npp.7.9.Installer.exe" -Args "/S" -Wait -PassThru
+[xml]$npp = (New-Object System.Net.WebClient).DownloadString("https://notepad-plus-plus.org/update/getDownloadUrl.php")
+Invoke-WebRequest $npp.GUP.Location -OutFile "$tempDrive\npp.Installer.exe"
+Start-Process -FilePath "npp.Installer.exe" -Args "/S" -Wait -PassThru
 
 #Visual Code (can be removed)
 WriteLog "Install Visual Code"
