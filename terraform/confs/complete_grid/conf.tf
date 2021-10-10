@@ -12,6 +12,7 @@ terraform {
 }
 
 provider "azurerm" {
+  version = "=2.78.0" // regression : https://github.com/hashicorp/terraform-provider-azurerm/issues/13652
   partner_id = "947f5924-5e20-4f0a-96eb-808371995ac8" // Sinequa Tracking ID
   subscription_id = var.sub_www_id
   tenant_id       = var.tenant_id
@@ -270,6 +271,13 @@ module "vmss-indexer1" {
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services,module.vm-primary-node1,module.vm-primary-node2,module.vm-primary-node3]
 }
 
+output "os_user" {
+    value        = local.os_admin_username
+}
+
+output "os_password" {
+    value        = nonsensitive(local.os_admin_password) // nonsensitive only for testing. This function should be removed.
+}
 /*
 output "sinequa_admin_url" {
   //value = "https://${module.frontend.pip.ip_address}/admin"
