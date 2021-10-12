@@ -278,8 +278,8 @@ output "os_user" {
 output "os_password" {
     value        = nonsensitive(local.os_admin_password) // nonsensitive only for testing. This function should be removed.
 }
-/*
+
 output "sinequa_admin_url" {
   //value = "https://${module.frontend.pip.ip_address}/admin"
-  //value = "https://${module.vm-primary-node1.pip.ip_address}/admin"
-}*/
+  value = "https://${module.vm-primary-node1.pip[0].ip_address}/admin"
+}

@@ -53,3 +53,9 @@ resource "azurerm_role_assignment" "sinequa_vmss_role_vm" {
   principal_id          = each.value
 }
 
+resource "azurerm_role_assignment" "sinequa_vmss_role_vmss" {
+  scope                 = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.id
+  role_definition_name  = "Contributor"
+  principal_id          = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.id
+}
+
