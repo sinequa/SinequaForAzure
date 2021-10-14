@@ -83,6 +83,7 @@ resource "azurerm_resource_group" "sinequa_rg" {
 
   tags = {
     "sinequa-grid" = local.prefix
+    "version"      = var.version_number
   }
 }
 
@@ -122,6 +123,7 @@ module "kv_st_services" {
   blob_sinequa_beta          = true
   blob_sinequa_keyvault      = local.kv_name
   blob_sinequa_queuecluster  = local.queue_cluster
+  blob_sinequa_version       = var.version_number
 
   depends_on = [azurerm_resource_group.sinequa_rg]
 }

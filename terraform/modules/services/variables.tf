@@ -66,6 +66,11 @@ variable "blob_sinequa_authentication_enabled" {
     default         = false
 }
 
+variable "blob_sinequa_version" {
+    type            = string
+    default         = ""
+}
+
 variable "tags" {
   type              = map
   default           = {}

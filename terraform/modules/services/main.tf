@@ -108,3 +108,13 @@ resource "azurerm_storage_blob" "sinequa_queuecluster" {
   source_content         = var.blob_sinequa_queuecluster
 }
 
+resource "azurerm_storage_blob" "sinequa-version" {
+  count                   = var.blob_sinequa_version != ""?1:0
+  name                   = join("",[var.data_storage_root, "var/sinequa-version"])
+  storage_account_name   = azurerm_storage_account.sinequa_st.name
+  storage_container_name = azurerm_storage_container.sinequa_st_container.name
+  type                   = "Block"
+  content_type           = "text/plain"
+  source_content         = var.blob_sinequa_version
+}
+

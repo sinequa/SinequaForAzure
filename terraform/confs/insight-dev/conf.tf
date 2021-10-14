@@ -101,6 +101,7 @@ resource "azurerm_resource_group" "sinequa_rg" {
 
   tags = {
     "sinequa-grid" = local.prefix
+    "version"      = var.version_number
   }
 }
 
@@ -144,6 +145,7 @@ module "kv_st_services" {
   blob_sinequa_queuecluster  = local.queue_cluster
   blob_sinequa_authentication_secret = local.srpc_secret
   blob_sinequa_authentication_enabled = true
+  blob_sinequa_version       = var.version_number
 
   depends_on = [azurerm_resource_group.sinequa_rg]
 }
@@ -177,6 +179,7 @@ module "vm-primary-node1" {
     "sinequa-webapp"                      = "WebApp1"
     "sinequa-alpha"                       = "true"
     "sinequa-hostname-override"           = local.node1_fqdn
+    "version"                             = var.version_number    
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]
@@ -220,6 +223,7 @@ module "vm-primary-node2" {
     "sinequa-webapp"                      = "WebApp2"
     "sinequa-alpha"                       = "true"
     "sinequa-hostname-override"           = local.node2_fqdn
+    "version"                             = var.version_number    
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]
@@ -264,6 +268,7 @@ module "vm-primary-node3" {
     "sinequa-alpha"                       = "true"
     "sinequa-hostname-override"           = local.node3_fqdn
     "sinequa-authentication-enabled"      = "true"
+    "version"                             = var.version_number    
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services]
@@ -308,6 +313,7 @@ module "vmss-indexer1" {
     "sinequa-node"                        = "insight-dynamic-node"
     "sinequa-indexer"                     = "indexer-dynamic"
     "sinequa-alpha"                       = "true"
+    "version"                             = var.version_number    
   }
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.kv_st_services,module.vm-primary-node1,module.vm-primary-node2,module.vm-primary-node3]
