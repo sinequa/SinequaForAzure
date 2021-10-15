@@ -35,6 +35,14 @@ resource "azurerm_key_vault_secret" "sinequa_kv_secret_password" {
   depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
 }
 
+resource "azurerm_key_vault_secret" "sinequa_kv_default_admin_password" {
+  name         = "sinequa-default-admin-password"
+  value        = var.default_admin_password
+  key_vault_id = azurerm_key_vault.sinequa_kv.id
+
+  depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
+}
+
 resource "azurerm_key_vault_secret" "sinequa_authentication_secret" {
   count                  = var.blob_sinequa_authentication_enabled?1:0
   name                   = "sinequa-authentication-secret"
@@ -43,6 +51,7 @@ resource "azurerm_key_vault_secret" "sinequa_authentication_secret" {
 
   depends_on = [azurerm_role_assignment.sinequa_kv_role_for_me]
 }
+
 
 
 resource "azurerm_storage_account" "sinequa_st" {

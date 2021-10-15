@@ -39,6 +39,11 @@ variable "admin_password" {
     default         = ""
 }
 
+variable "default_admin_password" {
+    type            = string
+    default         = ""
+}
+
 variable "blob_sinequa_primary_nodes" {
     type            = string
 }
