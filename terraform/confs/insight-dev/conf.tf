@@ -93,7 +93,7 @@ locals {
   primary_nodes           = join("",["1=srpc://", local.node1_fqdn ,":10301",";2=srpc://", local.node2_fqdn ,":10301",";3=srpc://", local.node3_fqdn ,":10301"])
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24)
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
-  queue_cluster           = "QueueCluster(${local.node1_name},${local.node2_name},${local.node3_name})"
+  queue_cluster           = "QueueClusterInsight(${local.node1_name},${local.node2_name},${local.node3_name})"
   st_container_name       = "sinequa"
   data_storage_root       = "grids/insight-dev/"
 
