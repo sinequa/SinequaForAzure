@@ -123,21 +123,21 @@ In the modules folder, scripts are provided to build blocks:
 | primary_node_vm_principal_ids | List of principals (VM identity) of Primary Nodes, it's required for managing the scale up/down of the Scaleset from the platform. |
 | tags                     | Azure tags to specify Sinequa roles. |
 
-* **aad**: Join a VM or VMSS on an Azure AD
+* **aad**: Join a VM or VMSS in an Azure AD
 
 | Variables                | Description |
 | ------------------------ | ----------- |
 | virtual_machine_id       | ID of VM or VMSS |
-| is_vm                    | ID is a VM or ar VMSS. Default is `true` (VM). |
+| is_vm                    | `virtual_machine_id` is a VM otherwise it's a VMSS. Default is `true` (VM). |
 | local_admins             | Array of emails (Azure login) for enabling the `Virtual Machine Administrator Login` role. |
 
-* **ad**: Join a VM on an Active Directory
+* **ad**: Join a VM in an Active Directory
 
 | Variables                | Description |
 | ------------------------ | ----------- |
-| ad_login                 | User that has the right to join the VM into the domain. |
+| ad_login                 | User login that has the right to join the VM into the domain. |
 | ad_password              | Password of the user that has the right to join the VM into the domain. |
-| virtual_machine_id       | VM id. |
+| virtual_machine_id       | VM ID. |
 | local_admins             | list of AD users to add in the local `administrator` group of the VM|
 
 
