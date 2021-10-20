@@ -135,6 +135,7 @@ In the modules folder, scripts are provided to build blocks:
 
 | Variables                | Description |
 | ------------------------ | ----------- |
+| active_directory_name    | Active Directory to join |
 | ad_login                 | User login that has the right to join the VM into the domain. |
 | ad_password              | Password of the user that has the right to join the VM into the domain. |
 | virtual_machine_id       | VM ID. |
