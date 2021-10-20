@@ -61,6 +61,7 @@ netsh advfirewall firewall add rule name= "Sinequa" dir=in action=allow protocol
 # Exclude $sinequaFolder from Windows Defender
 WriteLog "Update Windows Defender Exclusion";
 Add-MpPreference -ExclusionPath $sinequaFolder
+Add-MpPreference -ExclusionPath "F:\sinequa"
 
 # Test if Sinequa is already installed
 WriteLog "Install $zipFile in $destinationFolder";

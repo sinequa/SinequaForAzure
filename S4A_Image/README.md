@@ -1,4 +1,4 @@
-# S4A_Image <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1&color=9cf">
+# S4A_Image <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 
 Sinequa For Azure (S4A) Image is a set of scripts for creating your own Sinequa image on Azure. 
 
