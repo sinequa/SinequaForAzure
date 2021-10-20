@@ -48,7 +48,7 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 
 | Name                     | Value Example                        | Description                          |
 | ------------------------ | ------------------------------------ | ------------------------------------ |
-|	sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/`{container}` | Used to enable storage of:<br>* Configuration<br>* User settings<br>* Document cache<br>* Log store<br>* Audit store<br>and to declare cloud variables <br>(see bellow).|
+|	sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/`{container}/grids/{grid-name}` | Used to enable storage of:<br>* Configuration<br>* User settings<br>* Document cache<br>* Log store<br>* Audit store<br>and to declare cloud variables <br>(see bellow).|
 | sinequa-auto-disk         | "auto" or JSON value                | When adding data disks to an Azure VM, they are not partitioned/formatted. If you select "auto", all raw disks are automaticaly enabled. |
 |	sinequa-path		          | "f:\sinequa".  Default is `distrib_path` | `sinequa-path` is the root folder for all customer data, as opposed to `distrib-path` that only contains binaries on the OS disk. `sinequa-path` should be located on a dedicated Azure data disk. |
 |	sinequa-index-path	      | "g:\sinequa". Optional. Default is sinequa-path | `sinequa-index-path` is the root folder for all indexes. It is recommended to use it for NVMe disks. | 
@@ -88,7 +88,7 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 
 To reduce the cost of the disk usage and have a better reliability and availabilty on data, an Azure Blob storage account is broadly used for all data that do not require high I/O performances.
 
-If a `sinequa-data-storage-url` cloud tag is provided, the components below will automatically switch from data disk to Azure Storage account.
+If a `sinequa-data-storage-url` cloud tag is provided, the components below will automatically synchronize data from disk to Azure Storage account.
 
 It concerns:
 * Document cache store
