@@ -39,24 +39,25 @@ You must set the **SINEQUA_CLOUD** environment variable before starting the Sine
 
 | Name                     | Value                                | Description                          |
 | ------------------------ | ------------------------------------ | ------------------------------------ |
-|	SINEQUA_CLOUD            | "Azure"                              | Enable cloud init features.          |
+|	SINEQUA_CLOUD          | "Azure"                              | Enable cloud init features.          |
 
 
 #### 2.1.2. Cloud Tags <a name="cloudtags"> <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1&color=9cf">
 
 Cloud tags are Azure tags used on Azure resources. They are used to run some specific init tasks for a particular VM or VMSS. 
 
-| Name                     | Value Example                        | Description                          |
-| ------------------------ | ------------------------------------ | ------------------------------------ |
-|	sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/`{container}/grids/{grid-name}` | Used to enable storage of:<br>* Configuration<br>* User settings<br>* Document cache<br>* Log store<br>* Audit store<br>and to declare cloud variables <br>(see bellow).|
-| sinequa-auto-disk         | "auto" or JSON value                | When adding data disks to an Azure VM, they are not partitioned/formatted. If you select "auto", all raw disks are automaticaly enabled. |
-|	sinequa-path		          | "f:\sinequa".  Default is `distrib_path` | `sinequa-path` is the root folder for all customer data, as opposed to `distrib-path` that only contains binaries on the OS disk. `sinequa-path` should be located on a dedicated Azure data disk. |
-|	sinequa-index-path	      | "g:\sinequa". Optional. Default is sinequa-path | `sinequa-index-path` is the root folder for all indexes. It is recommended to use it for NVMe disks. | 
-|	sinequa-node              | "node1"                             | Node name. |
-| sinequa-primary-node-id   | 1 (or 2 or 3 or empty)              | To be used on [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html). |
-|	sinequa-webapp 		        | "webapp1"                           | Name of the [WebApp](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-webapps.html) to be created and started on this node.  |
-|	sinequa-engine		        | "engine1"                           | Name of the [engine](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-engines.html) to be created and started on this node.  |
-|	sinequa-indexer		        | "indexer1"                          | Name of the [indexer](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-indexers.html) to be created and started on this node. |
+| Name                         | Value Example                        | Description                          |
+| ---------------------------- | ------------------------------------ | ------------------------------------ |
+|	sinequa-data-storage-url   | https://`{storage account name}`.blob.core.windows.net/`{container}`/grids/`{grid-name}` | Used to enable storage of:<br>* Configuration<br>* User settings<br>* Document cache<br>* Log store<br>* Audit store<br>and to declare cloud variables <br>(see bellow).|
+|   sinequa-auto-disk          | "auto" or JSON value                | When adding data disks to an Azure VM, they are not partitioned/formatted. If you select "auto", all raw disks are automaticaly enabled. |
+|	sinequa-path		       | "f:\sinequa".  Default is `distrib_path` | `sinequa-path` is the root folder for all customer data, as opposed to `distrib-path` that only contains binaries on the OS disk. `sinequa-path` should be located on a dedicated Azure data disk. |
+|	sinequa-index-path	       | "g:\sinequa". Optional. Default is sinequa-path | `sinequa-index-path` is the root folder for all indexes. It is recommended to use it for NVMe disks. | 
+|	sinequa-node               | "node1"                             | Node name. |
+|   sinequa-primary-node-id    | 1 (or 2 or 3 or empty)              | To be used on [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html). |
+|	sinequa-webapp 		       | "webapp1"                           | Name of the [WebApp](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-webapps.html) to be created and started on this node.  |
+|	sinequa-engine		       | "engine1"                           | Name of the [engine](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-engines.html) to be created and started on this node.  |
+|	sinequa-indexer		       | "indexer1"                          | Name of the [indexer](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-indexers.html) to be created and started on this node. |
+|	sinequa-queue-cluster      | "queuecluster1(node1,node2,node3)"  | Name of the [Queue Cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html) with one or three node names to be created and started. |
 
 
 #### 2.1.3. Cloud Variables & Cloud Secrets <a name="cloudvars"> <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1&color=9cf">
