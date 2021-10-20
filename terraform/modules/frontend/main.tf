@@ -80,6 +80,10 @@ resource "azurerm_application_gateway" "sinequa_ag" {
     }
   }
 
+  waf_configuration  {
+    enable = false
+  }
+  
   ssl_certificate {
     name                        = var.certificate.name
     data                        = var.certificate.data

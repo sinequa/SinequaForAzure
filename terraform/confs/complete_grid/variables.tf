@@ -3,7 +3,7 @@ variable "tenant_id" {
   type        = string
 }
 
-variable "sub_www_id" {
+variable "subscription_id" {
   description = "Subscription ID"
   type        = string
 }

@@ -12,9 +12,9 @@ terraform {
 }
 
 provider "azurerm" {
-  version = "=2.78.0" // regression : https://github.com/hashicorp/terraform-provider-azurerm/issues/13652
+  #version = "=2.78.0"
   partner_id = "947f5924-5e20-4f0a-96eb-808371995ac8" // Sinequa Tracking ID
-  subscription_id = var.sub_www_id
+  subscription_id = var.subscription_id
   tenant_id       = var.tenant_id
   features {
     key_vault {
@@ -92,7 +92,6 @@ resource "azurerm_resource_group" "sinequa_rg" {
   location = local.region
 
   tags = {
-    "sinequa-grid" = local.prefix
     "version"      = var.version_number
   }
 }
@@ -108,7 +107,6 @@ module "network" {
   nsg_front_name        = "nsg-${local.prefix}-front"
 
   tags = {
-    "sinequa-grid" = local.prefix
   }
 
 }
@@ -176,7 +174,6 @@ module "vm-primary-node1" {
   pip                   = true
 
   tags = {
-    "sinequa-grid"                        = local.prefix
     "sinequa-auto-disk"                   = "auto"
     "sinequa-path"                        = "F:\\sinequa"
     "sinequa-data-storage-url"            = local.data_storage_url
@@ -211,7 +208,6 @@ module "vm-primary-node2" {
   pip                   = true
 
   tags = {
-    "sinequa-grid"                        = local.prefix
     "sinequa-auto-disk"                   = "auto"
     "sinequa-path"                        = "F:\\sinequa"
     "sinequa-data-storage-url"            = local.data_storage_url
@@ -246,7 +242,6 @@ module "vm-primary-node3" {
   pip                   = true
 
   tags = {
-    "sinequa-grid"                        = local.prefix
     "sinequa-auto-disk"                   = "auto"
     "sinequa-path"                        = "F:\\sinequa"
     "sinequa-data-storage-url"            = local.data_storage_url
@@ -282,7 +277,6 @@ module "vmss-indexer1" {
   }
 
   tags = {
-    "sinequa-grid"                        = local.prefix
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-node"                        = "vmss-indexer"
     "sinequa-indexer"                     = "indexer-dynamic"

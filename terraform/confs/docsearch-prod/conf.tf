@@ -12,7 +12,7 @@ provider "azuread" {}
 provider "azurerm" {
   version = "=2.78.0" // regression : https://github.com/hashicorp/terraform-provider-azurerm/issues/13652
   partner_id = "947f5924-5e20-4f0a-96eb-808371995ac8" // Sinequa Tracking ID
-  subscription_id = var.sub_www_id
+  subscription_id = var.subscription_id
   tenant_id       = var.tenant_id
   features {
     key_vault {

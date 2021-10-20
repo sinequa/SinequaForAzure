@@ -64,12 +64,17 @@ In the modules folder, scripts are provided to build blocks:
 | kv_name                  | Key vault to create. |
 | st_name                  | Storage account to create. |
 | container_name           | Container in the storage account. |
-| license                  | Sinequa license to be uploaded in the key vault as secret. |
+| data_storage_root        | Root folder of the grid. It must contains the **grids** folder. Eg: grids/mygrid|
+| license                  | Sinequa license to be uploaded in the key vault as secret. Optional. |
+| admin_password           | Store the OS password as secret |
+| default_admin_password   | Store the default Sinequa ES admin password as secret |
 | blob_sinequa_primary_nodes | Sinequa cloud variable for sRPC connection string of [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html). |
-| blob_sinequa_beta        | Sinequa cloud variable to enable beta features. |
+| blob_sinequa_authentication_secret | Secret value for enabling authentication on sRPC. Optional. |
+| blob_sinequa_authentication_enabled | Boolean for enabling Authentication with Secret. If true, it requires `{blob_sinequa_authentication_secret}` . Default value is `false` |
+| blob_sinequa_beta        | Sinequa cloud variable to enable beta features. Optional. |
 | blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
-| blob_sinequa_queuecluster | Sinequa cloud variable to create a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). |
-| tags                     | Azure tags |
+| blob_sinequa_queuecluster | Sinequa cloud variable to create a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). Optional. |
+| tags                     | Azure tags. Optional. |
 
 * **vm**: Deploys a virtual machine.
 
@@ -93,8 +98,9 @@ In the modules folder, scripts are provided to build blocks:
 | linked_to_application_gateway | The VM is linked to an application gateway. |
 | backend_address_pool_id  | Backend address pool ID of the application gateway. Required for VM with WebApp. |
 | network_security_group_id | Network security group of the VM. |
-| datadisk_ids             | Use existing data disk. |
-| tags                     | Azure tags to specify Sinequa roles. |
+| datadisk_ids             | Provide existing data disks for attaching them, instead of creating empty disks. Optional. |
+| private_ip_address       | Set a Static IP on the VM. If not used a Dynamic IP is used |
+| tags                     | Azure tags to specify Sinequa roles. Optional. |
 
 * **vmss**: Deploys a virtual machine scale set.
 
@@ -114,7 +120,24 @@ In the modules folder, scripts are provided to build blocks:
 | key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VMSS identity. |
 | storage_account_id       | Storage account used for Sinequa cloud variable and container. Needed to grant read/write access on the VMSS identity. |
 | network_security_group_id | Network security group of the VM. |
+| primary_node_vm_principal_ids | List of principals (VM identity) of Primary Nodes, it's required for managing the scale up/down of the Scaleset from the platform. |
 | tags                     | Azure tags to specify Sinequa roles. |
+
+* **aad**: Join a VM or VMSS on an Azure AD
+| Variables                | Description |
+| ------------------------ | ----------- |
+| virtual_machine_id       | ID of VM or VMSS |
+| is_vm                    | ID is a VM or ar VMSS. Default is `true` (VM). |
+| local_admins             | Array of emails (Azure login) for enabling the `Virtual Machine Administrator Login` role. |
+
+* **ad**: Join a VM on an Active Directory
+| Variables                | Description |
+| ------------------------ | ----------- |
+| ad_login                 | User that has the right to join the VM into the domain. |
+| ad_password              | Password of the user that has the right to join the VM into the domain. |
+| virtual_machine_id       | VM id. |
+| local_admins             | list of AD users to add in the local `administrator` group of the VM|
+
 
 ### 2. complete_grid Sample <a name="complete_grid">
 
