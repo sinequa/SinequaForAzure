@@ -57,7 +57,6 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 |	sinequa-webapp 		       | "webapp1"                           | Name of the [WebApp](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-webapps.html) to be created and started on this node.  |
 |	sinequa-engine		       | "engine1"                           | Name of the [engine](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-engines.html) to be created and started on this node.  |
 |	sinequa-indexer		       | "indexer1"                          | Name of the [indexer](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-indexers.html) to be created and started on this node. |
-|	sinequa-queue-cluster      | "queuecluster1(node1,node2,node3)"  | Name of the [Queue Cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html) with one or three node names to be created and started. |
 
 
 #### 2.1.3. Cloud Variables & Cloud Secrets <a name="cloudvars"> <img alt="11.6.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.6.1&color=9cf">
@@ -69,7 +68,7 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 | ----------------------------------------- | --------- | ------------ | ------------------------------------ | ------------------------------------ |
 |	sinequa-primary-nodes                   | x         |              | "1=srpc://vm-node1:10300;2=srpc://vm-node2:10300;3=srpc://vm-node3=10300" | sRPC connection string of primary nodes. |
 |   sinequa-keyvault 	                    | x         |              | "kv-grid1"                           | Name of the key vault containing secrets (see below). |
-|   sinequa-queue-cluster 	                | x         |              | "QueueCluster1(vm-node1,vm-node2,vm-node3)" | Creates and starts a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). |
+|   sinequa-queue-cluster 	                | x         |              | "QueueCluster1(node1,node2,node3)"   | Creates and starts a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). |
 |   sinequa-encryption-key                  | x         | x            | xxxxx                                | Encryption key (see the documentation on [how to generate your own encryption key](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.how-to.encrypt.html#generating-encryption-key)) |
 |   sinequa_authentication_secret           | x         | x            | xxxxx                                | Secret for authenticating all sRPC calls |
 |	sinequa-license		                    | x         | x            | xxxxx                                | Sinequa license. |

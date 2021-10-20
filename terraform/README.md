@@ -99,7 +99,7 @@ In the modules folder, scripts are provided to build blocks:
 | backend_address_pool_id  | Backend address pool ID of the application gateway. Required for VM with WebApp. |
 | network_security_group_id | Network security group of the VM. |
 | datadisk_ids             | Provide existing data disks for attaching them, instead of creating empty disks. Optional. |
-| private_ip_address       | Set a Static IP on the VM. If not used a Dynamic IP is used |
+| private_ip_address       | Set a static IP on the VM. If not used a dynamic IP is used. |
 | tags                     | Azure tags to specify Sinequa roles. Optional. |
 
 * **vmss**: Deploys a virtual machine scale set.
@@ -124,6 +124,7 @@ In the modules folder, scripts are provided to build blocks:
 | tags                     | Azure tags to specify Sinequa roles. |
 
 * **aad**: Join a VM or VMSS on an Azure AD
+
 | Variables                | Description |
 | ------------------------ | ----------- |
 | virtual_machine_id       | ID of VM or VMSS |
@@ -131,6 +132,7 @@ In the modules folder, scripts are provided to build blocks:
 | local_admins             | Array of emails (Azure login) for enabling the `Virtual Machine Administrator Login` role. |
 
 * **ad**: Join a VM on an Active Directory
+
 | Variables                | Description |
 | ------------------------ | ----------- |
 | ad_login                 | User that has the right to join the VM into the domain. |
