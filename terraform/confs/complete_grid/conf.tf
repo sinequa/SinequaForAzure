@@ -49,6 +49,7 @@ locals {
   data_storage_root       = "grids/${var.resource_group_name}/"
   
   data_storage_url        = "https://${local.st_name}.blob.core.windows.net/${local.st_container_name}/${local.data_storage_root}"
+  data_disk_size        = 100
 
   image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
 //   image_id // marketplace image // image is private
@@ -171,6 +172,7 @@ module "vm-primary-node1" {
   linked_to_application_gateway = false
   //backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
+  data_disk_size        = local.data_disk_size
   pip                   = true
 
   tags = {
@@ -205,6 +207,7 @@ module "vm-primary-node2" {
   linked_to_application_gateway = false
   //backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
+  data_disk_size        = local.data_disk_size
   pip                   = true
 
   tags = {
@@ -239,6 +242,7 @@ module "vm-primary-node3" {
   linked_to_application_gateway = false
   //backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
   network_security_group_id = module.network.nsg_app.id
+  data_disk_size        = local.data_disk_size
   pip                   = true
 
   tags = {
