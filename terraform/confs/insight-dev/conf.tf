@@ -301,7 +301,7 @@ module "vmss-indexer1" {
   source                = "../../modules/vmss"
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
-  vmss_name             = "nodevmss-indexer"
+  vmss_name             = "vmss-insight-dev-indexer"
   computer_name_prefix  = "indexer"
   vmss_size             = "Standard_B2ms"
   subnet_id             = data.azurerm_subnet.subnet_app.id
