@@ -73,7 +73,6 @@ locals {
   prefix                  = "sq"
   os_admin_username       = "sinequa"
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0)
-
   sinequa_default_admin_password = element(concat(random_password.sq_passwd.*.result, [""]), 0)
   srpc_secret             = element(concat(random_password.srpc.*.result, [""]), 0)
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""

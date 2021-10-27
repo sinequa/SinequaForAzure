@@ -40,7 +40,17 @@ data "azurerm_key_vault" "kv-snqa" {
   name                 = "kv-snqa-management-key"
   resource_group_name  = "rg-www-security"
 }
+resource "random_password" "sq_passwd" {
+  length      = 24
+  min_upper   = 4
+  min_lower   = 2
+  min_numeric = 4
+  special     = false
 
+  keepers = {
+    domain_name_label = local.prefix
+  }
+}
 data "azurerm_key_vault_secret" "sinequa_ad_secret" {
   name         = "azuredomainjoiner"
   key_vault_id = data.azurerm_key_vault.kv-snqa.id
@@ -54,6 +64,7 @@ locals {
   prefix                  = "doc"
   os_admin_username       = "sinequa"
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0)
+  sinequa_default_admin_password = element(concat(random_password.sq_passwd.*.result, [""]), 0)
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):""
   node1_osname            = "docsearch-dev1"  
   node1_name              = "docsearch-1"  
@@ -63,7 +74,9 @@ locals {
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24)
   kv_name                 = substr(join("-",["kv",local.prefix,replace(md5(local.resource_group_name),"-","")]),0,24)
   st_container_name       = "sinequa"
-  data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name])
+  data_storage_root       = "grids/docsearch-dev/"
+
+  data_storage_url        = join("",["https://",local.st_name,".blob.core.windows.net/",local.st_container_name,"/", local.data_storage_root])
   image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
   //ag_pip_dns_name         = "docsearch-dev-sinequa"
   queue_cluster           = null
@@ -118,6 +131,8 @@ module "kv_st_services" {
   license               = local.license
   container_name        = local.st_container_name
   admin_password        = local.os_admin_password
+  data_storage_root     = local.data_storage_root
+  default_admin_password = local.sinequa_default_admin_password
 
   blob_sinequa_primary_nodes = local.primary_nodes 
   blob_sinequa_beta          = true
