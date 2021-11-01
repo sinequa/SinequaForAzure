@@ -6,11 +6,12 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sineq
 0. [Prerequisite](#prerequisite)<br>
 1. [Terraform Modules](#modules)<br>
 2. [complete_grid Sample](#complete_grid)<br>
-2.1. [Nodes Specialization](#specify)<br>
-2.2. [Add Nodes to a Sinequa Grid](#add)<br>
-2.2.1.  [Add a VM Node](#add_vm)<br>
-2.2.2.  [Add a VMSS Node](#add_vmss)<br>
-2.2.3.  [Update a Sinequa Grid](#update)<br>
+3. [complete_grid_with_app_gateway Sample](#complete_grid_with_app_gateway)<br>
+4. [standalone_server Sample](#standalone_server)<br>
+5. [Operations](#operations)<br>
+5.1.  [Add a VM Node](#add_vm)<br>
+5.2.  [Add a VMSS Node](#add_vmss)<br>
+5.3.  [Update a Sinequa Grid](#update)<br>
 
    
 
@@ -174,7 +175,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
  * 1 virtual network
  * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
 
-![Sinequa For Azure Deployment](../images/S4A_Default_ARM.png)
+![Sinequa For Azure Deployment](../images/S4A_complete_grid_with_app_gateway.png)
 
 ```powershell
 PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform init
@@ -193,17 +194,17 @@ PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform apply
  * 1 virtual network
  * 1 virtual machine for all roles (including on [primary node](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html))
 
-![Sinequa For Azure Deployment](../images/S4A_Default_ARM.png)
+![Sinequa For Azure Deployment](../images/S4A_standalone_server.png)
 
 ```powershell
-PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform init
-PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform validate
-PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform apply
+PS C:\S4A\terraform\confs\standalone_server> .\terraform init
+PS C:\S4A\terraform\confs\standalone_server> .\terraform validate
+PS C:\S4A\terraform\confs\standalone_server> .\terraform apply
 ```
 
-
-### 2.2. Add Nodes to a Sinequa Grid <a name="add">	
-#### 2.2.1 Add a VM Node <a name="add_vm"> 
+5. [](#operations)<br>
+### 5. Operations <a name="operations">	
+#### 5.1 Add a VM Node <a name="add_vm"> 
 In `conf.tf`, add a new resource using the `vm` module and re-deploy.
 
 ```terraform
@@ -247,7 +248,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
 
 
-#### 2.2.2 Add a VMSS Node <a name="add_vmss"> 
+#### 5.2 Add a VMSS Node <a name="add_vmss"> 
 In `conf.tf`, add a new resource using the `vmss` module and re-deploy.
 
 ```terraform
@@ -281,7 +282,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
 
 
-### 2.2.3. Update a Sinequa Grid <a name="update"> 
+### 5.3. Update a Sinequa Grid <a name="update"> 
 To update a complete grid, just change the `local.image_id` of the `conf.tf` with the new version, then re-deploy.
 
 ```terraform
