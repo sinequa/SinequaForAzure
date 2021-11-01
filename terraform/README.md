@@ -30,7 +30,7 @@ In the modules folder, scripts are provided to build blocks:
 | ------------------------ | ----------- |
 | location                 | Azure location. |
 | resource_group_name      | Resource group for deployment. |
-| availability_set_name    | Availability set name to create. Needed for the application gateway. |
+| availability_set_name    | Availability set name to create. Needed for detecting if a vm is available for the application gateway (load balancer). |
 | application_gateway_name | Name of the application gateway to create. |
 | subnet_id                | Subnet ID for the application gateway. Used only for HTTPS from end-users. |
 | certificate              | Certificate object for SSL. Could be directly the content of a .pfx file or a certificate from a key vault. |
@@ -49,6 +49,8 @@ In the modules folder, scripts are provided to build blocks:
 | subnet_front_name        | Subnet for the application gateway. |
 | nsg_app_name             | Network security group for VM & VMSS (RDP rule). |
 | nsg_front_name           | Network security group for the application gateway (HTTPS rule). |
+| require_front_subnet     | boolean for enabling the subnet_front network. Default false. |
+| allow_http_on_app_nsg    | boolean for opening HTTP on subnet_app. Use this option if no App GW. Not recommanded as it's not secured. Default false. |
 | tags                     | Azure tags. |
 
 * **service**: Deploys a key vault and a storage account.
@@ -57,8 +59,8 @@ In the modules folder, scripts are provided to build blocks:
 | ------------------------ | ----------- |
 | location                 | Azure location. |
 | resource_group_name      | Resource group for deployment. |
-| kv_name                  | Key vault to create. |
-| st_name                  | Storage account to create. |
+| kv_name                  | Key vault to create. Name as to be unique on Azure. |
+| st_name                  | Storage account to create. Name as to be unique on Azure. |
 | container_name           | Container in the storage account. |
 | data_storage_root        | Root folder of the grid. It must contains the **grids** folder. Eg: grids/mygrid|
 | license                  | Sinequa license to be uploaded in the key vault as secret. Optional. |
@@ -69,6 +71,7 @@ In the modules folder, scripts are provided to build blocks:
 | blob_sinequa_authentication_enabled | Boolean for enabling Authentication with Secret. If true, it requires `{blob_sinequa_authentication_secret}` . Default value is `false` |
 | blob_sinequa_beta        | Sinequa cloud variable to enable beta features. Optional. |
 | blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
+| blob_sinequa_version     | Sinequa Version installed. Optional |
 | blob_sinequa_queuecluster | Sinequa cloud variable to create a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). Optional. |
 | tags                     | Azure tags. Optional. |
 
