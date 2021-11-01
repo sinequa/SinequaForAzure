@@ -36,6 +36,18 @@ description       = "The name of the network security group for the frontend"
   type              = string
 }
 
+variable "require_front_subnet" {
+description       = "Allow HTTPS inbound from Internet with an AppGateway"
+  type            = bool
+  default         = false
+}
+
+variable "allow_http_on_app_nsg" {
+description       = "Allow HTTP inbound from Internet"
+  type            = bool
+  default         = false
+}
+
 variable "tags" {
   type = map
 }

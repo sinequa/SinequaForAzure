@@ -10,6 +10,7 @@ resource "azurerm_public_ip" "sinequa_vm_pip" {
   resource_group_name       = var.resource_group_name
   allocation_method         = "Dynamic"
   sku                       = "Basic"  
+  tags                      = var.tags
 }
 
 resource "azurerm_network_interface" "sinequa_vm_nic" {
@@ -86,6 +87,7 @@ resource "azurerm_managed_disk" "sinequa_vm_datadisk" {
   storage_account_type = var.data_disk_type
   create_option        = "Empty"
   disk_size_gb         = var.data_disk_size
+  tags                 = var.tags
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "sinequa_vm_datadisk_attach" {

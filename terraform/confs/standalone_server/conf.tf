@@ -36,18 +36,9 @@ locals {
   //Primary Nodes Section
   node1_osname            = "vm-node1" //Windows Computer Name
   node1_name              = local.node1_osname //Name in Sinequa Grid
-  node2_osname            = "vm-node2" //Windows Computer Name
-  node2_name              = local.node2_osname //Name in Sinequa Grid
-  node3_osname            = "vm-node3" //Windows Computer Name
-  node3_name              = local.node3_osname //Name in Sinequa Grid
-  primary_nodes           = "1=srpc://${local.node1_osname}:10301;2=srpc://${local.node2_osname}:10301;3=srpc://${local.node3_osname}:10301" // sRPC Connection String
+  primary_nodes           = "1=srpc://${local.node1_osname}:10301" // sRPC Connection String
   primary_node_vm_size    = "Standard_B2s"
   data_disk_size        = 100 // Size of Datadisk (for data such as Indexes)
-
-  // Indexer vmss
-  os_indexer_name         = "vmss-indexer" //Windows Computer Name
-  indexer_capacity         = 3 // Max Number of VMSS Instances Allowed for Indexer
-  indexer_vmss_size       = "Standard_B2s"
 
   st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   st_container_name       = "sinequa"
@@ -55,8 +46,7 @@ locals {
   data_storage_root       = "grids/${var.resource_group_name}/"
   data_storage_url        = "https://${local.st_name}.blob.core.windows.net/${local.st_container_name}/${local.data_storage_root}"
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
-  queue_cluster           = "QueueCluster1(${local.node1_name},${local.node2_name},${local.node3_name})" //For Creating a Queuecluster during Cloud Init
-  
+  queue_cluster           = "QueueCluster1(${local.node1_name})" //For Creating a Queuecluster during Cloud Init
   image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
 }
 
@@ -151,7 +141,6 @@ module "vm-primary-node1" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
-  linked_to_application_gateway = false
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
   pip                   = true
@@ -164,105 +153,11 @@ module "vm-primary-node1" {
     "sinequa-node"                        = local.node1_name
     "sinequa-webapp"                      = "webApp1"
     "sinequa-engine"                      = "engine1"
+    "sinequa-indexer"                     = "indexer1"
     "version"                             = var.version_number
   },var.additional_tags)
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
-}
-
-// Create Primary Node2
-module "vm-primary-node2" {
-  source                = "../../modules/vm"
-  resource_group_name   = azurerm_resource_group.sinequa_rg.name
-  location              = azurerm_resource_group.sinequa_rg.location
-  vm_name               = local.node2_osname
-  computer_name         = local.node2_osname
-  vm_size               = local.primary_node_vm_size
-  subnet_id             = module.network.subnet_app.id
-  image_id              = local.image_id
-  admin_username        = local.os_admin_username
-  admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
-  network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
-  pip                   = false
-
-  tags = merge({
-    "sinequa-auto-disk"                   = "auto"
-    "sinequa-path"                        = "F:\\sinequa"
-    "sinequa-data-storage-url"            = local.data_storage_url
-    "sinequa-primary-node-id"             = "2"
-    "sinequa-node"                        = local.node2_name
-    "sinequa-webapp"                      = "webApp2"
-    "sinequa-engine"                      = "engine2"
-    "version"                             = var.version_number
-  },var.additional_tags)
-
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
-}
-
-// Create Primary Node3
-module "vm-primary-node3" {
-  source                = "../../modules/vm"
-  resource_group_name   = azurerm_resource_group.sinequa_rg.name
-  location              = azurerm_resource_group.sinequa_rg.location
-  vm_name               = local.node3_osname
-  computer_name         = local.node3_osname
-  vm_size               = local.primary_node_vm_size
-  subnet_id             = module.network.subnet_app.id
-  image_id              = local.image_id
-  admin_username        = local.os_admin_username
-  admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
-  network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
-  pip                   = false
-
-  tags = merge({
-    "sinequa-auto-disk"                   = "auto"
-    "sinequa-path"                        = "F:\\sinequa"
-    "sinequa-data-storage-url"            = local.data_storage_url
-    "sinequa-primary-node-id"             = "3"
-    "sinequa-node"                        = local.node3_name
-    "version"                             = var.version_number
-  },var.additional_tags)
-
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
-}
-
-// Create Indexer Scale Set
-module "vmss-indexer1" {
-  source                = "../../modules/vmss"
-  resource_group_name   = azurerm_resource_group.sinequa_rg.name
-  location              = azurerm_resource_group.sinequa_rg.location
-  vmss_name             = local.os_indexer_name
-  computer_name_prefix  = "indexer"
-  vmss_size             = local.indexer_vmss_size
-  subnet_id             = module.network.subnet_app.id
-  image_id              = local.image_id
-  admin_username        = local.os_admin_username
-  admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
-  network_security_group_id = module.network.nsg_app.id
-  vmss_capacity         = local.indexer_capacity
-
-  primary_node_vm_principal_ids = {
-    "1" = module.vm-primary-node1.vm.identity[0].principal_id
-    "2" = module.vm-primary-node2.vm.identity[0].principal_id
-    "3" = module.vm-primary-node3.vm.identity[0].principal_id
-  }
-
-  tags = merge({
-    "sinequa-data-storage-url"            = local.data_storage_url
-    "sinequa-node"                        = local.os_indexer_name
-    "sinequa-indexer"                     = "indexer-dynamic"
-    "version"                             = var.version_number
-  },var.additional_tags)
-
-  depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services,module.vm-primary-node1,module.vm-primary-node2,module.vm-primary-node3]
 }
 
 output "os_user" {

@@ -145,6 +145,25 @@ In the modules folder, scripts are provided to build blocks:
 ### 2. complete_grid Sample <a name="complete_grid">
 
 `complete_grid\conf.tf` is a deployment of all modules with these objects:
+ * 1 key vault
+ * 1 network security group
+ * 1 public IP address
+ * 1 storage account
+ * 1 virtual machine scale sets for indexer
+ * 1 virtual network
+ * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
+
+![Sinequa For Azure Deployment](../images/S4A_complete_grid.png)
+
+```powershell
+PS C:\S4A\terraform\confs\complete_grid> .\terraform init
+PS C:\S4A\terraform\confs\complete_grid> .\terraform validate
+PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
+```
+
+### 3. complete_grid_with_app_gateway Sample <a name="complete_grid_with_app_gateway">
+
+`complete_grid_with_app_gateway\conf.tf` is a deployment of all modules with these objects:
  * 1 application gateway
  * 1 availability set
  * 1 key vault
@@ -155,67 +174,33 @@ In the modules folder, scripts are provided to build blocks:
  * 1 virtual network
  * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
 
+![Sinequa For Azure Deployment](../images/S4A_Default_ARM.png)
 
 ```powershell
-PS C:\S4A\terraform\confs\complete_grid> .\terraform init
-PS C:\S4A\terraform\confs\complete_grid> .\terraform validate
-PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
+PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform init
+PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform validate
+PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform apply
 ```
-#####  2.1. Nodes Specialization <a name="specify">
 
-* **Cloud tags of `vm-node1`**:
-    | Name                     | Value |
-    | ------------------------ | ----- |
-    | sinequa-auto-disk	       | auto |
-	| sinequa-path		       | f:\sinequa |
-	| sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/sinequa |
-	| sinequa-primary-node-id  | 1 |
-	| sinequa-node	           | vm-node1 |
-	| sinequa-webapp 		   | webapp1 | 
-	| sinequa-engine		   | engine1 |
 
-* **Cloud tags of `vm-node2`**:
-    | Name                     | Value |
-    | ------------------------ | ----- |
-    | sinequa-auto-disk	       | auto |
-	| sinequa-path		       | f:\sinequa |
-	| sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/sinequa |
-	| sinequa-primary-node-id  | 2 |
-	| sinequa-node	           | vm-node2 |
-	| sinequa-webapp 		   | webapp2 |
-	| sinequa-engine		   | engine2 |
+### 4. standalone_server Sample <a name="standalone_server">
 
-* **Cloud tags of `vm-node3`**:
-    | Name                     | Value |
-    | ------------------------ | ----- |
-    | sinequa-auto-disk	       | auto |
-	| sinequa-path		       | f:\sinequa |
-	| sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/sinequa |
-	| sinequa-primary-node-id  | 3 |
-	| sinequa-node	           | vm-node3 |
-	| sinequa-webapp 		   | webapp3 |
+`standalone_server\conf.tf` is a deployment of all modules with these objects:
+ * 1 key vault
+ * 1 network security
+ * 1 public IP address
+ * 1 storage account
+ * 1 virtual network
+ * 1 virtual machine for all roles (including on [primary node](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html))
 
-* **Cloud tags of `vmss-indexer`**:
-    | Name                     | Value |
-    | ------------------------ | ----- |
-    | sinequa-auto-disk	       | auto |
-	| sinequa-path		       | f:\sinequa |
-	| sinequa-data-storage-url | https://`{storage account name}`.blob.core.windows.net/sinequa |
-	| sinequa-node	           | vm-indexer |
-	| sinequa-webapp 		   | indexer1 |
+![Sinequa For Azure Deployment](../images/S4A_Default_ARM.png)
 
-* **Cloud variables (in Storage account)**:
-    | Name                     | Value |
-    | ------------------------ | ----- |
-	| sinequa-primary-nodes    | 1=srpc://vm-node1:10300;2=srpc://vm-node2:10300;3=srpc://vm-node3=10300 |
-    | sinequa-beta             | true |
-	| sinequa-keyvault 	       | `{Key Vault Name}` |
-	| sinequa-queue-cluster    | QueueCluster1(vm-node1,vm-node2,vm-node3) |
-	
-* **Cloud secrets (secrets in key vault)**:
-    | Name                     | Value |
-    | ------------------------ | ----- |
-	| sinequa-license		   | `{License}` |
+```powershell
+PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform init
+PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform validate
+PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform apply
+```
+
 
 ### 2.2. Add Nodes to a Sinequa Grid <a name="add">	
 #### 2.2.1 Add a VM Node <a name="add_vm"> 

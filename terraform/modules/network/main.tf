@@ -15,6 +15,7 @@ resource "azurerm_subnet" "subnet_app" {
 }
 
 resource "azurerm_subnet" "subnet_front" {
+  count                = var.require_front_subnet?1:0
   name                 = var.subnet_front_name
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.sinequa_vnet.name
@@ -22,6 +23,7 @@ resource "azurerm_subnet" "subnet_front" {
 }
 
 resource "azurerm_network_security_group" "sinequa_nsg_front" {
+  count                     = var.require_front_subnet?1:0
   name                      = var.nsg_front_name
   location                  = var.location
   resource_group_name       = var.resource_group_name
@@ -48,7 +50,7 @@ resource "azurerm_network_security_group" "sinequa_nsg_front" {
   {
     name                        = "https"
     description                 = ""
-    priority                    = 120
+    priority                    = 110
     direction                   = "Inbound"
     access                      = "Allow"
     protocol                    = "Tcp"
@@ -88,7 +90,25 @@ resource "azurerm_network_security_group" "sinequa_nsg_app" {
     source_application_security_group_ids = []
     source_port_range = "*"
     source_port_ranges = []
-  } ]
+  }]
+}
+
+resource "azurerm_network_security_rule" "http_on_app" {
+  count                       = var.allow_http_on_app_nsg?1:0
+  name                        = "http"
+  description                 = ""
+  priority                    = 110
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  source_application_security_group_ids = []
+  destination_port_range      = "80"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  destination_application_security_group_ids = []
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.sinequa_nsg_app.name
 }
 
 resource "azurerm_subnet_network_security_group_association" "sinequa_subnet_nsg_app" {
@@ -97,7 +117,8 @@ resource "azurerm_subnet_network_security_group_association" "sinequa_subnet_nsg
 }
 
 resource "azurerm_subnet_network_security_group_association" "sinequa_subnet_nsg_front" {
-  subnet_id                 = azurerm_subnet.subnet_front.id
-  network_security_group_id = azurerm_network_security_group.sinequa_nsg_front.id
+  count                     = var.require_front_subnet?1:0
+  subnet_id                 = azurerm_subnet.subnet_front[0].id
+  network_security_group_id = azurerm_network_security_group.sinequa_nsg_front[0].id
 }
 

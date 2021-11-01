@@ -53,7 +53,7 @@ resource "azurerm_application_gateway" "sinequa_ag" {
     cookie_based_affinity = "Enabled"
     port                  = 80
     protocol              = "Http"
-    request_timeout       = 60
+    request_timeout       = 120
     affinity_cookie_name  = "SQApplicationGatewayAffinity"
   }
 
@@ -79,11 +79,7 @@ resource "azurerm_application_gateway" "sinequa_ag" {
       identity_ids = identity.value.identity_ids
     }
   }
-
-  waf_configuration  {
-    enable = false
-  }
-  
+ 
   ssl_certificate {
     name                        = var.certificate.name
     data                        = var.certificate.data
