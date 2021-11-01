@@ -13,12 +13,7 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sineq
 5.2.  [Add a VMSS Node](#add_vmss)<br>
 5.3.  [Update a Sinequa Grid](#update)<br>
 
-   
-
-## Diagram
-
-![Sinequa For Azure Deployment](../images/S4A_Default_ARM.png)
-
+  
 ## Scripts
 
 ### 0. Prerequisite <a name="prerequisite">
