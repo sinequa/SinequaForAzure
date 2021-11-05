@@ -14,11 +14,9 @@ variable "location" {
   default     = "francecentral"
 }
 
-
-variable "repo" {
-  description = "Sinequa - Type of build"
+variable "image_id" {
+  description = "Sinequa Image reference"
   type        = string
-  default     = "nightly"
 }
 
 variable "resource_group_name" {

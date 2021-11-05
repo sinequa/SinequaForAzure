@@ -57,7 +57,7 @@ locals {
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = "QueueCluster1(${local.node1_name},${local.node2_name},${local.node3_name})" //For Creating a Queuecluster during Cloud Init
   
-  image_id                = "/subscriptions/8c2243fe-2eba-45da-bf61-0ceb475dcde8/resourceGroups/rg-rnd-product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-${var.repo}/versions/${replace(var.version_number,"/^[0-9]+./","")}"
+  image_id                = var.image_id
 }
 
 
