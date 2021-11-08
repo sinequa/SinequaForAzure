@@ -295,7 +295,7 @@ module "vmss-indexer1" {
   tags = merge({
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-node"                        = local.os_indexer_name
-    "sinequa-indexer"                     = "indexer-dynamic"
+    "sinequa-indexer"                     = "elastic-indexer"
     "version"                             = var.version_number
   },var.additional_tags)
 
