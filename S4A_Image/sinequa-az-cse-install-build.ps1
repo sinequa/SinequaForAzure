@@ -6,7 +6,11 @@
 
 param (
 	[Parameter(HelpMessage="Url of the package")]
-	[string]	$fileUrl = "C:\install\sinequa.*.zip"	
+	[string]	$fileUrl, # eg "http://.../sinequa.*.zip",
+
+    [Parameter(HelpMessage="Url of the package")]
+	[string]	$filePath # eg "C:\install\sinequa.*.zip"	
+
 )
 
 
@@ -39,6 +43,7 @@ $sinequaFolder = Join-Path $destinationFolder "sinequa"
 $sinequaScriptsFolder = Join-Path $sinequaFolder "scripts"
 $versionFile = Join-Path $sinequaFolder "version.txt"
 $zipFile = "$tempDrive\sinequa.zip"
+if ($filePath) {$zipFile = $filePath}
 $serviceName = "sinequa.service"
 
 # Remove escaping character "xxxx" used for Invoke-AzVMRunCommand parameter limitations
@@ -64,7 +69,7 @@ Add-MpPreference -ExclusionPath $sinequaFolder
 Add-MpPreference -ExclusionPath "F:\sinequa"
 
 # Test if Sinequa is already installed
-WriteLog "Install $zipFile in $destinationFolder";
+WriteLog "Install Sinequa in $destinationFolder";
 if ((Test-Path $sinequaFolder) -and (Test-Path $versionFile)) {
 	$currentVersion = Get-Content $versionFile;
 	WriteLog "Sinequa is already installed: $currentVersion";
@@ -72,10 +77,12 @@ if ((Test-Path $sinequaFolder) -and (Test-Path $versionFile)) {
 }
 
 # Download the Sinequa Distribution
-WriteLog "Download $($fileUrl)";
-Invoke-WebRequest $fileUrl -OutFile $zipFile
-if (-Not (Test-Path $sinequaScriptsFolder)) {
-    New-Item $sinequaScriptsFolder -ItemType Directory
+if ($fileUrl) {
+    WriteLog "Download $($fileUrl)";
+    Invoke-WebRequest $fileUrl -OutFile $zipFile
+    if (-Not (Test-Path $sinequaScriptsFolder)) {
+        New-Item $sinequaScriptsFolder -ItemType Directory
+    }   
 }
 
 # Unzip Package
