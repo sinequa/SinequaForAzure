@@ -88,8 +88,9 @@ WriteLog "Install Git Client"
 Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.30.2.windows.1/Git-2.30.2-64-bit.exe" -OutFile "$tempDrive\git.exe"
 Start-Process -FilePath "git.exe" -Args "/VERYSILENT /NORESTART /MERGETASKS=!runcode" -Wait -PassThru
 
-
+<#
 # Visual Studio (can be removed)
 WriteLog "Install Visual Studio"
 Invoke-WebRequest "https://download.visualstudio.microsoft.com/download/pr/5a50b8ac-2c22-47f1-ba60-70d4257a78fa/cde402031e68684cfe1c86f7b67e144d7bfb90b50747d6df44c56858e019e4d9/vs_Professional.exe" -OutFile "$tempDrive\vs_Professional.exe"
 Start-Process -FilePath "vs_Professional.exe" -Args "--add Microsoft.VisualStudio.Workload.CoreEditor --add Microsoft.VisualStudio.Workload.Azure --add Microsoft.VisualStudio.Workload.NetWeb --add Microsoft.VisualStudio.Workload.ManagedDesktop --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended --passive --wait" -Wait -PassThru
+#>
