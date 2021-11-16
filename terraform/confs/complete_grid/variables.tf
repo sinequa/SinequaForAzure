@@ -30,8 +30,3 @@ variable "additional_tags" {
   type        = map
   default     = {}
 }
-
-variable "version_number" {
-  description = "Sinequa - Full version number"
-  type        = string
-}

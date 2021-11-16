@@ -99,7 +99,6 @@ resource "azurerm_resource_group" "sinequa_rg" {
   location = local.region
 
   tags = merge({
-    "version"      = var.version_number
   },var.additional_tags)
 }
 
@@ -157,7 +156,6 @@ module "kv_st_services" {
   blob_sinequa_beta          = true
   blob_sinequa_keyvault      = local.kv_name
   blob_sinequa_queuecluster  = local.queue_cluster
-  blob_sinequa_version       = var.version_number
 
   tags = merge({
   },var.additional_tags)
@@ -195,7 +193,6 @@ module "vm-primary-node1" {
     "sinequa-node"                        = local.node1_name
     "sinequa-webapp"                      = "webApp1"
     "sinequa-engine"                      = "engine1"
-    "version"                             = var.version_number
   },var.additional_tags)
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services] //, module.frontend
@@ -230,7 +227,6 @@ module "vm-primary-node2" {
     "sinequa-node"                        = local.node2_name
     "sinequa-webapp"                      = "webApp2"
     "sinequa-engine"                      = "engine2"
-    "version"                             = var.version_number
   },var.additional_tags)
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services] //module.frontend
@@ -263,7 +259,6 @@ module "vm-primary-node3" {
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-primary-node-id"             = "3"
     "sinequa-node"                        = local.node3_name
-    "version"                             = var.version_number
   },var.additional_tags)
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services] //module.frontend
@@ -296,7 +291,6 @@ module "vmss-indexer1" {
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-node"                        = local.os_indexer_name
     "sinequa-indexer"                     = "elastic-indexer"
-    "version"                             = var.version_number
   },var.additional_tags)
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services,module.vm-primary-node1,module.vm-primary-node2,module.vm-primary-node3]

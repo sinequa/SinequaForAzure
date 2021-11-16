@@ -82,7 +82,6 @@ resource "azurerm_resource_group" "sinequa_rg" {
   location = local.region
 
   tags = merge({
-    "version"      = var.version_number
   },var.additional_tags)
 }
 
@@ -120,7 +119,6 @@ module "kv_st_services" {
   blob_sinequa_beta          = true
   blob_sinequa_keyvault      = local.kv_name
   blob_sinequa_queuecluster  = local.queue_cluster
-  blob_sinequa_version       = var.version_number
 
   tags = merge({
   },var.additional_tags)
@@ -155,7 +153,6 @@ module "vm-primary-node1" {
     "sinequa-webapp"                      = "webApp1"
     "sinequa-engine"                      = "engine1"
     "sinequa-indexer"                     = "indexer1"
-    "version"                             = var.version_number
   },var.additional_tags)
 
   depends_on = [azurerm_resource_group.sinequa_rg, module.network, module.kv_st_services]
