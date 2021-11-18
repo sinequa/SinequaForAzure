@@ -109,6 +109,8 @@ resource "azurerm_network_security_rule" "http_on_app" {
   destination_application_security_group_ids = []
   resource_group_name         = var.resource_group_name
   network_security_group_name = azurerm_network_security_group.sinequa_nsg_app.name
+
+  depends_on = [azurerm_network_security_group.sinequa_nsg_app]
 }
 
 resource "azurerm_subnet_network_security_group_association" "sinequa_subnet_nsg_app" {
