@@ -72,25 +72,26 @@ resource "azurerm_network_security_group" "sinequa_nsg_app" {
   location                  = var.location
   resource_group_name       = var.resource_group_name
   tags                      = var.tags
+}
 
-  security_rule = [ {
-    access = "Allow"
-    description = "RDP"
-    destination_address_prefix = "*"
-    destination_address_prefixes = []
-    destination_application_security_group_ids = []
-    destination_port_range = "3389"
-    destination_port_ranges = []
-    direction = "Inbound"
-    name = "RDP"
-    priority = 300
-    protocol = "Tcp"
-    source_address_prefix = "*"
-    source_address_prefixes = []
-    source_application_security_group_ids = []
-    source_port_range = "*"
-    source_port_ranges = []
-  }]
+resource "azurerm_network_security_rule" "rdp_on_app" {
+  count                       = var.allow_http_on_app_nsg?1:0
+  name                        = "RDP"
+  description                 = ""
+  priority                    = 300
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  source_application_security_group_ids = []
+  destination_port_range      = "3389"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  destination_application_security_group_ids = []
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.sinequa_nsg_app.name
+
+  depends_on = [azurerm_network_security_group.sinequa_nsg_app]
 }
 
 resource "azurerm_network_security_rule" "http_on_app" {
