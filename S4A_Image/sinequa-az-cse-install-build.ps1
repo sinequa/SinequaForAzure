@@ -60,8 +60,8 @@ WriteLog "Set Sinequa Azure OS Environment Variables";
 
 # Add inbound Firewall Rules for Sinequa
 WriteLog "Add Sinequa Rule in Firewall"
-netsh advfirewall firewall delete rule name= "Sinequa"
-netsh advfirewall firewall add rule name= "Sinequa" dir=in action=allow protocol=TCP localport=10300-10500
+Get-NetFirewallRule -Name "SinequaServers" -ErrorAction SilentlyContinue | Remove-NetFirewallRule
+New-NetFirewallRule -Name "SinequaServers" -DisplayName "Sinequa Server Ports" -Group "Sinequa" -Profile Any -Direction Inbound -Enabled True -Protocol TCP -LocalPort 10300-10500
 
 # Exclude $sinequaFolder from Windows Defender
 WriteLog "Update Windows Defender Exclusion";
