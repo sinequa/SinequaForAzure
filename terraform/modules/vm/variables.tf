@@ -91,6 +91,10 @@ variable "network_security_group_id" {
     type            = string
 }
 
+variable "user_identity_id" {
+    type            = string
+}
+
 variable "datadisk_ids" {
     description     = "Provide specifics datadisks (replace default one)"
     type            = list(string)  

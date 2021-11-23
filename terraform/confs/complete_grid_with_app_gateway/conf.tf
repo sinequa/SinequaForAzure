@@ -178,6 +178,7 @@ module "vm-primary-node1" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
+  user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
   backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
@@ -212,6 +213,7 @@ module "vm-primary-node2" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
+  user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
   backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
@@ -246,6 +248,7 @@ module "vm-primary-node3" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
+  user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = false
   backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
@@ -277,15 +280,11 @@ module "vmss-indexer1" {
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
+  user_identity_id      = module.kv_st_services.id.id
+  user_identity_principal_id = module.kv_st_services.id.principal_id
   storage_account_id    = module.kv_st_services.st.id
   network_security_group_id = module.network.nsg_app.id
   vmss_capacity         = local.indexer_capacity
-
-  primary_node_vm_principal_ids = {
-    "1" = module.vm-primary-node1.vm.identity[0].principal_id
-    "2" = module.vm-primary-node2.vm.identity[0].principal_id
-    "3" = module.vm-primary-node3.vm.identity[0].principal_id
-  }
 
   tags = merge({
     "sinequa-data-storage-url"            = local.data_storage_url

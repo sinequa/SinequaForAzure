@@ -42,7 +42,7 @@ locals {
   node3_name              = local.node3_osname //Name in Sinequa Grid
   primary_nodes           = "1=srpc://${local.node1_osname}:10301;2=srpc://${local.node2_osname}:10301;3=srpc://${local.node3_osname}:10301" // sRPC Connection String
   primary_node_vm_size    = "Standard_B2s"
-  data_disk_size        = 100 // Size of Datadisk (for data such as Indexes)
+  data_disk_size        = 150 // Size of Datadisk (for data such as Indexes)
 
   // Indexer vmss
   os_indexer_name         = "vmss-indexer" //Windows Computer Name
@@ -149,6 +149,7 @@ module "vm-primary-node1" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
+  user_identity_id      = module.kv_st_services.id.id
   linked_to_application_gateway = false
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
@@ -181,6 +182,7 @@ module "vm-primary-node2" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
+  user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
   pip                   = false
@@ -212,6 +214,7 @@ module "vm-primary-node3" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
+  user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
   pip                   = false
@@ -241,14 +244,10 @@ module "vmss-indexer1" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
+  user_identity_id      = module.kv_st_services.id.id
+  user_identity_principal_id = module.kv_st_services.id.principal_id
   network_security_group_id = module.network.nsg_app.id
   vmss_capacity         = local.indexer_capacity
-
-  primary_node_vm_principal_ids = {
-    "1" = module.vm-primary-node1.vm.identity[0].principal_id
-    "2" = module.vm-primary-node2.vm.identity[0].principal_id
-    "3" = module.vm-primary-node3.vm.identity[0].principal_id
-  }
 
   tags = merge({
     "sinequa-data-storage-url"            = local.data_storage_url

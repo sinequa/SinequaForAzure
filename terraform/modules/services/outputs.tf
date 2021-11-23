@@ -13,3 +13,8 @@ output "container" {
   value = azurerm_storage_container.sinequa_st_container
   sensitive = true
 }
+
+output "id" {
+  value = azurerm_user_assigned_identity.identity
+  sensitive = true
+}

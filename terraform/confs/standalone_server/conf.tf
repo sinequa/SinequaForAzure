@@ -140,6 +140,7 @@ module "vm-primary-node1" {
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
   storage_account_id    = module.kv_st_services.st.id
+  user_identity_id      = module.kv_st_services.id.id 
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
   pip                   = true

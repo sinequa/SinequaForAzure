@@ -1,5 +1,11 @@
 data "azurerm_client_config" "current" {}
 
+resource "azurerm_user_assigned_identity" "identity" {
+  resource_group_name = var.resource_group_name
+  location            = var.location
+
+  name = "id-sq"
+}
 resource "azurerm_key_vault" "sinequa_kv" {
   name                        = var.kv_name
   location                    = var.location
@@ -9,6 +15,8 @@ resource "azurerm_key_vault" "sinequa_kv" {
   enable_rbac_authorization   = true
   sku_name                    = "standard"
   tags                        = var.tags
+
+  depends_on = [azurerm_user_assigned_identity.identity]
 }
 
 
@@ -16,6 +24,14 @@ resource "azurerm_role_assignment" "sinequa_kv_role_for_me" {
   scope                = azurerm_key_vault.sinequa_kv.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "sinequa_kv_role_for_id" {
+  scope                = azurerm_key_vault.sinequa_kv.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = azurerm_user_assigned_identity.identity.principal_id
+
+  depends_on = [azurerm_user_assigned_identity.identity]
 }
 
 
@@ -61,6 +77,8 @@ resource "azurerm_storage_account" "sinequa_st" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   tags                      = var.tags
+
+  depends_on = [azurerm_user_assigned_identity.identity]
 }
 
 resource "azurerm_storage_container" "sinequa_st_container" {
@@ -125,5 +143,13 @@ resource "azurerm_storage_blob" "sinequa-version" {
   type                   = "Block"
   content_type           = "text/plain"
   source_content         = var.blob_sinequa_version
+}
+
+resource "azurerm_role_assignment" "sinequa_st_role_id" {
+  scope                 = azurerm_storage_account.sinequa_st.id
+  role_definition_name  = "Storage Blob Data Contributor"
+  principal_id          = azurerm_user_assigned_identity.identity.principal_id
+
+  depends_on = [azurerm_user_assigned_identity.identity]
 }
 

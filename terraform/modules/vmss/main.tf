@@ -29,33 +29,16 @@ resource "azurerm_windows_virtual_machine_scale_set" "sinequa_vmss" {
   }
 
   identity {
-    type                = "SystemAssigned"
+    type                = "UserAssigned"
+    identity_ids        = [var.user_identity_id]
   }
 
 }
 
-resource "azurerm_role_assignment" "sinequa_kv_role_vmss" {
-  scope                 = var.key_vault_id
-  role_definition_name  = "key Vault Secrets Officer"
-  principal_id          = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.identity[0].principal_id
-}
-
-resource "azurerm_role_assignment" "storage_account_id" {
-  scope                 = var.storage_account_id
-  role_definition_name  = "Storage Blob Data Contributor"
-  principal_id          = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.identity[0].principal_id
-}
-
-resource "azurerm_role_assignment" "sinequa_vmss_role_vm" {
-  for_each              = var.primary_node_vm_principal_ids
-  scope                 = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.id
-  role_definition_name  = "Contributor"
-  principal_id          = each.value
-}
 
 resource "azurerm_role_assignment" "sinequa_vmss_role_vmss" {
   scope                 = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.id
   role_definition_name  = "Contributor"
-  principal_id          = azurerm_windows_virtual_machine_scale_set.sinequa_vmss.identity[0].principal_id
+  principal_id          = var.user_identity_principal_id
 }
 

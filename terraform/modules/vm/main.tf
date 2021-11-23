@@ -55,7 +55,8 @@ resource "azurerm_virtual_machine" "sinequa_vm" {
   }
 
   identity {
-    type                = "SystemAssigned"
+    type                = "UserAssigned"
+    identity_ids        = [var.user_identity_id]
   }
   
   storage_image_reference {
@@ -110,19 +111,5 @@ resource "azurerm_virtual_machine_data_disk_attachment" "sinequa_vm_datadiskids_
 resource "azurerm_network_interface_security_group_association" "sinequa_nic_nsg" {
   network_interface_id      = azurerm_network_interface.sinequa_vm_nic.id
   network_security_group_id = var.network_security_group_id
-}
-
-resource "azurerm_role_assignment" "sinequa_kv_role_vm" {
-  scope                 = var.key_vault_id
-  role_definition_name  = "key Vault Secrets Officer"
-  principal_id          = azurerm_virtual_machine.sinequa_vm.identity[0].principal_id
-  skip_service_principal_aad_check  = true
-}
-
-resource "azurerm_role_assignment" "sinequa_st_role_vm" {
-  scope                 = var.storage_account_id
-  role_definition_name  = "Storage Blob Data Contributor"
-  principal_id          = azurerm_virtual_machine.sinequa_vm.identity[0].principal_id
-  skip_service_principal_aad_check  = true
 }
 
