@@ -42,7 +42,7 @@ locals {
   node3_name              = local.node3_osname //Name in Sinequa Grid
   primary_nodes           = "1=srpc://${local.node1_osname}:10301;2=srpc://${local.node2_osname}:10301;3=srpc://${local.node3_osname}:10301" // sRPC Connection String
   primary_node_vm_size    = "Standard_B2s"
-  data_disk_size        = 150 // Size of Datadisk (for data such as Indexes)
+  data_disk_size        = 100 // Size of Datadisk (for data such as Indexes)
 
   // Indexer vmss
   os_indexer_name         = "vmss-indexer" //Windows Computer Name
