@@ -24,6 +24,8 @@ resource "azurerm_role_assignment" "sinequa_kv_role_for_me" {
   scope                = azurerm_key_vault.sinequa_kv.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = data.azurerm_client_config.current.object_id
+
+  depends_on = [azurerm_key_vault.sinequa_kv]
 }
 
 resource "azurerm_role_assignment" "sinequa_kv_role_for_id" {
@@ -31,7 +33,7 @@ resource "azurerm_role_assignment" "sinequa_kv_role_for_id" {
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 
-  depends_on = [azurerm_user_assigned_identity.identity]
+  depends_on = [azurerm_user_assigned_identity.identity, azurerm_key_vault.sinequa_kv]
 }
 
 
@@ -150,6 +152,6 @@ resource "azurerm_role_assignment" "sinequa_st_role_id" {
   role_definition_name  = "Storage Blob Data Contributor"
   principal_id          = azurerm_user_assigned_identity.identity.principal_id
 
-  depends_on = [azurerm_user_assigned_identity.identity]
+  depends_on = [azurerm_user_assigned_identity.identity, azurerm_storage_account.sinequa_st]
 }
 
