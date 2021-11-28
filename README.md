@@ -119,8 +119,5 @@ Thanks to [Storage Accounts](#storageaccount), you can easily back up and restor
 
 ![Restore](./images/S4A_Restore.png)
 
-* You can automatically restore the engine from Azure Storage account if indexes disappears (due to NVMe disk Azure policy).
-
-![Restore NVMe](./images/S4A_Restore_NVMe.png)
 
 
