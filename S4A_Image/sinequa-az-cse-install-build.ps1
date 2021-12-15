@@ -121,8 +121,12 @@ Import-Module WebAdministration
 Set-ItemProperty 'IIS:\Sites\Default Web Site\' -name physicalPath -value "$sinequaFolder\website"
 C:\Windows\System32\inetsrv\appcmd.exe set config http://localhost -section:system.webServer/isapiFilters /+"[name='Sinequa',path='$sinequaFolder\website\bin\sinequa_filter.dll',enabled='True',enableCache='True']" /commit:apphost
 
+
 WriteLog "Install web.config for a faster startup";
 Copy-Item "$sinequaFolder\website\web.config.default" -Destination "$sinequaFolder\website\web.config"
+
+# Reset IIS
+iisreset
 
 # Install the Sinequa service
 WriteLog "Install $serviceName service"
