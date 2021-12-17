@@ -69,7 +69,9 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 
 # Variables
 $vmName = "vm-sq-" + $version.Replace(".","-")
-$vmName = ($vmName.Length -gt 14)?$vmName.Substring(0,14):$vmName
+if ($vmName.Length -gt 14) {
+    $vmName = $vmName.Substring(0,14)
+}
 $nodeName = "sq-version"
 
 
