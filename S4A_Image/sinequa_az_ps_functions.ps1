@@ -141,6 +141,7 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
         $imageName = $image.Name
     }
     $osDiskName = "osdisk-$($prefix)_$($nodeName)-$($imageName)"
+    $osDiskSize = 64
     $dataDiskName = "datadisk-$($prefix)_$($nodeName)"
     $dataDiskType = "Premium_LRS" #"Premium_LRS"
     if (!$vmName) {$vmName = "vm-$prefix-$nodeName"}
@@ -194,7 +195,7 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
     $null = Add-AzVMNetworkInterface -Id $nic.Id -VM $vm
 
     # Applies the OS disk properties
-    $null = Set-AzVMOSDisk -VM $vm -CreateOption FromImage -Name $osDiskName
+    $null = Set-AzVMOSDisk -VM $vm -CreateOption FromImage -Name $osDiskName -DiskSizeInGB $osDiskSize
 
     # Add a DataDisk
     if ($dataDiskSizeInGB) {
