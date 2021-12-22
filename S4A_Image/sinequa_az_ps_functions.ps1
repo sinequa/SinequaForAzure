@@ -131,7 +131,7 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
     #default windows image (Microsoft Windows 2019 Datacenter)
     $publisherName = "MicrosoftWindowsServer"
     $offer = "WindowsServer"
-    $sku = "2019-Datacenter"
+    $sku = "2019-Datacenter-smalldisk"
 
     # Variables
     $pipName = "pip-$prefix-$nodeName"
