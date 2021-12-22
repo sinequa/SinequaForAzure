@@ -32,7 +32,19 @@ function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$passwo
     return Set-AzContext -SubscriptionId $subscriptionId
 }
 
-function SqAzurePSCreateTempVM($resourceGroup, $publisherName, $offer, $sku, $image, $prefix, $nodeName, $vmName, $osUsername, [SecureString]$osPassword, $vmSize = "Standard_D4s_v3") {
+function SqAzurePSCreateTempVM(
+    $resourceGroup,     
+    $publisherName = "MicrosoftWindowsServer",
+    $offer = "WindowsServer",
+    $sku = "2019-Datacenter-smalldisk",
+    $image, 
+    $prefix, 
+    $nodeName, 
+    $vmName, 
+    $osUsername, 
+    [SecureString]$osPassword, 
+    $vmSize = "Standard_D4s_v3"
+    ) {
     <#
     .SYNOPSIS
         Create a VM from an Image or from a default Windows Image
