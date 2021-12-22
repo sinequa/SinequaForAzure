@@ -32,7 +32,7 @@ function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$passwo
     return Set-AzContext -SubscriptionId $subscriptionId
 }
 
-function SqAzurePSCreateTempVM($resourceGroup, $image, $prefix, $nodeName, $vmName, $osUsername, [SecureString]$osPassword, $vmSize = "Standard_D4s_v3") {
+function SqAzurePSCreateTempVM($resourceGroup, $publisherName, $offer, $sku, $image, $prefix, $nodeName, $vmName, $osUsername, [SecureString]$osPassword, $vmSize = "Standard_D4s_v3") {
     <#
     .SYNOPSIS
         Create a VM from an Image or from a default Windows Image
@@ -100,6 +100,9 @@ function SqAzurePSCreateTempVM($resourceGroup, $image, $prefix, $nodeName, $vmNa
     -storageAccount $sa `
     -createPip $true `
     -prefix $prefix `
+    -publisherName $publisherName `
+    -offer $offer `
+    -sku $sku `
     -image $image `
     -nodeName $nodeName `
     -vmName $vmName `
@@ -110,7 +113,26 @@ function SqAzurePSCreateTempVM($resourceGroup, $image, $prefix, $nodeName, $vmNa
     -hostname $hostname
 }
 
-function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $prefix, $image, $tags, $nodeName, $hostName, $vmName, $nsg, $subnet, $osUsername, [SecureString]$osPassword, $vmSize = "Standard_D4s_v3", $dataDiskSizeInGB) {
+function SqAzurePSCreateVMforNode(
+    $resourceGroup, 
+    $storageAccount, 
+    $createPip, 
+    $prefix,
+    $publisherName = "MicrosoftWindowsServer",
+    $offer = "WindowsServer",
+    $sku = "2019-Datacenter-smalldisk",
+    $image,
+    $tags, 
+    $nodeName, 
+    $hostName, 
+    $vmName, 
+    $nsg, 
+    $subnet, 
+    $osUsername, 
+    [SecureString]$osPassword, 
+    $vmSize = "Standard_D4s_v3", 
+    $dataDiskSizeInGB
+    ) {
     <#
     .SYNOPSIS
         Create a VM from an Image or from a default Windows Image
@@ -128,14 +150,11 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
         Virtual Machine object created
     #>
     
-    #default windows image (Microsoft Windows 2019 Datacenter)
-    $publisherName = "MicrosoftWindowsServer"
-    $offer = "WindowsServer"
-    $sku = "2019-Datacenter-smalldisk"
-
     # Variables
     $pipName = "pip-$prefix-$nodeName"
     $nicName = "nic-$prefix-$nodeName"
+
+    #default windows image (Microsoft Windows 2019 Datacenter)
     $imageName = $offer
     if ($image) {
         $imageName = $image.Name
