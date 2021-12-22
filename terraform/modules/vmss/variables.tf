@@ -39,7 +39,12 @@ variable "image_id" {
 
 variable "os_disk_type" {
     type            = string
-    default         = "Premium_LRS"
+    default         = "Standard_LRS"
+}
+
+variable "os_disk_size" {
+    type            = number
+    default         = 128
 }
 
 variable "computer_name_prefix" {

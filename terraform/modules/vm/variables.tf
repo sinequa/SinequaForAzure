@@ -35,9 +35,15 @@ variable "image_id" {
   default           = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly"
 }
 
+
 variable "os_disk_type" {
     type            = string
-    default         = "Premium_LRS"
+    default         = "Standard_LRS"
+}
+
+variable "os_disk_size" {
+    type            = number
+    default         = 128
 }
 
 variable "data_disk_type" {

@@ -141,7 +141,7 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
         $imageName = $image.Name
     }
     $osDiskName = "osdisk-$($prefix)_$($nodeName)-$($imageName)"
-    $osDiskSize = 64
+    $osDiskSize = 128
     $dataDiskName = "datadisk-$($prefix)_$($nodeName)"
     $dataDiskType = "Premium_LRS" #"Premium_LRS"
     if (!$vmName) {$vmName = "vm-$prefix-$nodeName"}
