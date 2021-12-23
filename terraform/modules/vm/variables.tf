@@ -43,7 +43,7 @@ variable "os_disk_type" {
 
 variable "os_disk_size" {
     type            = number
-    default         = 128
+    default         = 64
 }
 
 variable "data_disk_type" {
