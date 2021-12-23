@@ -128,6 +128,11 @@ module "kv_st_services" {
   blob_sinequa_beta          = true
   blob_sinequa_keyvault      = local.kv_name
   blob_sinequa_queuecluster  = local.queue_cluster
+  blob_sinequa_node_aliases  = {
+    "node1" = local.node1_name
+    "node2" = local.node2_name
+    "node3" = local.node3_name
+  }
 
   tags = merge({
   },var.additional_tags)
@@ -162,6 +167,7 @@ module "vm-primary-node1" {
     "sinequa-primary-node-id"             = "1"
     "sinequa-node"                        = local.node1_name
     "sinequa-webapp"                      = "webApp1"
+    "sinequa-webapp-fw-port"              = 80
     "sinequa-engine"                      = "engine1"
   },var.additional_tags)
 
@@ -194,6 +200,7 @@ module "vm-primary-node2" {
     "sinequa-primary-node-id"             = "2"
     "sinequa-node"                        = local.node2_name
     "sinequa-webapp"                      = "webApp2"
+    "sinequa-webapp-fw-port"              = 80
     "sinequa-engine"                      = "engine2"
   },var.additional_tags)
 

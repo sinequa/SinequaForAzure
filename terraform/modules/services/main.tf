@@ -127,7 +127,7 @@ resource "azurerm_storage_blob" "sinequa-keyvault" {
   source_content         = var.blob_sinequa_keyvault
 }
 
-resource "azurerm_storage_blob" "sinequa_queuecluster" {
+resource "azurerm_storage_blob" "sinequa-queuecluster" {
   count                  = var.blob_sinequa_queuecluster != ""?1:0
   name                   = join("",[var.data_storage_root, "var/sinequa-queue-cluster"])
   storage_account_name   = azurerm_storage_account.sinequa_st.name
@@ -147,6 +147,16 @@ resource "azurerm_storage_blob" "sinequa-version" {
   source_content         = var.blob_sinequa_version
 }
 
+resource "azurerm_storage_blob" "sinequa-node-aliases" {
+  for_each               = var.blob_sinequa_node_aliases
+  name                   = join("",[var.data_storage_root, "aliases/node/", each.key])
+  storage_account_name   = azurerm_storage_account.sinequa_st.name
+  storage_container_name = azurerm_storage_container.sinequa_st_container.name
+  type                   = "Block"
+  content_type           = "text/plain"
+  source_content         = each.value
+}
+
 resource "azurerm_role_assignment" "sinequa_st_role_id" {
   scope                 = azurerm_storage_account.sinequa_st.id
   role_definition_name  = "Storage Blob Data Contributor"
@@ -154,4 +164,7 @@ resource "azurerm_role_assignment" "sinequa_st_role_id" {
 
   depends_on = [azurerm_user_assigned_identity.identity, azurerm_storage_account.sinequa_st]
 }
+
+
+
 

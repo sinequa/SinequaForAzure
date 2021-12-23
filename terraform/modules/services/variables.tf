@@ -71,6 +71,10 @@ variable "blob_sinequa_authentication_enabled" {
     default         = false
 }
 
+variable "blob_sinequa_node_aliases" {
+    type            = map
+    default         = {}
+}
 variable "blob_sinequa_version" {
     type            = string
     default         = ""
