@@ -70,11 +70,6 @@ variable "key_vault_id" {
     default         = ""
 }
 
-variable "storage_account_id" {
-    type            = string
-    default         = ""
-}
-
 variable "availability_set_id" {
     type            = string
     default         = ""

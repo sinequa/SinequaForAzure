@@ -14,8 +14,13 @@ variable "kv_name" {
   type              = string
 }
 
-variable "st_name" {
-  description       = "The name of the storage account"
+variable "st_premium_name" {
+  description       = "The name of the primary storage account"
+  type              = string
+}
+
+variable "st_hot_name" {
+  description       = "The name of the secondary storage account"
   type              = string
 }
 

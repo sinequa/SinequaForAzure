@@ -65,11 +65,6 @@ variable "key_vault_id" {
     default         = ""
 }
 
-variable "storage_account_id" {
-    type            = string
-    default         = ""
-}
-
 variable "network_security_group_id" {
     type            = string
 }

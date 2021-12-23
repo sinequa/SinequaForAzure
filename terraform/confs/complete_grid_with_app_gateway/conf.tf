@@ -49,11 +49,12 @@ locals {
   indexer_capacity         = 3 // Max Number of VMSS Instances Allowed for Indexer
   indexer_vmss_size       = "Standard_B2s"
 
-  st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_premium_name         = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_hot_name             = substr(join("",["sthot",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   st_container_name       = "sinequa"
 
   data_storage_root       = "grids/${var.resource_group_name}/"
-  data_storage_url        = "https://${local.st_name}.blob.core.windows.net/${local.st_container_name}/${local.data_storage_root}"
+  data_storage_url        = "https://${local.st_premium_name}.blob.core.windows.net/${local.st_container_name}/${local.data_storage_root}"
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = "QueueCluster1(${local.node1_name},${local.node2_name},${local.node3_name})" //For Creating a Queuecluster during Cloud Init
   
@@ -145,7 +146,8 @@ module "kv_st_services" {
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
   kv_name               = local.kv_name
-  st_name               = local.st_name
+  st_premium_name       = local.st_premium_name
+  st_hot_name           = local.st_hot_name 
   license               = local.license
   container_name        = local.st_container_name
   admin_password        = local.os_admin_password
@@ -177,7 +179,6 @@ module "vm-primary-node1" {
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
   user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
@@ -212,7 +213,6 @@ module "vm-primary-node2" {
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
   user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
@@ -247,7 +247,6 @@ module "vm-primary-node3" {
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
   user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = false
@@ -282,7 +281,6 @@ module "vmss-indexer1" {
   key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   user_identity_principal_id = module.kv_st_services.id.principal_id
-  storage_account_id    = module.kv_st_services.st.id
   network_security_group_id = module.network.nsg_app.id
   vmss_capacity         = local.indexer_capacity
 
