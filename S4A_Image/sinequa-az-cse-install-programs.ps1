@@ -32,7 +32,10 @@ Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 WriteLog "Install Windows Updates PS Package"
 Install-Module PSWindowsUpdate -Force
 
-
+#Extend Disk C is os-disk-size is greater than the original osdisk image
+WriteLog "Extend OS Disk Size"
+Set-Content -Path ./diskpart.txt -Value "list disk`nlist volume`nselect volume C`nextend"
+diskpart.exe -s diskpart.txt
 
 #Azure Storage
 WriteLog "Install Azure PS Package"
