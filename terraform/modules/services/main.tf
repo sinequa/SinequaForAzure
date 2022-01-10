@@ -111,7 +111,7 @@ resource "azurerm_storage_container" "sinequa_st_premium_container" {
 
 
 resource "azurerm_storage_blob" "st-org-root-secondary" {
-  name                   = "${var.org_name}/var/st-org-root-secondary"
+  name                   = "var/st-org-root-secondary"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
@@ -120,7 +120,7 @@ resource "azurerm_storage_blob" "st-org-root-secondary" {
 }
 
 resource "azurerm_storage_blob" "sinequa_primary_nodes" {
-  name                   = "${var.org_name}/grids/${var.grid_name}/var/sinequa-primary-nodes"
+  name                   = "grids/${var.grid_name}/var/sinequa-primary-nodes"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
@@ -130,7 +130,7 @@ resource "azurerm_storage_blob" "sinequa_primary_nodes" {
 
 resource "azurerm_storage_blob" "sinequa_authentication_enabled" {
   count                  = var.blob_sinequa_authentication_enabled?1:0
-  name                   = "${var.org_name}/grids/${var.grid_name}/var/sinequa-authentication-enabled"
+  name                   = "var/sinequa-authentication-enabled"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
@@ -140,7 +140,7 @@ resource "azurerm_storage_blob" "sinequa_authentication_enabled" {
 
 
 resource "azurerm_storage_blob" "sinequa_beta" {
-  name                   = "${var.org_name}/grids/${var.grid_name}/var/sinequa-beta"
+  name                   = "grids/${var.grid_name}/var/sinequa-beta"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
@@ -149,7 +149,7 @@ resource "azurerm_storage_blob" "sinequa_beta" {
 }
 
 resource "azurerm_storage_blob" "sinequa-keyvault" {
-  name                   = "${var.org_name}/grids/${var.grid_name}/var/sinequa-keyvault"
+  name                   = "grids/${var.grid_name}/var/sinequa-keyvault"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
@@ -159,7 +159,7 @@ resource "azurerm_storage_blob" "sinequa-keyvault" {
 
 resource "azurerm_storage_blob" "sinequa-queuecluster" {
   count                  = var.blob_sinequa_queuecluster != ""?1:0
-  name                   = "${var.org_name}/grids/${var.grid_name}/var/sinequa-queue-cluster"
+  name                   = "grids/${var.grid_name}/var/sinequa-queue-cluster"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
@@ -169,7 +169,7 @@ resource "azurerm_storage_blob" "sinequa-queuecluster" {
 
 resource "azurerm_storage_blob" "sinequa-version" {
   count                   = var.blob_sinequa_version != ""?1:0
-  name                   = "${var.org_name}/grids/${var.grid_name}/var/sinequa-version"
+  name                   = "grids/${var.grid_name}/var/sinequa-version"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
@@ -179,7 +179,7 @@ resource "azurerm_storage_blob" "sinequa-version" {
 
 resource "azurerm_storage_blob" "sinequa-node-aliases" {
   for_each               = var.blob_sinequa_node_aliases
-  name                   = "${var.org_name}/grids/${var.grid_name}/aliases/node/${each.key}"
+  name                   = "grids/${var.grid_name}/aliases/node/${each.key}"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
