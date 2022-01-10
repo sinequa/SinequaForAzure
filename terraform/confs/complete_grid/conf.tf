@@ -32,7 +32,11 @@ locals {
 
   sinequa_default_admin_password = element(concat(random_password.sq_passwd.*.result, [""]), 0) // Sinequa Admin user password
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):"" //Sinequa License
-  
+
+  //Sinequa Org & Grid  
+  org_name                 = "sinequa"
+  grid_name                = var.resource_group_name
+
   //Primary Nodes Section
   node1_osname            = "vm-node1" //Windows Computer Name
   node1_name              = local.node1_osname //Name in Sinequa Grid
@@ -51,10 +55,9 @@ locals {
 
   st_premium_name         = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   st_hot_name             = substr(join("",["sthot",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
-  st_container_name       = "sinequa"
+  
 
-  data_storage_root       = "grids/${var.resource_group_name}/"
-  data_storage_url        = "https://${local.st_premium_name}.blob.core.windows.net/${local.st_container_name}/${local.data_storage_root}"
+  data_storage_url        = "https://${local.st_premium_name}.blob.core.windows.net/${local.org_name}/grids/${local.grid_name}/"
   
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = "QueueCluster1(${local.node1_name},${local.node2_name},${local.node3_name})" //For Creating a Queuecluster during Cloud Init
@@ -122,9 +125,9 @@ module "kv_st_services" {
   st_premium_name       = local.st_premium_name
   st_hot_name           = local.st_hot_name 
   license               = local.license
-  container_name        = local.st_container_name
   admin_password        = local.os_admin_password
-  data_storage_root     = local.data_storage_root
+  org_name              = local.org_name
+  grid_name             = local.grid_name
   default_admin_password = local.sinequa_default_admin_password
 
   blob_sinequa_primary_nodes = local.primary_nodes 

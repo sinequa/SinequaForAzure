@@ -24,15 +24,14 @@ variable "st_hot_name" {
   type              = string
 }
 
-variable "container_name" {
-  description       = "The name of the blob container"
-  type              = string
+variable "org_name" {
+    description     = "Org Name"
+    type            = string
 }
 
-variable "data_storage_root" {
-    description     = "Root folder after the container name"
+variable "grid_name" {
+    description     = "Grid Name"
     type            = string
-    default         = "" 
 }
 
 variable "license" {
