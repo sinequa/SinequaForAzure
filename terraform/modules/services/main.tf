@@ -116,7 +116,7 @@ resource "azurerm_storage_blob" "st-org-root-secondary" {
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
   content_type           = "text/plain"
-  source_content         = "https://${var.st_hot_name}.blob.core.windows.net/${var.container_name}/${var.data_storage_root}"
+  source_content         = "https://${var.st_hot_name}.blob.core.windows.net/${var.container_name}"
 }
 
 resource "azurerm_storage_blob" "sinequa_primary_nodes" {
