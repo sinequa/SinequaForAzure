@@ -119,72 +119,21 @@ resource "azurerm_storage_blob" "st-org-root-secondary" {
   source_content         = "https://${var.st_hot_name}.blob.core.windows.net/${var.org_name}"
 }
 
-resource "azurerm_storage_blob" "sinequa_primary_nodes" {
-  name                   = "grids/${var.grid_name}/var/sinequa-primary-nodes"
-  storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
-  storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
-  type                   = "Block"
-  content_type           = "text/plain"
-  source_content         = var.blob_sinequa_primary_nodes
-}
+module "grid_var" {
+  count                                 = var.skip_blob_var_creation?0:1
+  source                                = "./blob_grid_var"
+  storage_account_name                  = azurerm_storage_account.sinequa_st_premium.name
+  org_name                              = var.org_name
+  grid_name                             = var.grid_name
+  blob_sinequa_primary_nodes            = var.blob_sinequa_primary_nodes
+  blob_sinequa_beta                     = var.blob_sinequa_beta 
+  blob_sinequa_keyvault                 = var.blob_sinequa_keyvault
+  blob_sinequa_queuecluster             = var.blob_sinequa_queuecluster
+  blob_sinequa_authentication_enabled   = var.blob_sinequa_authentication_enabled
+  blob_sinequa_node_aliases             = var.blob_sinequa_node_aliases
+  blob_sinequa_version                  = var.blob_sinequa_version
 
-resource "azurerm_storage_blob" "sinequa_authentication_enabled" {
-  count                  = var.blob_sinequa_authentication_enabled?1:0
-  name                   = "var/sinequa-authentication-enabled"
-  storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
-  storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
-  type                   = "Block"
-  content_type           = "text/plain"
-  source_content         = "true"
-}
-
-
-resource "azurerm_storage_blob" "sinequa_beta" {
-  name                   = "grids/${var.grid_name}/var/sinequa-beta"
-  storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
-  storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
-  type                   = "Block"
-  content_type           = "text/plain"
-  source_content         = var.blob_sinequa_beta
-}
-
-resource "azurerm_storage_blob" "sinequa-keyvault" {
-  name                   = "grids/${var.grid_name}/var/sinequa-keyvault"
-  storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
-  storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
-  type                   = "Block"
-  content_type           = "text/plain"
-  source_content         = var.blob_sinequa_keyvault
-}
-
-resource "azurerm_storage_blob" "sinequa-queuecluster" {
-  count                  = var.blob_sinequa_queuecluster != ""?1:0
-  name                   = "grids/${var.grid_name}/var/sinequa-queue-cluster"
-  storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
-  storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
-  type                   = "Block"
-  content_type           = "text/plain"
-  source_content         = var.blob_sinequa_queuecluster
-}
-
-resource "azurerm_storage_blob" "sinequa-version" {
-  count                   = var.blob_sinequa_version != ""?1:0
-  name                   = "grids/${var.grid_name}/var/sinequa-version"
-  storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
-  storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
-  type                   = "Block"
-  content_type           = "text/plain"
-  source_content         = var.blob_sinequa_version
-}
-
-resource "azurerm_storage_blob" "sinequa-node-aliases" {
-  for_each               = var.blob_sinequa_node_aliases
-  name                   = "grids/${var.grid_name}/aliases/node/${each.key}"
-  storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
-  storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
-  type                   = "Block"
-  content_type           = "text/plain"
-  source_content         = each.value
+  depends_on = [azurerm_storage_account.sinequa_st_premium]
 }
 
 resource "azurerm_role_assignment" "sinequa_st_hot_role_id" {

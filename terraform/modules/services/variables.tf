@@ -48,8 +48,14 @@ variable "default_admin_password" {
     default         = ""
 }
 
+variable "skip_blob_var_creation" {
+    type            = bool
+    default         = false
+}
+
 variable "blob_sinequa_primary_nodes" {
     type            = string
+    default         = ""
 }
 
 variable "blob_sinequa_beta" {
