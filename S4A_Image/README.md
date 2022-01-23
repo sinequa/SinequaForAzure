@@ -21,7 +21,7 @@ Depending on where Sinequa images are located and where you deploy a grid, you c
 ## Scripts
 
 #### 1. Create the Base Image <a name="ownimage_base">
-This first image is a **Windows Base Image** (Microsoft Windows 2019 Datacenter) including **all Sinequa prerequisites** and **additional programs** that you want to install before building a specific version of Sinequa.
+This first image is a **Windows Base Image** (Microsoft Windows 2022 Datacenter) including **all Sinequa prerequisites** and **additional programs** that you want to install before building a specific version of Sinequa.
 
 ```powershell
 sinequa-for-azure-build-base-image.ps1

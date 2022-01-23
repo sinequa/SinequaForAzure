@@ -98,6 +98,7 @@ if (Test-Path "$sinequaFolder\assets\static\static_resources_sba1.zxb") {
 }
 
 #Install IIS
+<#
 WriteLog "Install IIS"
 $feature = Get-WindowsOptionalFeature -Online -FeatureName IIS-ISAPIFilter
 if (($null -eq $feature) -or ($null -ne $feature -and $feature.State -eq "Disabled")) {
@@ -127,6 +128,7 @@ Copy-Item "$sinequaFolder\website\web.config.default" -Destination "$sinequaFold
 
 # Reset IIS
 iisreset
+#>
 
 # Install the Sinequa service
 WriteLog "Install $serviceName service"

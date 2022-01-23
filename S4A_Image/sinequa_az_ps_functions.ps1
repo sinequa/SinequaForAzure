@@ -36,7 +36,7 @@ function SqAzurePSCreateTempVM(
     $resourceGroup,     
     $publisherName = "MicrosoftWindowsServer",
     $offer = "WindowsServer",
-    $sku = "2019-Datacenter-smalldisk",
+    $sku = "2022-Datacenter-smalldisk",
     $image, 
     $prefix, 
     $nodeName, 
@@ -132,7 +132,7 @@ function SqAzurePSCreateVMforNode(
     $prefix,
     $publisherName = "MicrosoftWindowsServer",
     $offer = "WindowsServer",
-    $sku = "2019-Datacenter-smalldisk",
+    $sku = "2022-Datacenter-smalldisk",
     $image,
     $tags, 
     $nodeName, 
@@ -166,7 +166,7 @@ function SqAzurePSCreateVMforNode(
     $pipName = "pip-$prefix-$nodeName"
     $nicName = "nic-$prefix-$nodeName"
 
-    #default windows image (Microsoft Windows 2019 Datacenter)
+    #default windows image (Microsoft Windows 2022 Datacenter)
     $imageName = $offer
     if ($image) {
         $imageName = $image.Name
