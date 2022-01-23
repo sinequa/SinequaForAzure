@@ -167,10 +167,8 @@ module "kv_st_services" {
   license               = local.license
   admin_password        = local.os_admin_password
   org_name              = local.org_name
-  grid_name             = local.dev_grid_name
   default_admin_password = local.sinequa_default_admin_password
   blob_sinequa_keyvault  = local.kv_name
-  skip_blob_var_creation = true
   tags = merge({
   },var.additional_tags)
 

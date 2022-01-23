@@ -32,6 +32,7 @@ variable "org_name" {
 variable "grid_name" {
     description     = "Grid Name"
     type            = string
+    default         = ""
 }
 
 variable "license" {
@@ -46,11 +47,6 @@ variable "admin_password" {
 variable "default_admin_password" {
     type            = string
     default         = ""
-}
-
-variable "skip_blob_var_creation" {
-    type            = bool
-    default         = false
 }
 
 variable "blob_sinequa_primary_nodes" {

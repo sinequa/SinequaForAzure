@@ -120,7 +120,7 @@ resource "azurerm_storage_blob" "st-org-root-secondary" {
 }
 
 module "grid_var" {
-  count                                 = var.skip_blob_var_creation?0:1
+  count                                 = var.grid_name!=""?1:0
   source                                = "./blob_grid_var"
   storage_account_name                  = azurerm_storage_account.sinequa_st_premium.name
   org_name                              = var.org_name
