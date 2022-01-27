@@ -155,7 +155,8 @@ module "vm-primary-node1" {
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-primary-node-id"             = "1"
     "sinequa-node"                        = local.node1_name
-    "sinequa-webapp"                      = "webApp1"
+    "sinequa-kestrel-webapp"              = "webApp1"
+    "sinequa-webapp-fw-port"              = 80    
     "sinequa-engine"                      = "engine1"
     "sinequa-indexer"                     = "indexer1"
   },var.additional_tags)

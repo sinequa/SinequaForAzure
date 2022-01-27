@@ -233,7 +233,7 @@ module "vm-dev-primary-node1" {
     "sinequa-data-storage-url"            = local.dev_data_storage_url
     "sinequa-primary-node-id"             = "1"
     "sinequa-node"                        = local.dev_node1_name
-    "sinequa-webapp"                      = "webApp1"
+    "sinequa-kestrel-webapp"              = "webApp1"
     "sinequa-webapp-fw-port"              = 80
     "sinequa-engine"                      = "engine1"
   },var.additional_tags)
@@ -265,7 +265,7 @@ module "vm-dev-primary-node2" {
     "sinequa-data-storage-url"            = local.dev_data_storage_url
     "sinequa-primary-node-id"             = "2"
     "sinequa-node"                        = local.dev_node2_name
-    "sinequa-webapp"                      = "webApp2"
+    "sinequa-kestrel-webapp"              = "webApp2"
     "sinequa-webapp-fw-port"              = 80
     "sinequa-engine"                      = "engine2"
   },var.additional_tags)
@@ -359,7 +359,7 @@ module "vm-prd-primary-node1" {
     "sinequa-data-storage-url"            = local.prd_data_storage_url
     "sinequa-primary-node-id"             = "1"
     "sinequa-node"                        = local.prd_node1_name
-    "sinequa-webapp"                      = "webApp1"
+    "sinequa-kestrel-webapp"              = "webApp1"
     "sinequa-webapp-fw-port"              = 80
     "sinequa-engine"                      = "engine1"
   },var.additional_tags)
@@ -391,7 +391,7 @@ module "vm-prd-primary-node2" {
     "sinequa-data-storage-url"            = local.prd_data_storage_url
     "sinequa-primary-node-id"             = "2"
     "sinequa-node"                        = local.prd_node2_name
-    "sinequa-webapp"                      = "webApp2"
+    "sinequa-kestrel-webapp"              = "webApp2"
     "sinequa-webapp-fw-port"              = 80
     "sinequa-engine"                      = "engine2"
   },var.additional_tags)
