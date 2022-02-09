@@ -133,7 +133,7 @@ iisreset
 # Install the Sinequa service
 WriteLog "Install $serviceName service"
 $start = "delayed-auto"
-& "sc.exe" "create" $serviceName "start=$start" "binPath=""$sinequaFolder\bin\sinequa.service.exe""" "DisplayName=sinequa.service"
+& "sc.exe" "create" $serviceName "start=$start" "binPath=""$sinequaFolder\bin\sinequa.service.exe""" "DisplayName=sinequa.service" "obj=""NT AUTHORITY\NetworkService""" "password=""ignored"""
 
 $EndTime = Get-Date
 WriteLog "Script execution time: $($EndTime - $StartTime)"
