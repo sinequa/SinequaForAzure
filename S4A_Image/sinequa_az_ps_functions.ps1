@@ -391,7 +391,7 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
     do {
         WriteLog "[$($vmName)] Running Windows Update on the VM"
         $cmd = Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -Name $vmName -CommandId 'RunPowerShellScript' -ScriptPath $scriptName
-        $cmd
+        $cmd | Select-Object -expand Value
 
         #Analyze output to know if reboot is needed
         $reboot = $cmd | Select-Object -expand Value |  Where-Object Message -Like '*Reboot*' 
