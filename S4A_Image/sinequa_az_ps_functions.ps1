@@ -406,6 +406,7 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
             $res = Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager' -Name 'PendingFileRenameOperations' -ErrorAction Ignore
             if ($res -and $res.PendingFileRenameOperations) {
                 $reboot = "PendingFileRenameOperations"
+                $res.PendingFileRenameOperations
             }
         }
 
