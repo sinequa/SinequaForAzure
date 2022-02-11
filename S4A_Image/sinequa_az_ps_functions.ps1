@@ -391,12 +391,26 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
     do {
         WriteLog "[$($vmName)] Running Windows Update on the VM"
         $cmd = Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -Name $vmName -CommandId 'RunPowerShellScript' -ScriptPath $scriptName
-        
+        $cmd
+
         #Analyze output to know if reboot is needed
         $reboot = $cmd | Select-Object -expand Value |  Where-Object Message -Like '*Reboot*' 
-        WriteLog "[$($vmName)] Result of $($scriptName):"
-        $reboot
 
+        if (-not $reboot) {
+            $reboot = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing"  -Name "RebootPending" -ErrorAction Ignore
+        }
+        if (-not $reboot) {
+            $reboot = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update'  -Name 'RebootRequired' -ErrorAction Ignore
+        }
+        if (-not $reboot) {
+            $res = Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager' -Name 'PendingFileRenameOperations' -ErrorAction Ignore
+            if ($res -and $res.PendingFileRenameOperations) {
+                $reboot = "PendingFileRenameOperations"
+            }
+        }
+
+        WriteLog "[$($vmName)] Result of $($scriptName): $reboot"
+        
         if ($reboot) {
             WriteLog "[$($vmName)] Restart Windows"
             $null = Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
