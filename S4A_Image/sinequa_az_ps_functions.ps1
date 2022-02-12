@@ -393,8 +393,8 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
         
         #Analyze output to know if reboot is needed
         $reboot = $cmd | Select-Object -expand Value |  Where-Object Message -Like '*Reboot*' 
-        WriteLog "[$($vmName)] Result of $($scriptName): $reboot"
-       
+        WriteLog "[$($vmName)] Result of $($scriptName):"
+        $cmd | Select-Object -expand Value
 
         if ($reboot) {
             WriteLog "[$($vmName)] Restart Windows"
