@@ -387,20 +387,22 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
         Script to execute
     .OUTPUTS
     #>
- 
-    WriteLog "[$($vmName)] Running Windows Update on the VM"
-    $cmd = Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -Name $vmName -CommandId 'RunPowerShellScript' -ScriptPath $scriptName
-    $cmd | Select-Object -expand Value
-
-    #Analyze output to know if reboot is needed
-    $reboot = $cmd | Select-Object -expand Value |  Where-Object Message -Like '*Reboot*' 
-
-
-    WriteLog "[$($vmName)] Result of $($scriptName): $reboot"
+    do {
+        WriteLog "[$($vmName)] Running Windows Update on the VM"
+        $cmd = Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -Name $vmName -CommandId 'RunPowerShellScript' -ScriptPath $scriptName
         
-    WriteLog "[$($vmName)] Restart Windows"
-    $null = Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
-    Start-Sleep -s 60
+        #Analyze output to know if reboot is needed
+        $reboot = $cmd | Select-Object -expand Value |  Where-Object Message -Like '*Reboot*' 
+        WriteLog "[$($vmName)] Result of $($scriptName): $reboot"
+       
+
+        if ($reboot) {
+            WriteLog "[$($vmName)] Restart Windows"
+            $null = Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
+            Start-Sleep -s 60
+        }
+    }
+    while ($reboot)
 }
 
 function WriteLog ($message) {
@@ -455,7 +457,7 @@ function SqAzurePSCreateImage($resourceGroupName, $imageName, $vm) {
     }
 
     #Create the image configuration
-    $imageCfg = New-AzImageConfig -SourceVirtualMachineId $vm.Id -Location $vm.Location
+    $imageCfg = New-AzImageConfig -SourceVirtualMachineId $vm.Id -Location $vm.Location -HyperVGeneration "V2"
 
     #Create the generalized image
     WriteLog "Create Image: $imageName"
