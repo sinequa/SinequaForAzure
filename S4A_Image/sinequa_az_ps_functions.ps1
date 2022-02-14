@@ -206,7 +206,7 @@ function SqAzurePSCreateVMforNode(
     $vm = New-AzVMConfig -VMName $vmName -VMSize $vmSize -IdentityType SystemAssigned
 
     # Set the VM Size and Type
-    $null = Set-AzVMOperatingSystem -VM $vm -Windows -ComputerName $hostName -Credential $credential -PatchMode Manual -ProvisionVMAgent
+    $null = Set-AzVMOperatingSystem -VM $vm -Windows -ComputerName $hostName -Credential $credential -ProvisionVMAgent
 
     # Enable the provisioning of the VM Agent
     if ($vm.OSProfile.WindowsConfiguration) {
