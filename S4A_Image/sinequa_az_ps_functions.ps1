@@ -457,7 +457,7 @@ function SqAzurePSCreateImage($resourceGroupName, $imageName, $vm) {
     }
 
     #Create the image configuration
-    $imageCfg = New-AzImageConfig -SourceVirtualMachineId $vm.Id -Location $vm.Location -HyperVGeneration "V2"
+    $imageCfg = New-AzImageConfig -SourceVirtualMachineId $vm.Id -Location $vm.Location -HyperVGeneration "V1"
 
     #Create the generalized image
     WriteLog "Create Image: $imageName"
