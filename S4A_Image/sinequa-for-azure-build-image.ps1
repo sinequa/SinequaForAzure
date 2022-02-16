@@ -102,6 +102,11 @@ if (!$vm) {
     $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword
 }
 
+#Apply Windows Updates
+$script = ".\sinequa-az-cse-windows-update.ps1"
+SqAzurePSApplyWindowsUpdates -resourceGroupName $rg.ResourceGroupName -vmName $vmName -scriptName $script
+
+
 #If Local File, copy it into the storage account
 if (($localFile.Length -gt 0) -and (Test-Path $localFile)) {
     $res = SqAzurePSLocalFileToRGStorageAccount -resourceGroup $rg -localFile $localFile -imageName $imageName
