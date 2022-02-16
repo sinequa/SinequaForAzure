@@ -399,10 +399,12 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
         if ($reboot) {
             WriteLog "[$($vmName)] Restart Windows"
             $null = Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
-            Start-Sleep -s 60
+            Start-Sleep -s 30
         }
     }
     while ($reboot)
+    WriteLog "[$($vmName)] Last Restart Windows"
+    $null = Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
 }
 
 function WriteLog ($message) {
