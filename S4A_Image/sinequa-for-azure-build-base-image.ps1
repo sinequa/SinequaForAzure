@@ -41,7 +41,7 @@ param (
     [SecureString]    $osPassword = ("Password1234" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
     [Parameter(HelpMessage = "Image SKU of WindowsServer")]
-    [string]    $imageSku
+    [string]    $imageSku = "2022-datacenter-smalldisk"
     
 )
 
