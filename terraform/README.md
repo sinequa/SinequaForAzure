@@ -169,7 +169,7 @@ In the modules folder, scripts are provided to build blocks:
  * 1 key vault
  * 1 network security group
  * 1 public IP address
- * 1 storage account
+ * 2 storage accounts
  * 1 virtual machine scale sets for indexer
  * 1 virtual network
  * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
@@ -187,18 +187,18 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 
 `complete_2grids\conf.tf` is a deployment of all modules with these objects:
  * Shared
-  * 1 key vault
-  * 1 network security group
-  * 2 storage account
-  * 1 virtual network
+   * 1 key vault
+   * 1 network security group
+   * 2 storage accounts
+   * 1 virtual network
  * Grid1
-  * 1 public IP address
-  * 1 virtual machine scale sets for indexer
-  * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
+   * 1 public IP address
+   * 1 virtual machine scale sets for indexer
+   * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
  * Grid2
-  * 1 public IP address
-  * 1 virtual machine scale sets for indexer
-  * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
+   * 1 public IP address
+   * 1 virtual machine scale sets for indexer
+   * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
 
 ![Sinequa For Azure Deployment](../images/S4A_complete_2grids.png)
 
