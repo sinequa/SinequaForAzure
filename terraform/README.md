@@ -203,9 +203,9 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ![Sinequa For Azure Deployment](../images/S4A_complete_2grids.png)
 
 ```powershell
-PS C:\S4A\terraform\confs\complete_grid> .\terraform init
-PS C:\S4A\terraform\confs\complete_grid> .\terraform validate
-PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
+PS C:\S4A\terraform\confs\complete_2grids> .\terraform init
+PS C:\S4A\terraform\confs\complete_2grids> .\terraform validate
+PS C:\S4A\terraform\confs\complete_2grids> .\terraform apply
 ```
 ### 4. complete_grid_with_app_gateway Sample <a name="complete_grid_with_app_gateway">
 
@@ -330,7 +330,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 To update a complete grid, just change the `local.image_id` of the `conf.tf` with the new version, then re-deploy.
 
 ```terraform
-image_id                = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/6.1.42"
+image_id                = "/subscriptions/xxxx-xxxx-xxxx-xxxx/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/7.1.2000"
 ```
 
 ```powershell

@@ -54,7 +54,7 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 |	sinequa-index-path	       | "g:\sinequa". Optional. Default is sinequa-path | `sinequa-index-path` is the root folder for all indexes. It is recommended to use it for NVMe disks. | 
 |	sinequa-node               | "node1"                             | Node name. |
 |   sinequa-primary-node-id    | 1 (or 2 or 3 or empty)              | To be used on [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html). |
-|	sinequa-webapp 		       | "webapp1"                           | Name of the [WebApp](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-webapps.html) to be created and started on this node.  |
+|	sinequa-kestrel-webapp 		       | "webapp1"                           | Name of the [ Kestrel WebApp](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-webapps.html) to be created and started on this node.  |
 |	sinequa-engine		       | "engine1"                           | Name of the [engine](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-engines.html) to be created and started on this node.  |
 |	sinequa-indexer		       | "indexer1"                          | Name of the [indexer](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-indexers.html) to be created and started on this node. |
 

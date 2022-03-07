@@ -107,7 +107,7 @@ sinequa-for-azure-build-image.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-build-image.ps1 -version 11.5.1.54 -tempResourceGroupName temp-sinequa-image-11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -localfile c:\builds\11.5.1.54\sinequa.11.zip -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
+PS C:\> .\sinequa-for-azure-build-image.ps1 -version 11.7.1.2000 -tempResourceGroupName temp-sinequa-image-11.7.1.2000 -imageName sinequa-nightly-11.7.1.2000 -localfile c:\builds\11.7.1.2000\sinequa.11.zip -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
 ```
 
 
@@ -139,12 +139,12 @@ sinequa-for-azure-image-to-gallery.ps1
 | imageResourceGroupName | rg-sinequa                      | Resource group name of both the image to share & the Shared Image Gallery.|
 | galleryName            | SinequaForAzure                 | Shared Image Gallery name. |
 | imageDefinitionName 	 | sinequa-11-nightly              | Image definition name. |
-| imageName              |                                 | Image name to share (e.g.: sinequa-release-11.7.0.0). |
+| imageName              |                                 | Image name to share (e.g.: sinequa-release-11.7.1.0). |
 | version 	             |                                 | Sinequa version (e.g.: 11.7.0.0). |
 | deleteOlds             | false                           | Keeps the last 5 images only. |
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-image-to-gallery.ps1 -version 11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
+PS C:\> .\sinequa-for-azure-image-to-gallery.ps1 -version 11.7.1.2000 -imageName sinequa-nightly-11.7.1.2000 -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
 ```
 
