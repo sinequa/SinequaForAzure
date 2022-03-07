@@ -54,7 +54,8 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 |	sinequa-index-path	       | "g:\sinequa". Optional. Default is sinequa-path | `sinequa-index-path` is the root folder for all indexes. It is recommended to use it for NVMe disks. | 
 |	sinequa-node               | "node1"                             | Node name. |
 |   sinequa-primary-node-id    | 1 (or 2 or 3 or empty)              | To be used on [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html). |
-|	sinequa-kestrel-webapp 		       | "webapp1"                           | Name of the [ Kestrel WebApp](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-webapps.html) to be created and started on this node.  |
+|	sinequa-kestrel-webapp     | "webapp1"                           | Name of the [ Kestrel WebApp](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-webapps.html) to be created and started on this node.  |
+|	sinequa-webapp-fw-port     | 80                                  | TCP Port to allow in Windows firewall. |
 |	sinequa-engine		       | "engine1"                           | Name of the [engine](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-engines.html) to be created and started on this node.  |
 |	sinequa-indexer		       | "indexer1"                          | Name of the [indexer](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-indexers.html) to be created and started on this node. |
 
@@ -69,6 +70,7 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 |	sinequa-primary-nodes                   | x         |              | "1=srpc://vm-node1:10300;2=srpc://vm-node2:10300;3=srpc://vm-node3=10300" | sRPC connection string of primary nodes. |
 |   sinequa-keyvault 	                    | x         |              | "kv-grid1"                           | Name of the key vault containing secrets (see below). |
 |   sinequa-queue-cluster 	                | x         |              | "QueueCluster1(node1,node2,node3)"   | Creates and starts a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). |
+|	sinequa-beta		                    | x         |              | true or false                        | Enables beta features. |
 |   sinequa-encryption-key                  | x         | x            | xxxxx                                | Encryption key (see the documentation on [how to generate your own encryption key](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.how-to.encrypt.html#generating-encryption-key)) |
 |   sinequa_authentication_secret           | x         | x            | xxxxx                                | Secret for authenticating all sRPC calls |
 |	sinequa-license		                    | x         | x            | xxxxx                                | Sinequa license. |
@@ -83,6 +85,23 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 |	sinequa-ssl-client-crt                  | x         | x            |                                      | Client crt file for sRPC. |
 |	sinequa-ssl-client-key                  | x         | x            |                                      | Client private key for sRPC. |
 |	sinequa-ssl-client-override-host-name   | x         | x            |                                      | Overrides host name for sRPC. |
+
+#### 2.1.4. Cloud Alises <a name="cloudaliases"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
+
+* Cloud Aliases are Azure blobs stored in the primary storage account. They are used to declare Sinequa aliases in the configuration.
+
+| Key                                       | Value Example                        | Description                          |
+| ----------------------------------------- | ------------------------------------ | ------------------------------------ |
+|	grids/`{grid name}`/aliases/node/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node alias. |
+|	grids/`{grid name}`/aliases/nodelist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node alias list. |
+|	grids/`{grid name}`/aliases/engine/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` engine alias. |
+|	grids/`{grid name}`/aliases/enginelist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node engine list. |
+|	grids/`{grid name}`/aliases/index/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` index alias. |
+|	grids/`{grid name}`/aliases/indexlist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node index list. |
+|	grids/`{grid name}`/aliases/indexer/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` indexer alias. |
+|	grids/`{grid name}`/aliases/indexerlist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node indexer list. |
+|	grids/`{grid name}`/aliases/identity/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` identity alias. |
+|	grids/`{grid name}`/aliases/identitylist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node identity list. |
 
 ### 2.2. Leverage Storage Account <a name="storageaccount"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 
@@ -100,14 +119,46 @@ It concerns:
 
 ![Storage Account](./images/S4A_Storage.png)
 
+### 2.3. Leverage a Secondary Storage Account <a name="secondarystorageaccount"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
 
-### 2.3. Leverage Scale Set for Elasticity <a name="scaleset"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+As Blobs of storage has not the same size and not the same frequency of access, a second storage could be used for levergaring a cheaper SKU.
+
+If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if this storage contains an org var called `st-org-root-secondary` then some blobs will be moved to this secondary Azure Storage account.
+
+Asure Storage SKU recommendations:
+- Primary Storage with `Premium` sku: for fast access and small content (blob < 10ko)
+- Secondary Storage with `Standard Hot` sku: for large content (sha + queue + logs)
+
+* Primary Storage (Premium --> blob <= 10K)
+	/{orgname}
+		/var
+			/st-org-root-secondary => contains url of the secondary storage
+		/grids
+			/{gridname}
+				/var
+                /Document cache store
+                /User settings
+                /Registry
+                /Configuration
+
+* Secondary Storage (Standard Hot)
+	/{orgname}
+		/grids
+			/{gridname}
+                /audit
+				/log
+				/queue-volumes
+		/sha
+			/blobs
+
+
+### 2.4. Leverage Scale Set for Elasticity <a name="scaleset"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 
 To reduce the cost of VM usage and control the indexing workload, scale set is used to scale up & down the number of indexers based on the indexing workload.
 
 ![Indexing Scale Set](./images/S4A_Indexing_ScaleSet.png)
 
-### 2.4. Back Up and Restore the Application <a name="backup"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+### 2.5. Back Up and Restore the Application <a name="backup"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 
 Thanks to [Storage Accounts](#storageaccount), you can easily back up and restore a complete grid with consistency between components. 
 
