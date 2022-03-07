@@ -101,12 +101,16 @@ resource "azurerm_storage_container" "sinequa_st_hot_container" {
   name                  = var.org_name
   storage_account_name  = azurerm_storage_account.sinequa_st_hot.name
   container_access_type = "private"
+
+  depends_on = [azurerm_storage_account.sinequa_st_hot]
 }
 
 resource "azurerm_storage_container" "sinequa_st_premium_container" {
   name                  = var.org_name
   storage_account_name  = azurerm_storage_account.sinequa_st_premium.name
   container_access_type = "private"
+
+  depends_on = [azurerm_storage_account.sinequa_st_premium]
 }
 
 
@@ -117,6 +121,8 @@ resource "azurerm_storage_blob" "st-org-root-secondary" {
   type                   = "Block"
   content_type           = "text/plain"
   source_content         = "https://${var.st_hot_name}.blob.core.windows.net/${var.org_name}"
+
+  depends_on = [azurerm_storage_container.sinequa_st_premium_container]
 }
 
 module "grid_var" {
@@ -133,7 +139,7 @@ module "grid_var" {
   blob_sinequa_node_aliases             = var.blob_sinequa_node_aliases
   blob_sinequa_version                  = var.blob_sinequa_version
 
-  depends_on = [azurerm_storage_account.sinequa_st_premium]
+  depends_on = [azurerm_storage_account.sinequa_st_premium,azurerm_storage_container.sinequa_st_premium_container]
 }
 
 resource "azurerm_role_assignment" "sinequa_st_hot_role_id" {
