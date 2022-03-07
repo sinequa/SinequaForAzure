@@ -8,8 +8,9 @@ Sinequa For Azure (S4A) is a set of capabilities and dedicated features designed
 2. [Sinequa Azure Features](#features)<br>
 2.1. [Cloud Init](#cloudinit)<br>
 2.2. [Leverage Storage Account](#storageaccount)<br>
-2.3. [Leverage Scale Set for Elasticity](#scaleset)<br>
-2.4. [Back Up and Restore the Application](#backup)<br>
+2.3. [Leverage a Secondary Storage Account](#secondarystorageaccount)<br>
+2.4. [Leverage Scale Set for Elasticity](#scaleset)<br>
+2.5. [Back Up and Restore the Application](#backup)<br>
   
 ## 0. Prerequisites <a name="prerequisites">
 * Access to https://portal.azure.com
