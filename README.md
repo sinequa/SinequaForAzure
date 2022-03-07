@@ -42,7 +42,7 @@ You must set the **SINEQUA_CLOUD** environment variable before starting the Sine
 |	SINEQUA_CLOUD          | "Azure"                              | Enable cloud init features.          |
 
 
-#### 2.1.2. Cloud Tags <a name="cloudtags"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+#### 2.1.2. Cloud Tags <a name="cloudtags"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
 
 Cloud tags are Azure tags used on Azure resources. They are used to run some specific init tasks for a particular VM or VMSS. 
 

@@ -1,4 +1,4 @@
-# S4A_Image <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+# S4A_Image <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
 
 Sinequa For Azure (S4A) Image is a set of scripts for creating your own Sinequa image on Azure. 
 
@@ -10,9 +10,8 @@ Sinequa For Azure (S4A) Image is a set of scripts for creating your own Sinequa 
 In the script folder, different PowerShell scripts allow you to create your own Sinequa Azure image that you can deploy to create a Sinequa grid.
 
 Depending on where Sinequa images are located and where you deploy a grid, you can use different sources:
-- Deploy a grid in **another tenant** than your image: **Only use the Azure Marketplace** (official image, not a custom one).
-- Deploy a grid in the **same tenant** but not in the same subscription: Use **Marketplace** or your own **Shared Image Gallery**.
-- Deploy a grid in the **same subscription**: Use either **Marketplace**, your own **Shared image gallery** or your own **image**.
+- Deploy a grid in the **same tenant** but not in the same subscription: Use your own **Shared Image Gallery**.
+- Deploy a grid in the **same subscription**: Use your own **Shared image gallery** or your own **image**.
 
 ## Diagram
 
@@ -35,6 +34,7 @@ sinequa-for-azure-build-base-image.ps1
     [[-tempResourceGroupName] <String>]    
     [[-osUsername] <String>]    
     [[-osPassword] <Securetring>]       
+    [[-imageSku] <String>]   
 ```
 | Parameter              | Default Value                   | Description |
 | ---------------------- | ------------------------------- | ----------- |
@@ -48,6 +48,7 @@ sinequa-for-azure-build-base-image.ps1
 | tempResourceGroupName  | temp-sinequa-base-image         | Transient resource group for building a VM to generalize. |
 | osUsername             | sinequa                         | OS user for the transient VM. |
 | osPassword             | Password1234                    | OS password for the transient VM. |
+| imageSku               | 2022-datacenter-smalldisk       | Windows Image. |
 
 Example:
 ```powershell
