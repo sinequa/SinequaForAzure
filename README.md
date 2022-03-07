@@ -130,6 +130,7 @@ Asure Storage SKU recommendations:
 - Primary Storage with the `Premium` sku for fast access and small content (blob < 10ko)
 - Secondary Storage with the `Standard Hot` sku for large content (sha + queue + logs)
 
+Storage hierarchy:
 * Primary Storage (Premium --> blob <= 10K)
   * /{orgname}
     * /var
