@@ -126,17 +126,17 @@ As Blobs have not the same size and not the same frequency of access, a second s
 
 If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if this storage contains an org var called `st-org-root-secondary` then some blobs will be moved to this secondary Azure Storage account.
 
-Asure Storage SKU recommendations:
+#### Asure Storage SKU recommendations:
 - Primary Storage with the `Premium` sku for fast access and small content (blob < 10ko)
 - Secondary Storage with the `Standard Hot` sku for large content (sha + queue + logs)
 
-Storage hierarchy:
+#### Storage hierarchy:
 * Primary Storage (Premium --> blob <= 10K)
-  * /{orgname}
+  * /`{org name}`
     * /var
 	  * /st-org-root-secondary => contains url of the secondary storage
     * /grids
-	  * /{gridname}
+	  * /`{grid name}`
 	    * /var
         * /Document cache store
         * /User settings
@@ -144,9 +144,9 @@ Storage hierarchy:
         * /Configuration
 
 * Secondary Storage (Standard Hot)
-  * /{orgname}
+  * /`{org name}`
 	* /grids
-	  * /{gridname}
+	  * /`{grid name}`
         * /audit
 		* /log
 		* /queue-volumes
