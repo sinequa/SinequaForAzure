@@ -93,16 +93,16 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 
 | Key                                       | Value Example                        | Description                          |
 | ----------------------------------------- | ------------------------------------ | ------------------------------------ |
-|	grids/`{grid name}`/aliases/node/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node alias. |
-|	grids/`{grid name}`/aliases/nodelist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node alias list. |
-|	grids/`{grid name}`/aliases/engine/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` engine alias. |
-|	grids/`{grid name}`/aliases/enginelist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node engine list. |
-|	grids/`{grid name}`/aliases/index/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` index alias. |
-|	grids/`{grid name}`/aliases/indexlist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node index list. |
-|	grids/`{grid name}`/aliases/indexer/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` indexer alias. |
-|	grids/`{grid name}`/aliases/indexerlist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node indexer list. |
-|	grids/`{grid name}`/aliases/identity/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` identity alias. |
-|	grids/`{grid name}`/aliases/identitylist/`{alias name}`"                   | "vm-node-1" | Create an `{alias name}` node identity list. |
+|	grids/`{grid name}`/aliases/node/`{alias name}`"                   | "vm-node-1"            | Create an `{alias name}` node alias. |
+|	grids/`{grid name}`/aliases/nodelist/`{alias name}`"               | "vm-node-1,vm-node-2"  | Create an `{alias name}` node alias list. |
+|	grids/`{grid name}`/aliases/engine/`{alias name}`"                 | "engine1"              | Create an `{alias name}` engine alias. |
+|	grids/`{grid name}`/aliases/enginelist/`{alias name}`"             | "engine1,engine2"      | Create an `{alias name}` engine alias list. |
+|	grids/`{grid name}`/aliases/index/`{alias name}`"                  | "index1"               | Create an `{alias name}` index alias. |
+|	grids/`{grid name}`/aliases/indexlist/`{alias name}`"              | "index1,index2"        | Create an `{alias name}` index alias list. |
+|	grids/`{grid name}`/aliases/indexer/`{alias name}`"                | "indexer1"             | Create an `{alias name}` indexer alias. |
+|	grids/`{grid name}`/aliases/indexerlist/`{alias name}`"            | "indexer1,indexer2"    | Create an `{alias name}` indexer alias list. |
+|	grids/`{grid name}`/aliases/identity/`{alias name}`"               | "node/identity0"                   | Create an `{alias name}` identity alias. |
+|	grids/`{grid name}`/aliases/identitylist/`{alias name}`"           | "node/identity0,node/identity1"    | Create an `{alias name}` identity alias list. |
 
 ### 2.2. Leverage Storage Account <a name="storageaccount"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 
@@ -122,35 +122,35 @@ It concerns:
 
 ### 2.3. Leverage a Secondary Storage Account <a name="secondarystorageaccount"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
 
-As Blobs of storage has not the same size and not the same frequency of access, a second storage could be used for levergaring a cheaper SKU.
+As Blobs have not the same size and not the same frequency of access, a second storage could be used for leveraging cheaper SKUs.
 
 If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if this storage contains an org var called `st-org-root-secondary` then some blobs will be moved to this secondary Azure Storage account.
 
 Asure Storage SKU recommendations:
-- Primary Storage with `Premium` sku: for fast access and small content (blob < 10ko)
-- Secondary Storage with `Standard Hot` sku: for large content (sha + queue + logs)
+- Primary Storage with the `Premium` sku for fast access and small content (blob < 10ko)
+- Secondary Storage with the `Standard Hot` sku for large content (sha + queue + logs)
 
 * Primary Storage (Premium --> blob <= 10K)
-	/{orgname}
-		/var
-			/st-org-root-secondary => contains url of the secondary storage
-		/grids
-			/{gridname}
-				/var
-                /Document cache store
-                /User settings
-                /Registry
-                /Configuration
+  * /{orgname}
+    * /var
+	  * /st-org-root-secondary => contains url of the secondary storage
+    * /grids
+	  * /{gridname}
+	    * /var
+        * /Document cache store
+        * /User settings
+        * /Registry
+        * /Configuration
 
 * Secondary Storage (Standard Hot)
-	/{orgname}
-		/grids
-			/{gridname}
-                /audit
-				/log
-				/queue-volumes
-		/sha
-			/blobs
+  * /{orgname}
+	* /grids
+	  * /{gridname}
+        * /audit
+		* /log
+		* /queue-volumes
+	* /sha
+	  * /blobs
 
 
 ### 2.4. Leverage Scale Set for Elasticity <a name="scaleset"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
