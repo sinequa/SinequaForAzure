@@ -39,7 +39,12 @@ variable "image_id" {
 
 variable "os_disk_type" {
     type            = string
-    default         = "Premium_LRS"
+    default         = "Standard_LRS"
+}
+
+variable "os_disk_size" {
+    type            = number
+    default         = 64
 }
 
 variable "computer_name_prefix" {
@@ -56,11 +61,6 @@ variable "admin_password" {
 }
 
 variable "key_vault_id" {
-    type            = string
-    default         = ""
-}
-
-variable "storage_account_id" {
     type            = string
     default         = ""
 }

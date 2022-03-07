@@ -69,7 +69,9 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 
 # Variables
 $vmName = "vm-sq-" + $version.Replace(".","-")
-$vmName = $vmName.Substring(0,14)
+if ($vmName.Length -gt 14) {
+    $vmName = $vmName.Substring(0,14)
+}
 $nodeName = "sq-version"
 
 
@@ -99,6 +101,11 @@ $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyCon
 if (!$vm) {
     $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword
 }
+
+#Apply Windows Updates
+$script = ".\sinequa-az-cse-windows-update.ps1"
+SqAzurePSApplyWindowsUpdates -resourceGroupName $rg.ResourceGroupName -vmName $vmName -scriptName $script
+
 
 #If Local File, copy it into the storage account
 if (($localFile.Length -gt 0) -and (Test-Path $localFile)) {

@@ -32,7 +32,19 @@ function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$passwo
     return Set-AzContext -SubscriptionId $subscriptionId
 }
 
-function SqAzurePSCreateTempVM($resourceGroup, $image, $prefix, $nodeName, $vmName, $osUsername, [SecureString]$osPassword, $vmSize = "Standard_D4s_v3") {
+function SqAzurePSCreateTempVM(
+    $resourceGroup,     
+    $publisherName = "MicrosoftWindowsServer",
+    $offer = "WindowsServer",
+    $sku = "2022-Datacenter-smalldisk",
+    $image, 
+    $prefix, 
+    $nodeName, 
+    $vmName, 
+    $osUsername, 
+    [SecureString]$osPassword, 
+    $vmSize = "Standard_D4s_v3"
+    ) {
     <#
     .SYNOPSIS
         Create a VM from an Image or from a default Windows Image
@@ -100,6 +112,9 @@ function SqAzurePSCreateTempVM($resourceGroup, $image, $prefix, $nodeName, $vmNa
     -storageAccount $sa `
     -createPip $true `
     -prefix $prefix `
+    -publisherName $publisherName `
+    -offer $offer `
+    -sku $sku `
     -image $image `
     -nodeName $nodeName `
     -vmName $vmName `
@@ -110,7 +125,26 @@ function SqAzurePSCreateTempVM($resourceGroup, $image, $prefix, $nodeName, $vmNa
     -hostname $hostname
 }
 
-function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $prefix, $image, $tags, $nodeName, $hostName, $vmName, $nsg, $subnet, $osUsername, [SecureString]$osPassword, $vmSize = "Standard_D4s_v3", $dataDiskSizeInGB) {
+function SqAzurePSCreateVMforNode(
+    $resourceGroup, 
+    $storageAccount, 
+    $createPip, 
+    $prefix,
+    $publisherName = "MicrosoftWindowsServer",
+    $offer = "WindowsServer",
+    $sku = "2022-Datacenter-smalldisk",
+    $image,
+    $tags, 
+    $nodeName, 
+    $hostName, 
+    $vmName, 
+    $nsg, 
+    $subnet, 
+    $osUsername, 
+    [SecureString]$osPassword, 
+    $vmSize = "Standard_D4s_v3", 
+    $dataDiskSizeInGB
+    ) {
     <#
     .SYNOPSIS
         Create a VM from an Image or from a default Windows Image
@@ -128,19 +162,17 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
         Virtual Machine object created
     #>
     
-    #default windows image (Microsoft Windows 2019 Datacenter)
-    $publisherName = "MicrosoftWindowsServer"
-    $offer = "WindowsServer"
-    $sku = "2019-Datacenter"
-
     # Variables
     $pipName = "pip-$prefix-$nodeName"
     $nicName = "nic-$prefix-$nodeName"
+
+    #default windows image (Microsoft Windows 2022 Datacenter)
     $imageName = $offer
     if ($image) {
         $imageName = $image.Name
     }
     $osDiskName = "osdisk-$($prefix)_$($nodeName)-$($imageName)"
+    $osDiskSize = 64
     $dataDiskName = "datadisk-$($prefix)_$($nodeName)"
     $dataDiskType = "Premium_LRS" #"Premium_LRS"
     if (!$vmName) {$vmName = "vm-$prefix-$nodeName"}
@@ -174,7 +206,7 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
     $vm = New-AzVMConfig -VMName $vmName -VMSize $vmSize -IdentityType SystemAssigned
 
     # Set the VM Size and Type
-    $null = Set-AzVMOperatingSystem -VM $vm -Windows -ComputerName $hostName -Credential $credential
+    $null = Set-AzVMOperatingSystem -VM $vm -Windows -ComputerName $hostName -Credential $credential -ProvisionVMAgent
 
     # Enable the provisioning of the VM Agent
     if ($vm.OSProfile.WindowsConfiguration) {
@@ -194,7 +226,7 @@ function SqAzurePSCreateVMforNode($resourceGroup, $storageAccount, $createPip, $
     $null = Add-AzVMNetworkInterface -Id $nic.Id -VM $vm
 
     # Applies the OS disk properties
-    $null = Set-AzVMOSDisk -VM $vm -CreateOption FromImage -Name $osDiskName
+    $null = Set-AzVMOSDisk -VM $vm -CreateOption FromImage -Name $osDiskName -DiskSizeInGB $osDiskSize
 
     # Add a DataDisk
     if ($dataDiskSizeInGB) {
@@ -355,7 +387,6 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
         Script to execute
     .OUTPUTS
     #>
- 
     do {
         WriteLog "[$($vmName)] Running Windows Update on the VM"
         $cmd = Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -Name $vmName -CommandId 'RunPowerShellScript' -ScriptPath $scriptName
@@ -363,15 +394,17 @@ function SqAzurePSApplyWindowsUpdates($resourceGroupName, $vmName, $scriptName) 
         #Analyze output to know if reboot is needed
         $reboot = $cmd | Select-Object -expand Value |  Where-Object Message -Like '*Reboot*' 
         WriteLog "[$($vmName)] Result of $($scriptName):"
-        $reboot
+        $cmd | Select-Object -expand Value
 
         if ($reboot) {
             WriteLog "[$($vmName)] Restart Windows"
             $null = Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
-            Start-Sleep -s 60
+            Start-Sleep -s 30
         }
     }
     while ($reboot)
+    WriteLog "[$($vmName)] Last Restart Windows"
+    $null = Restart-AzVM -ResourceGroupName $resourceGroupName -Name $vmName
 }
 
 function WriteLog ($message) {
@@ -426,7 +459,7 @@ function SqAzurePSCreateImage($resourceGroupName, $imageName, $vm) {
     }
 
     #Create the image configuration
-    $imageCfg = New-AzImageConfig -SourceVirtualMachineId $vm.Id -Location $vm.Location
+    $imageCfg = New-AzImageConfig -SourceVirtualMachineId $vm.Id -Location $vm.Location -HyperVGeneration "V1"
 
     #Create the generalized image
     WriteLog "Create Image: $imageName"

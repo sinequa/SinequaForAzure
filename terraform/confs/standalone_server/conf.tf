@@ -33,6 +33,10 @@ locals {
   sinequa_default_admin_password = element(concat(random_password.sq_passwd.*.result, [""]), 0) // Sinequa Admin user password
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):"" //Sinequa License
   
+  //Sinequa Org & Grid  
+  org_name                 = "sinequa"
+  grid_name                = var.resource_group_name
+
   //Primary Nodes Section
   node1_osname            = "vm-node1" //Windows Computer Name
   node1_name              = local.node1_osname //Name in Sinequa Grid
@@ -40,11 +44,11 @@ locals {
   primary_node_vm_size    = "Standard_B2s"
   data_disk_size        = 100 // Size of Datadisk (for data such as Indexes)
 
-  st_name                 = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_premium_name         = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_hot_name             = substr(join("",["sthot",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   st_container_name       = "sinequa"
 
-  data_storage_root       = "grids/${var.resource_group_name}/"
-  data_storage_url        = "https://${local.st_name}.blob.core.windows.net/${local.st_container_name}/${local.data_storage_root}"
+  data_storage_url        = "https://${local.st_premium_name}.blob.core.windows.net/${local.org_name}/grids/${local.grid_name}/"
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = "QueueCluster1(${local.node1_name})" //For Creating a Queuecluster during Cloud Init
   image_id                = var.image_id
@@ -108,11 +112,12 @@ module "kv_st_services" {
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
   kv_name               = local.kv_name
-  st_name               = local.st_name
+  st_premium_name       = local.st_premium_name
+  st_hot_name           = local.st_hot_name 
   license               = local.license
-  container_name        = local.st_container_name
+  org_name              = local.org_name
+  grid_name             = local.grid_name
   admin_password        = local.os_admin_password
-  data_storage_root     = local.data_storage_root
   default_admin_password = local.sinequa_default_admin_password
 
   blob_sinequa_primary_nodes = local.primary_nodes 
@@ -139,7 +144,6 @@ module "vm-primary-node1" {
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
   user_identity_id      = module.kv_st_services.id.id 
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
@@ -151,7 +155,8 @@ module "vm-primary-node1" {
     "sinequa-data-storage-url"            = local.data_storage_url
     "sinequa-primary-node-id"             = "1"
     "sinequa-node"                        = local.node1_name
-    "sinequa-webapp"                      = "webApp1"
+    "sinequa-kestrel-webapp"              = "webApp1"
+    "sinequa-webapp-fw-port"              = 80    
     "sinequa-engine"                      = "engine1"
     "sinequa-indexer"                     = "indexer1"
   },var.additional_tags)

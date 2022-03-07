@@ -15,6 +15,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "sinequa_vmss" {
   os_disk {
     caching                 = "ReadWrite"
     storage_account_type    = var.os_disk_type
+    disk_size_gb            = var.os_disk_size
   }
  
   network_interface {

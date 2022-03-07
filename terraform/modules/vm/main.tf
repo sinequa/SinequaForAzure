@@ -67,6 +67,7 @@ resource "azurerm_virtual_machine" "sinequa_vm" {
     name              = local.os_disk_name
     caching           = "ReadWrite"
     create_option     = "FromImage"
+    disk_size_gb      = var.os_disk_size
     managed_disk_type = var.os_disk_type
   }
 

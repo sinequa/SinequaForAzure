@@ -1,4 +1,4 @@
-# Terraform <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+# Terraform <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
 
 Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sinequa ES grid deployment.
 
@@ -6,12 +6,13 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sineq
 0. [Prerequisite](#prerequisite)<br>
 1. [Terraform Modules](#modules)<br>
 2. [complete_grid Sample](#complete_grid)<br>
-3. [complete_grid_with_app_gateway Sample](#complete_grid_with_app_gateway)<br>
-4. [standalone_server Sample](#standalone_server)<br>
-5. [Operations](#operations)<br>
-5.1.  [Add a VM Node](#add_vm)<br>
-5.2.  [Add a VMSS Node](#add_vmss)<br>
-5.3.  [Update a Sinequa Grid](#update)<br>
+3. [complete_2grids Sample](#complete_2grids)<br>
+4. [complete_grid_with_app_gateway Sample](#complete_grid_with_app_gateway)<br>
+5. [standalone_server Sample](#standalone_server)<br>
+6. [Operations](#operations)<br>
+6.1.  [Add a VM Node](#add_vm)<br>
+6.2.  [Add a VMSS Node](#add_vmss)<br>
+6.3.  [Update a Sinequa Grid](#update)<br>
 
   
 ## Scripts
@@ -19,6 +20,8 @@ Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sineq
 ### 0. Prerequisite <a name="prerequisite">
 
 * https://www.terraform.io/downloads.html
+* Access to https://portal.azure.com
+* Install Azure CLI: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli
 
 ### 1. Terraform Modules <a name="modules">
 
@@ -60,9 +63,10 @@ In the modules folder, scripts are provided to build blocks:
 | location                 | Azure location. |
 | resource_group_name      | Resource group for deployment. |
 | kv_name                  | Key vault to create. Name as to be unique on Azure. |
-| st_name                  | Storage account to create. Name as to be unique on Azure. |
-| container_name           | Container in the storage account. |
-| data_storage_root        | Root folder of the grid. It must contains the **grids** folder. Eg: grids/mygrid|
+| st_premium_name          | Primary Storage account to create. Name as to be unique on Azure. |
+| st_hot_name              | Secondary Storage account to create. Name as to be unique on Azure. |
+| org_name                 | Organization Name. An Orgranization can contains several grids (like dev, prod) |
+| grid_name                | Grid Name to deploy (e.g: dev) |
 | license                  | Sinequa license to be uploaded in the key vault as secret. Optional. |
 | admin_password           | Store the OS password as secret |
 | default_admin_password   | Store the default Sinequa ES admin password as secret |
@@ -73,7 +77,25 @@ In the modules folder, scripts are provided to build blocks:
 | blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
 | blob_sinequa_version     | Sinequa Version installed. Optional |
 | blob_sinequa_queuecluster | Sinequa cloud variable to create a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). Optional. |
+| blob_sinequa_node_aliases | Map of confiuguration Aliases. Optional. |
 | tags                     | Azure tags. Optional. |
+
+
+
+* **service/blob_grid_var**: Deploys Blob Var for a particular grid.
+
+| Variables                | Description |
+| ------------------------ | ----------- |
+| storage_account_name     | Storage account for blob vars. |
+| org_name                 | Organization Name. An Orgranization can contains several grids (like dev, prod) |
+| grid_name                | Grid Name to deploy (e.g: dev) |
+| blob_sinequa_primary_nodes | Sinequa cloud variable for sRPC connection string of [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html). |
+| blob_sinequa_authentication_enabled | Boolean for enabling Authentication with Secret. If true, it requires `{blob_sinequa_authentication_secret}` . Default value is `false` |
+| blob_sinequa_beta        | Sinequa cloud variable to enable beta features. Optional. |
+| blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
+| blob_sinequa_version     | Sinequa Version installed. Optional |
+| blob_sinequa_queuecluster | Sinequa cloud variable to create a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). Optional. |
+| blob_sinequa_node_aliases | Map of confiuguration Aliases. Optional. |
 
 * **vm**: Deploys a virtual machine.
 
@@ -147,7 +169,7 @@ In the modules folder, scripts are provided to build blocks:
  * 1 key vault
  * 1 network security group
  * 1 public IP address
- * 1 storage account
+ * 2 storage accounts
  * 1 virtual machine scale sets for indexer
  * 1 virtual network
  * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
@@ -160,7 +182,32 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform validate
 PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
 
-### 3. complete_grid_with_app_gateway Sample <a name="complete_grid_with_app_gateway">
+
+### 3. complete_2grids Sample <a name="complete_2grids">
+
+`complete_2grids\conf.tf` is a deployment of all modules with these objects:
+ * Shared
+   * 1 key vault
+   * 1 network security group
+   * 2 storage accounts
+   * 1 virtual network
+ * Grid1
+   * 1 public IP address
+   * 1 virtual machine scale sets for indexer
+   * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
+ * Grid2
+   * 1 public IP address
+   * 1 virtual machine scale sets for indexer
+   * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
+
+![Sinequa For Azure Deployment](../images/S4A_complete_2grids.png)
+
+```powershell
+PS C:\S4A\terraform\confs\complete_2grids> .\terraform init
+PS C:\S4A\terraform\confs\complete_2grids> .\terraform validate
+PS C:\S4A\terraform\confs\complete_2grids> .\terraform apply
+```
+### 4. complete_grid_with_app_gateway Sample <a name="complete_grid_with_app_gateway">
 
 `complete_grid_with_app_gateway\conf.tf` is a deployment of all modules with these objects:
  * 1 application gateway
@@ -182,7 +229,7 @@ PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform apply
 ```
 
 
-### 4. standalone_server Sample <a name="standalone_server">
+### 5. standalone_server Sample <a name="standalone_server">
 
 `standalone_server\conf.tf` is a deployment of all modules with these objects:
  * 1 key vault
@@ -200,9 +247,8 @@ PS C:\S4A\terraform\confs\standalone_server> .\terraform validate
 PS C:\S4A\terraform\confs\standalone_server> .\terraform apply
 ```
 
-5. [](#operations)<br>
-### 5. Operations <a name="operations">	
-#### 5.1 Add a VM Node <a name="add_vm"> 
+### 6. Operations <a name="operations">	
+#### 6.1 Add a VM Node <a name="add_vm"> 
 In `conf.tf`, add a new resource using the `vm` module and re-deploy.
 
 ```terraform
@@ -246,7 +292,7 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
 
 
-#### 5.2 Add a VMSS Node <a name="add_vmss"> 
+#### 6.2 Add a VMSS Node <a name="add_vmss"> 
 In `conf.tf`, add a new resource using the `vmss` module and re-deploy.
 
 ```terraform
@@ -280,11 +326,11 @@ PS C:\S4A\terraform\confs\complete_grid> .\terraform apply
 ```
 
 
-### 5.3. Update a Sinequa Grid <a name="update"> 
+### 6.3. Update a Sinequa Grid <a name="update"> 
 To update a complete grid, just change the `local.image_id` of the `conf.tf` with the new version, then re-deploy.
 
 ```terraform
-image_id                = "/subscriptions/e88f44fe-533b-4811-a972-5f6a692b0730/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/6.1.42"
+image_id                = "/subscriptions/xxxx-xxxx-xxxx-xxxx/resourceGroups/Product/providers/Microsoft.Compute/galleries/SinequaForAzure/images/sinequa-11-nightly/versions/7.1.2000"
 ```
 
 ```powershell

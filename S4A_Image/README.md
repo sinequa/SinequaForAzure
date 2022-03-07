@@ -1,4 +1,4 @@
-# S4A_Image <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+# S4A_Image <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
 
 Sinequa For Azure (S4A) Image is a set of scripts for creating your own Sinequa image on Azure. 
 
@@ -10,9 +10,8 @@ Sinequa For Azure (S4A) Image is a set of scripts for creating your own Sinequa 
 In the script folder, different PowerShell scripts allow you to create your own Sinequa Azure image that you can deploy to create a Sinequa grid.
 
 Depending on where Sinequa images are located and where you deploy a grid, you can use different sources:
-- Deploy a grid in **another tenant** than your image: **Only use the Azure Marketplace** (official image, not a custom one).
-- Deploy a grid in the **same tenant** but not in the same subscription: Use **Marketplace** or your own **Shared Image Gallery**.
-- Deploy a grid in the **same subscription**: Use either **Marketplace**, your own **Shared image gallery** or your own **image**.
+- Deploy a grid in the **same tenant** but not in the same subscription: Use your own **Shared Image Gallery**.
+- Deploy a grid in the **same subscription**: Use your own **Shared image gallery** or your own **image**.
 
 ## Diagram
 
@@ -21,7 +20,7 @@ Depending on where Sinequa images are located and where you deploy a grid, you c
 ## Scripts
 
 #### 1. Create the Base Image <a name="ownimage_base">
-This first image is a **Windows Base Image** (Microsoft Windows 2019 Datacenter) including **all Sinequa prerequisites** and **additional programs** that you want to install before building a specific version of Sinequa.
+This first image is a **Windows Base Image** (Microsoft Windows 2022 Datacenter) including **all Sinequa prerequisites** and **additional programs** that you want to install before building a specific version of Sinequa.
 
 ```powershell
 sinequa-for-azure-build-base-image.ps1
@@ -35,6 +34,7 @@ sinequa-for-azure-build-base-image.ps1
     [[-tempResourceGroupName] <String>]    
     [[-osUsername] <String>]    
     [[-osPassword] <Securetring>]       
+    [[-imageSku] <String>]   
 ```
 | Parameter              | Default Value                   | Description |
 | ---------------------- | ------------------------------- | ----------- |
@@ -48,6 +48,7 @@ sinequa-for-azure-build-base-image.ps1
 | tempResourceGroupName  | temp-sinequa-base-image         | Transient resource group for building a VM to generalize. |
 | osUsername             | sinequa                         | OS user for the transient VM. |
 | osPassword             | Password1234                    | OS password for the transient VM. |
+| imageSku               | 2022-datacenter-smalldisk       | Windows Image. |
 
 Example:
 ```powershell
@@ -106,7 +107,7 @@ sinequa-for-azure-build-image.ps1
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-build-image.ps1 -version 11.5.1.54 -tempResourceGroupName temp-sinequa-image-11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -localfile c:\builds\11.5.1.54\sinequa.11.zip -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
+PS C:\> .\sinequa-for-azure-build-image.ps1 -version 11.7.1.2000 -tempResourceGroupName temp-sinequa-image-11.7.1.2000 -imageName sinequa-nightly-11.7.1.2000 -localfile c:\builds\11.7.1.2000\sinequa.11.zip -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
 ```
 
 
@@ -138,12 +139,12 @@ sinequa-for-azure-image-to-gallery.ps1
 | imageResourceGroupName | rg-sinequa                      | Resource group name of both the image to share & the Shared Image Gallery.|
 | galleryName            | SinequaForAzure                 | Shared Image Gallery name. |
 | imageDefinitionName 	 | sinequa-11-nightly              | Image definition name. |
-| imageName              |                                 | Image name to share (e.g.: sinequa-release-11.7.0.0). |
+| imageName              |                                 | Image name to share (e.g.: sinequa-release-11.7.1.0). |
 | version 	             |                                 | Sinequa version (e.g.: 11.7.0.0). |
 | deleteOlds             | false                           | Keeps the last 5 images only. |
 
 Example:
 ```powershell
-PS C:\> .\sinequa-for-azure-image-to-gallery.ps1 -version 11.5.1.54 -imageName sinequa-nightly-11.5.1.54 -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
+PS C:\> .\sinequa-for-azure-image-to-gallery.ps1 -version 11.7.1.2000 -imageName sinequa-nightly-11.7.1.2000 -tenantId 00000000-0000-0000-0000-000000000000 -subscriptionId 00000000-0000-0000-0000-000000000000
 ```
 

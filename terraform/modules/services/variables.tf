@@ -14,20 +14,25 @@ variable "kv_name" {
   type              = string
 }
 
-variable "st_name" {
-  description       = "The name of the storage account"
+variable "st_premium_name" {
+  description       = "The name of the primary storage account"
   type              = string
 }
 
-variable "container_name" {
-  description       = "The name of the blob container"
+variable "st_hot_name" {
+  description       = "The name of the secondary storage account"
   type              = string
 }
 
-variable "data_storage_root" {
-    description     = "Root folder after the container name"
+variable "org_name" {
+    description     = "Org Name"
     type            = string
-    default         = "" 
+}
+
+variable "grid_name" {
+    description     = "Grid Name"
+    type            = string
+    default         = ""
 }
 
 variable "license" {
@@ -46,6 +51,7 @@ variable "default_admin_password" {
 
 variable "blob_sinequa_primary_nodes" {
     type            = string
+    default         = ""
 }
 
 variable "blob_sinequa_beta" {
@@ -71,6 +77,10 @@ variable "blob_sinequa_authentication_enabled" {
     default         = false
 }
 
+variable "blob_sinequa_node_aliases" {
+    type            = map
+    default         = {}
+}
 variable "blob_sinequa_version" {
     type            = string
     default         = ""
