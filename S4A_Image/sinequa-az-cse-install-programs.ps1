@@ -61,7 +61,7 @@ Start-Process -filepath "vc_redist.x64.exe" -ArgumentList "/install /passive /no
 
 #Install 7zip
 WriteLog "Install 7zip"
-Invoke-WebRequest "https://www.7-zip.org/a/7z1900-x64.exe" -OutFile "$tempDrive\7zsetup.exe"
+Invoke-WebRequest "https://www.7-zip.org/a/7z2107-x64.exe" -OutFile "$tempDrive\7zsetup.exe"
 Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 
 # Setting the NLA information to Disabled
