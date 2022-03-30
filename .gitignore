@@ -11,9 +11,12 @@
 # .zip files
 *.zip
 
-# .log files
+# .log files 
 *.log
 
+# .diff files
+*.bak
+*.orig
 
 terraform/confs/sinequa.license.txt
 
