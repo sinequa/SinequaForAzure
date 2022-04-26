@@ -100,11 +100,10 @@ if (Test-Path "$sinequaFolder\assets\static\static_resources_sba1.zxb") {
 
 # Install the Sinequa CloudInit
 WriteLog "Install $cloudInitServiceName service"
-#$start = "delayed-auto"
-$start = "demand"
+$start = "delayed-auto"
 & "sc.exe" "create" $cloudInitServiceName "start=$start" "binPath=""$sinequaFolder\bin\sinequa.cloudinit.exe""" "DisplayName=""$cloudInitServiceName"""
 
-# Install the Sinequa service
+# Install the Sinequa service on demand. Sinequa.cloudInit will start it the firt time, and change it to auto
 WriteLog "Install $serviceName service"
 #$start = "delayed-auto"
 $start = "demand"
