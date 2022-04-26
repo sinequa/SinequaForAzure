@@ -81,6 +81,12 @@ SqAzurePSLogin -tenantId $tenantId -subscriptionId $subscriptionId -user $user -
 # for debugging
 $cleanExistingResourceGroup = $false 
 
+# Test Inputs
+if (($localFile.Length -gt 0) -and (-not(Test-Path $localFile))) {
+    WriteError("'$localFile' localFile doesn't exist.")
+    Exit 1   
+}
+
 # Temp Resource Group
 WriteLog "Temp Resource Group: $tempResourceGroupName"
 $rg = Get-AzResourceGroup -Name $tempResourceGroupName -Location $location  -ErrorAction SilentlyContinue

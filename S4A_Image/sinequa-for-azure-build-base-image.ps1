@@ -64,7 +64,7 @@ $nodeName = "sq-base"
 $bgFile = ".\config.bgi"
 
 # for debugging
-$cleanExistingResourceGroup = $false 
+$cleanExistingResourceGroup = $true 
 $forceProgramsInstall = $true
 
 # Azure Login

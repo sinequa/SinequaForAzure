@@ -51,7 +51,8 @@ if ($bgFileUrl.Length -gt 0)
     WriteLog "Download $bgFileUrl"
     $bgFile = "$tempDrive\config.bgi"
     Invoke-WebRequest $bgFileUrl -OutFile $bgFile
-    Move-Item -Path $bgFile -Destination "C:\Packages\Plugins\Microsoft.Compute.BGInfo\2.1" -Force
+    $bgInfoDir = Get-ChildItem -Directory -Path "C:\Packages\Plugins\Microsoft.Compute.BGInfo"
+    Copy-Item -Path 'C:\sinequa\ThirdPartyNotices.txt' -Destination $bgInfoDir.FullName -Force
 }
 
 #Install C++ Resdistribuable (Sinequa Prerequisite)
