@@ -68,6 +68,12 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 # Setting the NLA information to Disabled
 (Get-WmiObject -class "Win32_TSGeneralSetting" -Namespace root\cimv2\terminalservices -ComputerName $env:COMPUTERNAME -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(0)
 
+# Install NVIDIA GPU Driver
+WriteLog "Install NVIDIA Tesla Driver"
+Invoke-WebRequest "https://us.download.nvidia.com/tesla/511.65/511.65-data-center-tesla-desktop-winserver-2016-2019-2022-dch-international.exe" -OutFile "$tempDrive\nvidia-tesla.exe"
+& "C:\Program Files\7-Zip\7z.exe" x "nvidia-tesla.exe" "-onvidia"
+Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish" -Wait -PassThru
+
 
 ########Install Optional programs
 

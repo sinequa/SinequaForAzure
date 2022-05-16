@@ -41,8 +41,10 @@ param (
     [SecureString]    $osPassword = ("Password1234" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
     [Parameter(HelpMessage = "Image SKU of WindowsServer")]
-    [string]    $imageSku = "2022-datacenter-smalldisk"
-    
+    [string]    $imageSku = "2022-datacenter-smalldisk",
+
+    [Parameter(HelpMessage = "VM Size")]
+    [string]    $vmSize = "Standard_D4s_v3"
 )
 
 
@@ -89,7 +91,7 @@ if (!$rg) {
 $image = Get-AzImage -ResourceGroupName $imageResourceGroupName -ImageName $imageName -ErrorAction SilentlyContinue
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
 if (!$vm) {
-    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku
+    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku -vmSize $vmSize
 }
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -vmName $vmName
 
