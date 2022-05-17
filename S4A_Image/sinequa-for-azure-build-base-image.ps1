@@ -89,14 +89,22 @@ if (!$rg) {
 
 # Get Image if already exists & Create a Virtual Machine
 $image = Get-AzImage -ResourceGroupName $imageResourceGroupName -ImageName $imageName -ErrorAction SilentlyContinue
+if ($image) {
+    # delete previous image
+    WriteLog "Delete existing image"
+    Remove-AzImage -ResourceGroupName $imageResourceGroupName -ImageName $imageName -Force;
+    $image = $null
+}
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
 if (!$vm) {
+    WriteLog "Create Temp VM"
     $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku -vmSize $vmSize
 }
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -vmName $vmName
 
 #If image doesn't exists, then it's the first image => run init script
 if (!$image -or $forceProgramsInstall) {
+    WriteLog "Install Programs"
     # upload the bginfo file into a transient storage account
     $bgFileUrl = (SqAzurePSLocalFileToRGStorageAccount -resourceGroup $rg -imageName $imageName -localFile $bgFile)[1]
     # run script for install prerequisites and optional programs
