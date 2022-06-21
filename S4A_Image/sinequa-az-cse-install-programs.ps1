@@ -70,8 +70,8 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 
 # Install NVIDIA GPU Driver
 WriteLog "Install NVIDIA Tesla Driver"
-Invoke-WebRequest "https://us.download.nvidia.com/tesla/511.65/511.65-data-center-tesla-desktop-winserver-2016-2019-2022-dch-international.exe" -OutFile "$tempDrive\nvidia-tesla.exe"
-& "C:\Program Files\7-Zip\7z.exe" x "nvidia-tesla.exe" "-onvidia"
+Invoke-WebRequest "https://download.microsoft.com/download/7/3/6/7361d1b9-08c8-4571-87aa-18cf671e71a0/512.78_grid_win10_win11_server2016_server2019_server2022_64bit_azure_swl.exe" -OutFile "$tempDrive\nvidia-driver.exe"
+& "C:\Program Files\7-Zip\7z.exe" x "nvidia-driver.exe" "-onvidia"
 Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish" -Wait -PassThru
 
 
