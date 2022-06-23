@@ -47,6 +47,8 @@ You must set the **SINEQUA_CLOUD** environment variable before starting the Sine
 
 Cloud tags are Azure tags used on Azure resources. They are used to run some specific init tasks for a particular VM or VMSS. 
 
+Note: Cloud tags are available as "Environment Variables" in the product with the `_CloudTag_` prefix. E.g The `sinequa-node` tag value is accessible through the `_CloudTag_sinequa-node` Environment Variable.
+
 | Name                         | Value Example                        | Description                          |
 | ---------------------------- | ------------------------------------ | ------------------------------------ |
 |	sinequa-data-storage-url   | https://`{storage account name}`.blob.core.windows.net/`{container}`/grids/`{grid-name}` | Used to enable storage of:<br>* Configuration<br>* User settings<br>* Document cache<br>* Log store<br>* Audit store<br>and to declare cloud variables <br>(see bellow).|
@@ -64,7 +66,12 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 #### 2.1.3. Cloud Variables & Cloud Secrets <a name="cloudvars"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 
 * Cloud variables are Azure blobs stored in the storage account. They are used to declare global variables in the configuration.
+
+Note: Cloud variables are available as "Environment Variables" in the product with the `_CloudVar_` prefix. E.g The `sinequa-beta` cloud var value is accessible through the `_CloudVar_sinequa-beta` Environment Variable.
+
 * Cloud secrets are secrets stored in the key vault defined in cloud variables. They are used to store sensitive data.
+
+Note: Cloud secrets begining with the `sinequa-env-`prefix are available as "Environment Variables" in the product with the `_CloudSecret_` prefix. E.g The `sinequa-env-my-secret` secret value is accessible through the `_CloudSecret_sinequa-env-my-secret` Environment Variable.
 
 | Name                                      | Cloud Var | Cloud Secret | Value Example                        | Description                          |
 | ----------------------------------------- | --------- | ------------ | ------------------------------------ | ------------------------------------ |
@@ -87,7 +94,7 @@ Cloud tags are Azure tags used on Azure resources. They are used to run some spe
 |	sinequa-ssl-client-key                  | x         | x            |                                      | Client private key for sRPC. |
 |	sinequa-ssl-client-override-host-name   | x         | x            |                                      | Overrides host name for sRPC. |
 
-#### 2.1.4. Cloud Alises <a name="cloudaliases"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
+#### 2.1.4. Cloud Aliases <a name="cloudaliases"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
 
 * Cloud Aliases are Azure blobs stored in the primary storage account. They are used to declare Sinequa aliases in the configuration.
 
