@@ -52,7 +52,7 @@ if ($bgFileUrl.Length -gt 0)
     $bgFile = "$tempDrive\config.bgi"
     Invoke-WebRequest $bgFileUrl -OutFile $bgFile
     $bgInfoDir = Get-ChildItem -Directory -Path "C:\Packages\Plugins\Microsoft.Compute.BGInfo"
-    Copy-Item -Path 'C:\sinequa\ThirdPartyNotices.txt' -Destination $bgInfoDir.FullName -Force
+    Copy-Item -Path $bgFile -Destination $bgInfoDir.FullName -Force
 }
 
 #Install C++ Resdistribuable (Sinequa Prerequisite)
@@ -67,6 +67,12 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 
 # Setting the NLA information to Disabled
 (Get-WmiObject -class "Win32_TSGeneralSetting" -Namespace root\cimv2\terminalservices -ComputerName $env:COMPUTERNAME -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(0)
+
+# Install NVIDIA GPU Driver
+WriteLog "Install NVIDIA Tesla Driver"
+Invoke-WebRequest "https://download.microsoft.com/download/7/3/6/7361d1b9-08c8-4571-87aa-18cf671e71a0/512.78_grid_win10_win11_server2016_server2019_server2022_64bit_azure_swl.exe" -OutFile "$tempDrive\nvidia-driver.exe"
+& "C:\Program Files\7-Zip\7z.exe" x "nvidia-driver.exe" "-onvidia"
+Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish" -Wait -PassThru
 
 
 ########Install Optional programs

@@ -122,6 +122,7 @@ function SqAzurePSCreateTempVM(
     -subnet $VirtualNetwork.Subnets[0] `
     -osUsername $osUsername `
     -osPassword $osPassword `
+    -vmSize $vmSize `
     -hostname $hostname
 }
 

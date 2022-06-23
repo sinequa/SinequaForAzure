@@ -45,6 +45,7 @@ $versionFile = Join-Path $sinequaFolder "version.txt"
 $zipFile = "$tempDrive\sinequa.zip"
 if ($filePath) {$zipFile = $filePath}
 $serviceName = "sinequa.service"
+$cloudInitServiceName = "sinequa.cloudinit.service"
 
 # Remove escaping character "xxxx" used for Invoke-AzVMRunCommand parameter limitations
 if ($fileUrl -and $fileUrl.length -gt 1 -and $fileUrl[0] -eq """" -and $fileUrl[$fileUrl.length-1] -eq """") { $fileUrl = $fileUrl -replace ".$" -replace "^." }
@@ -97,43 +98,16 @@ if (Test-Path "$sinequaFolder\assets\static\static_resources_sba1.zxb") {
     Remove-Item "$sinequaFolder\assets\static\static_resources_sba1.zxb" -Force    
 }
 
-#Install IIS
-<#
-WriteLog "Install IIS"
-$feature = Get-WindowsOptionalFeature -Online -FeatureName IIS-ISAPIFilter
-if (($null -eq $feature) -or ($null -ne $feature -and $feature.State -eq "Disabled")) {
-    Enable-WindowsOptionalFeature -Online -FeatureName IIS-ISAPIFilter -All
-}
-$feature = Get-WindowsOptionalFeature -Online -FeatureName IIS-ASPNET45
-if (($null -eq $feature) -or ($null -ne $feature -and $feature.State -eq "Disabled")) {
-    Enable-WindowsOptionalFeature -Online -FeatureName IIS-ASPNET45 -All
-}
-
-# Add IIS rigths
-WriteLog "Add IIS rigths"
-$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("IIS_IUSRS", "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")
-$acl = Get-ACL $sinequaFolder
-$acl.AddAccessRule($accessRule)
-Set-ACL -Path $sinequaFolder -ACLObject $acl
-
-# Install Website
-WriteLog "Install Sinequa website";
-Import-Module WebAdministration
-Set-ItemProperty 'IIS:\Sites\Default Web Site\' -name physicalPath -value "$sinequaFolder\website"
-C:\Windows\System32\inetsrv\appcmd.exe set config http://localhost -section:system.webServer/isapiFilters /+"[name='Sinequa',path='$sinequaFolder\website\bin\sinequa_filter.dll',enabled='True',enableCache='True']" /commit:apphost
-
-
-WriteLog "Install web.config for a faster startup";
-Copy-Item "$sinequaFolder\website\web.config.default" -Destination "$sinequaFolder\website\web.config"
-
-# Reset IIS
-iisreset
-#>
-
-# Install the Sinequa service
-WriteLog "Install $serviceName service"
+# Install the Sinequa CloudInit
+WriteLog "Install $cloudInitServiceName service"
 $start = "delayed-auto"
-& "sc.exe" "create" $serviceName "start=$start" "binPath=""$sinequaFolder\bin\sinequa.service.exe""" "DisplayName=sinequa.service"
+& "sc.exe" "create" $cloudInitServiceName "start=$start" "binPath=""$sinequaFolder\bin\sinequa.cloudinit.exe -SinequaPath d:\sinequa""" "DisplayName=""$cloudInitServiceName"""
+
+# Install the Sinequa service on demand. Sinequa.cloudInit will start it the firt time, and change it to auto
+WriteLog "Install $serviceName service"
+#$start = "delayed-auto"
+$start = "demand"
+& "sc.exe" "create" $serviceName "obj=NT Authority\NetworkService" "start=$start" "binPath=""$sinequaFolder\bin\sinequa.service.exe""" "DisplayName=""$serviceName"""
 
 $EndTime = Get-Date
 WriteLog "Script execution time: $($EndTime - $StartTime)"
