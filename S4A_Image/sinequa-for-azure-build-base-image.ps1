@@ -48,7 +48,7 @@ param (
     [string]    $vmSize = "Standard_D4s_v3",
     
     [Parameter(HelpMessage = "Tags (""-Tags @{'tagname' = 'tagvalue'}""")]
-    [hastable]    $tags
+    [hashtable]    $tags
 )
 
 
