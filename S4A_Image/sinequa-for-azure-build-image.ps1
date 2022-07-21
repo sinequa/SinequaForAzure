@@ -54,7 +54,7 @@ param (
     [SecureString]    $osPassword = ("Password1234" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
     
     [Parameter(HelpMessage = "Tags (""-Tags @{'tagname' = 'tagvalue'}""")]
-    [string]    $tags
+    [hastable]    $tags
 )
 
 
