@@ -43,7 +43,8 @@ function SqAzurePSCreateTempVM(
     $vmName, 
     $osUsername, 
     [SecureString]$osPassword, 
-    $vmSize = "Standard_D4s_v3"
+    $vmSize = "Standard_D4s_v3",
+    $tags
     ) {
     <#
     .SYNOPSIS
@@ -123,6 +124,7 @@ function SqAzurePSCreateTempVM(
     -osUsername $osUsername `
     -osPassword $osPassword `
     -vmSize $vmSize `
+    -tags $tags `
     -hostname $hostname
 }
 

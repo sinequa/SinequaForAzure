@@ -51,7 +51,10 @@ param (
     [string]    $osUsername = "sinequa",
 
     [Parameter(HelpMessage = "OS Password of the VM")]
-    [SecureString]    $osPassword = ("Password1234" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force)
+    [SecureString]    $osPassword = ("Password1234" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
+    
+    [Parameter(HelpMessage = "Tags (""-Tags @{'tagname' = 'tagvalue'}""")]
+    [string]    $tags
 )
 
 
@@ -98,14 +101,14 @@ $rg = Get-AzResourceGroup -Name $tempResourceGroupName -Location $location  -Err
 if (!$rg) {
     #Create the temp resource group
     WriteLog "Create the temp resource group: $tempResourceGroupName"
-    $rg = New-AzResourceGroup -Name $tempResourceGroupName -Location $location
+    $rg = New-AzResourceGroup -Name $tempResourceGroupName -Tag $tags -Location $location
 }
 
 # Get Image if already exists & Create a Virtual Machine
 $baseImage = Get-AzImage -ResourceGroupName $imageResourceGroupName -ImageName $baseImageName
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
 if (!$vm) {
-    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword
+    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -tags $tags
 }
 
 #Apply Windows Updates

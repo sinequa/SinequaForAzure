@@ -44,7 +44,11 @@ param (
     [string]    $imageSku = "2022-datacenter-smalldisk",
 
     [Parameter(HelpMessage = "VM Size")]
-    [string]    $vmSize = "Standard_D4s_v3"
+    [string]    $vmSize = "Standard_D4s_v3",
+    
+    [Parameter(HelpMessage = "Tags (""-Tags @{'tagname' = 'tagvalue'}""")]
+    [string]    $tags
+
 )
 
 
@@ -79,11 +83,11 @@ if ($rg -and $cleanExistingResourceGroup) {
     #Delete the temp resource group if exists
     $null = Remove-AzResourceGroup -Name $tempResourceGroupName -Force
 }
-$rg = Get-AzResourceGroup -Name $tempResourceGroupName -Location $location  -ErrorAction SilentlyContinue
+$rg = Get-AzResourceGroup -Name $tempResourceGroupName -Location $location -ErrorAction SilentlyContinue
 if (!$rg) {
     #Create the temp resource group
     WriteLog "Create the temp resource group: $tempResourceGroupName"
-    $rg = New-AzResourceGroup -Name $tempResourceGroupName -Location $location
+    $rg = New-AzResourceGroup -Name $tempResourceGroupName -Tag $tags -Location $location
 }
 
 
@@ -98,7 +102,7 @@ if ($image) {
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
 if (!$vm) {
     WriteLog "Create Temp VM"
-    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku -vmSize $vmSize
+    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku -vmSize $vmSize -tags tags
 }
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -vmName $vmName
 
