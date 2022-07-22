@@ -102,7 +102,7 @@ if ($image) {
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
 if (!$vm) {
     WriteLog "Create Temp VM"
-    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku -vmSize $vmSize -tags tags
+    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku -vmSize $vmSize -tags $tags
 }
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -vmName $vmName
 
