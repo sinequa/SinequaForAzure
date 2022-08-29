@@ -23,6 +23,9 @@ param (
     [Parameter(HelpMessage = "Azure User Password")]
     [SecureString]    $password = ("$env:AZURE_BUILD_PWD" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
+    [Parameter(HelpMessage = "Azure Environment Name")]
+    [string]    $environmentName  = "AzureCloud",
+
     [Parameter(HelpMessage = "Azure Location")]
     [string]    $location = "francecentral",
 
@@ -63,7 +66,7 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 $maxImagesToKeep = 5
 
 # Azure Login
-SqAzurePSLogin -tenantId $tenantId -subscriptionId $subscriptionId -user $user -password $password
+SqAzurePSLogin -tenantId $tenantId -subscriptionId $subscriptionId -user $user -password $password -environmentName $environmentName
 
 # Get Resource Group
 $rg = Get-AzResourceGroup -Name $imageResourceGroupName -Location $location 

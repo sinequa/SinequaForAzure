@@ -6,7 +6,7 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 
 
 $startupScript = $null; #"sinequa-az-startup.ps1"
-function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$password, $servicePrincipalID, [securestring] $servicePrincipalSecret) {
+function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$password, $servicePrincipalID, [securestring] $servicePrincipalSecret, $environmentName="AzureCloud") {
     <#
     .SYNOPSIS
         Login on Azure with login and password
@@ -22,11 +22,11 @@ function SqAzurePSLogin($tenantId, $subscriptionId, $user, [securestring]$passwo
     if ($user -and $user.length -gt 0 -and $password -and $password.length -gt 0) 
     {
         $Credential = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $user,$password
-        Connect-AzAccount -Credential $Credential -Tenant $tenantId -Subscription $subscriptionId
+        Connect-AzAccount -Credential $Credential -Tenant $tenantId -Subscription $subscriptionId -EnvironmentName $environmentName
     } elseif ($servicePrincipalID -and $servicePrincipalID.length -gt 0 -and $servicePrincipalSecret -and $servicePrincipalSecret.length -gt 0) 
     {
         $pscredential = New-Object -TypeName System.Management.Automation.PSCredential($servicePrincipalID, $servicePrincipalSecret)
-        Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $tenantId
+        Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $tenantId -EnvironmentName $environmentName
     }
     WriteLog "Use Subscription ID: $subscriptionId"
     return Set-AzContext -SubscriptionId $subscriptionId
@@ -573,7 +573,11 @@ function SqAzurePSLocalFileToRGStorageAccount($resourceGroup, $imageName, $local
         $sa = New-AzStorageAccount -ResourceGroupName $tempResourceGroupName -Name $saName -Location $resourceGroup.Location -SkuName Standard_LRS -Tag @{sinequa=$imageName}
     }    
     $sakey = (Get-AzStorageAccountKey -ResourceGroupName $resourceGroup.ResourceGroupName -Name $sa.StorageAccountName)[0].Value;
-    $saConnectionString = "DefaultEndpointsProtocol=https;AccountName=$($sa.StorageAccountName);AccountKey=$($sakey);EndpointSuffix=core.windows.net"# 
+    $suffix = "core.windows.net"
+    if ($sa.PrimaryEndpoints.Blob -match "blob\.([^/]+)/") {
+        $suffix = $Matches[1]
+    }    
+    $saConnectionString = "DefaultEndpointsProtocol=https;AccountName=$($sa.StorageAccountName);AccountKey=$($sakey);EndpointSuffix=$($suffix)"# 
     $saContext = New-AzStorageContext -ConnectionString $saConnectionString
     $container = Get-AzStorageContainer -Name $saContainerName -Context $saContext -ErrorAction SilentlyContinue
     if (!$container) {
@@ -587,7 +591,7 @@ function SqAzurePSLocalFileToRGStorageAccount($resourceGroup, $imageName, $local
     $sasStartTime = (Get-Date).AddDays(-1)
     $sasEndTime = $sasStartTime.AddDays(2)
     $sasToken = New-AzStorageContainerSASToken -Container $saContainerName -Permission "rl" -StartTime $sasStartTime -ExpiryTime $sasEndTime -Context $saContext
-    $url = "https://$($sa.StorageAccountName).blob.core.windows.net/$($saContainerName)/$($filename)$($sasToken)"
+    $url = "$($sa.PrimaryEndpoints.Blob)$($saContainerName)/$($filename)$($sasToken)"
     WriteLog "Url: $url"
     return $url
 }

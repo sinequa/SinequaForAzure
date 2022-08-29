@@ -22,6 +22,9 @@ param (
     [Parameter(HelpMessage = "Azure User Password")]
     [SecureString]    $password = ("$env:AZURE_BUILD_PWD" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
+    [Parameter(HelpMessage = "Azure Environment Name")]
+    [string]    $environmentName  = "AzureCloud",
+
     [Parameter(HelpMessage = "Azure Location")]
     [string]    $location = "francecentral",
 
@@ -44,11 +47,11 @@ param (
     [string]    $imageSku = "2022-datacenter-smalldisk",
 
     [Parameter(HelpMessage = "VM Size")]
+
     [string]    $vmSize = "Standard_D4s_v3",
     
     [Parameter(HelpMessage = "Tags (""-Tags @{'tagname' = 'tagvalue'}""")]
-    [string]    $tags
-
+    [hashtable]    $tags
 )
 
 
@@ -74,7 +77,7 @@ $cleanExistingResourceGroup = $true
 $forceProgramsInstall = $true
 
 # Azure Login
-SqAzurePSLogin -tenantId $tenantId -subscriptionId $subscriptionId -user $user -password $password
+SqAzurePSLogin -tenantId $tenantId -subscriptionId $subscriptionId -user $user -password $password -environmentName $environmentName
 
 
 # Temp Resource Group
@@ -102,7 +105,7 @@ if ($image) {
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
 if (!$vm) {
     WriteLog "Create Temp VM"
-    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku -vmSize $vmSize -tags tags
+    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $image -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -sku $imageSku -vmSize $vmSize -tags $tags
 }
 $vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -vmName $vmName
 
