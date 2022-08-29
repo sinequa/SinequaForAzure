@@ -23,6 +23,9 @@ param (
     [Parameter(HelpMessage = "Azure User Password")]
     [SecureString]    $password = ("$env:AZURE_BUILD_PWD" |  where-Object {$_} | ConvertTo-SecureString -AsPlainText -Force),
 
+    [Parameter(HelpMessage = "Azure Environment Name")]
+    [string]    $environmentName  = "AzureCloud",
+
     [Parameter(HelpMessage = "Azure Location")]
     [string]    $location = "francecentral",
 
@@ -79,7 +82,7 @@ $nodeName = "sq-version"
 
 
 # Azure Login
-SqAzurePSLogin -tenantId $tenantId -subscriptionId $subscriptionId -user $user -password $password
+SqAzurePSLogin -tenantId $tenantId -subscriptionId $subscriptionId -user $user -password $password -environmentName $environmentName
 
 # for debugging
 $cleanExistingResourceGroup = $false 
