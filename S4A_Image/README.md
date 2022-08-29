@@ -28,7 +28,8 @@ sinequa-for-azure-build-base-image.ps1
     [[-subscriptionId] <String>]    
     [-user <String>]    
     [-password <SecureString>]    
-    [[-location] <String>]    
+    [[-environmentName] <String>]
+    [[-location] <String>]
     [[-imageResourceGroupName] <String>]    
     [[-imageName] <String>]    
     [[-tempResourceGroupName] <String>]    
@@ -42,6 +43,7 @@ sinequa-for-azure-build-base-image.ps1
 | subscriptionId         | $env:AZURE_PRODUCT_SUBSCRIPTION | Subscription ID used for login. |
 | user 	                 | $env:AZURE_BUILD_USER           | User for login. |
 | password 	             | $env:AZURE_BUILD_PWD            | Password for login. |
+| environmentName        | AzureCloud                      | Environment endpoint for Azure Services. Used for GOV environments (eg: AzureUSGovernment)  |
 | location               | francecentral                   | Azure region. |
 | imageResourceGroupName | rg-sinequa                      | Resource group name of the base image to create. |
 | imageName              | sinequa-base-image              | Name of the image containing the prerequisites and additional programs. |
@@ -76,6 +78,7 @@ sinequa-for-azure-build-image.ps1
     [[-subscriptionId] <String>]    
     [-user <String>]    
     [-password <SecureString>]    
+    [[-environmentName] <String>]
     [[-location] <String>]    
     [[-imageResourceGroupName] <String>]    
     [[-baseImageName] <String>]    
@@ -94,6 +97,7 @@ sinequa-for-azure-build-image.ps1
 | subscriptionId         | $env:AZURE_PRODUCT_SUBSCRIPTION | Subscription ID used for login. |
 | user 	                 | $env:AZURE_BUILD_USER           | User for login. |
 | password 	             | $env:AZURE_BUILD_PWD            | Password for login. |
+| environmentName        | AzureCloud                      | Environment endpoint for Azure Services. Used for GOV environments (eg: AzureUSGovernment)  |
 | location               | francecentral                   | Azure region. |
 | imageResourceGroupName | rg-sinequa                      | Resource group name of both the base image and the new image to create. |
 | baseImageName          | sinequa-base-image              | Name of the image containing the prerequisites and additional programs. |
@@ -119,7 +123,8 @@ sinequa-for-azure-image-to-gallery.ps1
     [[-tenantId] <String>]    
     [[-subscriptionId] <String>]    
     [-user <String>]    
-    [-password <SecureString>]    
+    [-password <SecureString>]
+    [[-environmentName] <String>]
     [[-location] <String>]    
     [[-imageResourceGroupName] <String>]    
     [[-galleryName] <String>]    
@@ -135,6 +140,7 @@ sinequa-for-azure-image-to-gallery.ps1
 | subscriptionId         | $env:AZURE_PRODUCT_SUBSCRIPTION | Subscription ID used for login. |
 | user 	                 | $env:AZURE_BUILD_USER           | User for login. |
 | password 	             | $env:AZURE_BUILD_PWD            | Password for login. |
+| environmentName        | AzureCloud                      | Environment endpoint for Azure Services. Used for GOV environments (eg: AzureUSGovernment)  |
 | location               | francecentral                   | Azure region. |
 | imageResourceGroupName | rg-sinequa                      | Resource group name of both the image to share & the Shared Image Gallery.|
 | galleryName            | SinequaForAzure                 | Shared Image Gallery name. |
