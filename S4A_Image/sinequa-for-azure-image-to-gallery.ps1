@@ -61,6 +61,11 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 # Include Sinequa Functions
 . .\sinequa_az_ps_functions.ps1
 
+if (-not (isSinequaVersion -version $version)) {
+    WriteError("'$version' is not a valid version (x.y.z or x.y.z.r)")
+    Exit 1   
+}
+
 # Variables
 # Number of image to keep
 $maxImagesToKeep = 5
