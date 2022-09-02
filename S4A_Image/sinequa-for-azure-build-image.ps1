@@ -88,6 +88,10 @@ SqAzurePSLogin -tenantId $tenantId -subscriptionId $subscriptionId -user $user -
 $cleanExistingResourceGroup = $false 
 
 # Test Inputs
+if (-not (isSinequaVersion -version $version)) {
+    WriteError("'$version' is not a valid version (x.y.z or x.y.z.r)")
+    Exit 1   
+}
 if (($localFile.Length -gt 0) -and (-not(Test-Path $localFile))) {
     WriteError("'$localFile' localFile doesn't exist.")
     Exit 1   

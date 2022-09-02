@@ -525,25 +525,33 @@ function SqAzurePSCreateImageVersion($resourceGroup, $galleryName, $imageDefinit
         GalleryImageVersion
     #>
     
+    $igVersion = $version
+    if ($version.Split(".").Count -eq 4) {
+        $igVersion = $version.Split(".")[1,2,3] -join "."
+    }
+    if ($version -ne $igVersion) {
+        WriteLog "Version used for imageGallery $version -> $igVersion"
+    }
+
     #Remove Version if exist
-    WriteLog "Remove Version (if exists): $version"
+    WriteLog "Remove Version (if exists): $igVersion"
     Remove-AzGalleryImageVersion `
     -GalleryImageDefinitionName $imageDefinitionName `
-    -Name $version.Substring(3) `
+    -Name $igVersion `
     -GalleryName $galleryName `
     -ResourceGroupName $resourceGroup.ResourceGroupName `
     -Force
 
     #Create a new version for the image
-    WriteLog "Create Image Version: $version"
-    $region1 = @{Name="westeurope";ReplicaCount=1}
-    $region2 = @{Name="francecentral";ReplicaCount=1}
-    $targetRegions = @($region1,$region2)
+    WriteLog "Create Image Version: $igVersion"
+    $region1 = @{Name=$image.Location;ReplicaCount=1}
+    #$region2 = @{Name="westeurope";ReplicaCount=1}
+    $targetRegions = @($region1)
     $expiration = ((Get-Date).AddYears(1)).ToString("yyyy-MM-dd")
 
     return New-AzGalleryImageVersion `
     -GalleryImageDefinitionName $imageDefinitionName `
-    -GalleryImageVersionName $version.Substring(3) `
+    -GalleryImageVersionName $igVersion `
     -GalleryName $galleryName `
     -ResourceGroupName $resourceGroup.ResourceGroupName `
     -Location $resourceGroup.Location `
@@ -804,3 +812,8 @@ function SqAzurePSUpdateVM($resourceGroupName, $location, $vmName, $image, $star
     WriteLog "[$($vm.Name)] Execution time for $($vm.Name): $($EndVmTime - $StartVmTime)"
 }
 
+function isSinequaVersion($version) {
+
+    if ($version -match  '^([\d]+)\.([\d]+)\.([\d]+)(\.[\d]+){0,1}$') { return $true}
+    return $false;
+}
