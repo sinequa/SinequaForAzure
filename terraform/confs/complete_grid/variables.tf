@@ -14,6 +14,11 @@ variable "location" {
   default     = "francecentral"
 }
 
+variable "azure_environment" {
+  description = "Region"
+  type        = string
+  default     = "AzureCloud" // https://learn.microsoft.com/en-us/powershell/module/az.accounts/get-azenvironment 
+}
 
 variable "image_id" {
   description = "Sinequa Image reference"

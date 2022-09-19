@@ -581,7 +581,7 @@ function SqAzurePSLocalFileToRGStorageAccount($resourceGroup, $imageName, $local
         $sa = New-AzStorageAccount -ResourceGroupName $tempResourceGroupName -Name $saName -Location $resourceGroup.Location -SkuName Standard_LRS -Tag @{sinequa=$imageName}
     }    
     $sakey = (Get-AzStorageAccountKey -ResourceGroupName $resourceGroup.ResourceGroupName -Name $sa.StorageAccountName)[0].Value;
-    $suffix = "core.windows.net"
+    $suffix = (Get-AzContext).Environment.StorageEndpointSuffix
     if ($sa.PrimaryEndpoints.Blob -match "blob\.([^/]+)/") {
         $suffix = $Matches[1]
     }    

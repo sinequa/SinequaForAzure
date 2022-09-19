@@ -120,7 +120,7 @@ resource "azurerm_storage_blob" "st-org-root-secondary" {
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
   content_type           = "text/plain"
-  source_content         = "https://${var.st_hot_name}.blob.core.windows.net/${var.org_name}"
+  source_content         = "https://${var.st_hot_name}.blob.core.${var.api_domain}/${var.org_name}"
 
   depends_on = [azurerm_storage_container.sinequa_st_premium_container]
 }

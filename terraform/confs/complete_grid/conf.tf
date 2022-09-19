@@ -25,17 +25,17 @@ provider "azurerm" {
 data "azurerm_client_config" "current" {}
 
 locals {
-  region                  = "francecentral"
   resource_group_name     = var.resource_group_name
   os_admin_username       = "sinequa" // Windows Login Name
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0) // Windows Login Password
 
   sinequa_default_admin_password = element(concat(random_password.sq_passwd.*.result, [""]), 0) // Sinequa Admin user password
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):"" //Sinequa License
+  api_domain              = var.azure_environment == "AzureUSGovernment"?"usgovcloudapi.net":(var.azure_environment == "AzureGermanCloud"?"microsoftazure.de":(var.azure_environment == "AzureChinaCloud"?"vault.azure.cn":"windows.net"))
 
   //Sinequa Org & Grid  
-  org_name                 = "sinequa"
-  grid_name                = var.resource_group_name
+  org_name                = "sinequa"
+  grid_name               = var.resource_group_name
 
   //Primary Nodes Section
   node1_osname            = "vm-node1" //Windows Computer Name
@@ -57,7 +57,7 @@ locals {
   st_hot_name             = substr(join("",["sthot",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   
 
-  data_storage_url        = "https://${local.st_premium_name}.blob.core.windows.net/${local.org_name}/grids/${local.grid_name}/"
+  data_storage_url        = "https://${local.st_premium_name}.blob.core.${local.api_domain}/${local.org_name}/grids/${local.grid_name}/"
   
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = "QueueCluster1(${local.node1_name},${local.node2_name},${local.node3_name})" //For Creating a Queuecluster during Cloud Init
@@ -93,7 +93,7 @@ resource "random_password" "sq_passwd" {
 // Create the resource group
 resource "azurerm_resource_group" "sinequa_rg" {
   name = local.resource_group_name
-  location = local.region
+  location = var.location
 
   tags = merge({
   },var.additional_tags)
@@ -129,6 +129,7 @@ module "kv_st_services" {
   org_name              = local.org_name
   grid_name             = local.grid_name
   default_admin_password = local.sinequa_default_admin_password
+  api_domain            = local.api_domain
 
   blob_sinequa_primary_nodes = local.primary_nodes 
   blob_sinequa_beta          = true
