@@ -119,12 +119,14 @@ if (!$vm) {
 }
 
 #Apply Windows Updates
+WriteLog "Apply Windows Updates"
 $script = ".\sinequa-az-cse-windows-update.ps1"
 SqAzurePSApplyWindowsUpdates -resourceGroupName $rg.ResourceGroupName -vmName $vmName -scriptName $script
 
 
 #If Local File, copy it into the storage account
 if (($localFile.Length -gt 0) -and (Test-Path $localFile)) {
+    WriteLog "Upload $localFile"
     $res = SqAzurePSLocalFileToRGStorageAccount -resourceGroup $rg -localFile $localFile -imageName $imageName
     $fileUrl = ($res)[1]
 }
@@ -134,6 +136,7 @@ if ($fileUrl.Length -eq 0) {
 }
 
 #Install Sinequa
+WriteLog "Install Sinequa"
 $script = ".\sinequa-az-cse-install-build.ps1"
 $parameters = @{fileUrl = $fileUrl}
 SqAzurePSRunScript -resourceGroupName $rg.ResourceGroupName -vmName $vmName -scriptName $script -parameters $parameters

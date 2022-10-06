@@ -76,7 +76,7 @@ if ((Test-Path $sinequaFolder) -and (Test-Path $versionFile)) {
 
 # Download the Sinequa Distribution
 if ($fileUrl) {
-    WriteLog "Download $($fileUrl)";
+    WriteLog "Download $($fileUrl) to $zipFile";
     Invoke-WebRequest $fileUrl -OutFile $zipFile
     if (-Not (Test-Path $sinequaScriptsFolder)) {
         New-Item $sinequaScriptsFolder -ItemType Directory
