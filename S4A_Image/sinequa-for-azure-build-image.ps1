@@ -138,7 +138,7 @@ if ($fileUrl.Length -eq 0) {
 #Install Sinequa
 WriteLog "Install Sinequa"
 $script = ".\sinequa-az-cse-install-build.ps1"
-$parameters = @{fileUrl = $fileUrl}
+$parameters = @{fileUrl = "`""+$fileUrl+"`""}
 SqAzurePSRunScript -resourceGroupName $rg.ResourceGroupName -vmName $vmName -scriptName $script -parameters $parameters
 
 

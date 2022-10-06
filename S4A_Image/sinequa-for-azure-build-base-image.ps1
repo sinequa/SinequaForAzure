@@ -116,7 +116,7 @@ if (!$image -or $forceProgramsInstall) {
     $bgFileUrl = (SqAzurePSLocalFileToRGStorageAccount -resourceGroup $rg -imageName $imageName -localFile $bgFile)[1]
     # run script for install prerequisites and optional programs
     $script = ".\sinequa-az-cse-install-programs.ps1"
-    $parameters = @{bgFileUrl =  $bgFileUrl}
+    $parameters = @{bgFileUrl =  "`""+$bgFileUrl+"`""}
     SqAzurePSRunScript -resourceGroupName $rg.ResourceGroupName -vmName $vmName -scriptName $script -parameters $parameters
 }
 

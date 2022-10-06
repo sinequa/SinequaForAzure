@@ -21,6 +21,8 @@ function WriteLog ($message) {
     Write-Output "$date $message"
 }
 
+# Remove escaping character "xxxx" used for Invoke-AzVMRunCommand parameter limitations
+if ($bgFileUrl -and $bgFileUrl.length -gt 1 -and $bgFileUrl[0] -eq """" -and $bgFileUrl[$bgFileUrl.length-1] -eq """") { $bgFileUrl = $bgFileUrl -replace ".$" -replace "^." }
 
 WriteLog "Install Nuget"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
