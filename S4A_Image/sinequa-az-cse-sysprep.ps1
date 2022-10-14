@@ -4,13 +4,13 @@
  $cseDir = 'C:\Packages\Plugins\Microsoft.Compute.CustomScriptExtension\'
  if (Test-Path -Path $cseDir)
  {
-     Remove-Item -Recurse -Force $cseDir | Out-Null
+     Remove-Item -Recurse -Force $cseDir -ErrorAction SilentlyContinue | Out-Null
  }
  Write-Host "Clean scripts: RunCommandWindows"
  $cseDir = 'C:\Packages\Plugins\Microsoft.CPlat.Core.RunCommandWindows\'
  if (Test-Path -Path $cseDir)
  {
-     Remove-Item -Recurse -Force $cseDir | Out-Null
+     Remove-Item -Recurse -Force $cseDir -ErrorAction SilentlyContinue | Out-Null
  }
 
 Write-Host "Sysprep"
