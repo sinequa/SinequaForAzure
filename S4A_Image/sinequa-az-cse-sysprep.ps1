@@ -1,3 +1,18 @@
+
+ # Remove any left over CustomScriptExtension files.
+ Write-Host "Clean scripts: CustomScriptExtension"
+ $cseDir = 'C:\Packages\Plugins\Microsoft.Compute.CustomScriptExtension\'
+ if (Test-Path -Path $cseDir)
+ {
+     Remove-Item -Recurse -Force $cseDir | Out-Null
+ }
+ Write-Host "Clean scripts: RunCommandWindows"
+ $cseDir = 'C:\Packages\Plugins\Microsoft.CPlat.Core.RunCommandWindows\'
+ if (Test-Path -Path $cseDir)
+ {
+     Remove-Item -Recurse -Force $cseDir | Out-Null
+ }
+
 Write-Host "Sysprep"
 & $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quit /mode:vm
 
