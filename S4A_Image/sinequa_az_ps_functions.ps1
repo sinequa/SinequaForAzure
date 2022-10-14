@@ -174,9 +174,9 @@ function SqAzurePSCreateVMforNode(
     if ($image) {
         $imageName = $image.Name
     }
-    $osDiskName = "osdisk-$($prefix)_$($nodeName)-$($imageName)"
+    $osDiskName = "osdisk-$($vmName)"
     $osDiskSize = 64
-    $dataDiskName = "datadisk-$($prefix)_$($nodeName)"
+    $dataDiskName = "datadisk-$($vmName)"
     $dataDiskType = "Premium_LRS" #"Premium_LRS"
     if (!$vmName) {$vmName = "vm-$prefix-$nodeName"}
     if (!$hostName) {$hostName =  "$prefix-$nodeName"}
@@ -229,7 +229,12 @@ function SqAzurePSCreateVMforNode(
     $null = Add-AzVMNetworkInterface -Id $nic.Id -VM $vm
 
     # Applies the OS disk properties
-    $null = Set-AzVMOSDisk -VM $vm -CreateOption FromImage -Name $osDiskName -DiskSizeInGB $osDiskSize
+    $disk = Get-AzDisk -ResourceGroupName $resourceGroup.ResourceGroupName -DiskName $osDiskName -ErrorAction SilentlyContinue
+    if ($disk) {
+        WriteLog "Delete existing $osDiskName disk"
+        Remove-AzDisk -ResourceGroupName $resourceGroup.ResourceGroupName -DiskName $osDiskName -Force
+    }
+    $null = Set-AzVMOSDisk -VM $vm -CreateOption FromImage -Name $osDiskName -DiskSizeInGB $osDiskSize -DeleteOption Delete
 
     # Add a DataDisk
     if ($dataDiskSizeInGB) {

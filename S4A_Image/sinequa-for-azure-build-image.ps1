@@ -113,10 +113,15 @@ if (!$rg) {
 
 # Get Image if already exists & Create a Virtual Machine
 $baseImage = Get-AzImage -ResourceGroupName $imageResourceGroupName -ImageName $baseImageName
-$vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -ErrorAction SilentlyContinue | Where-Object {$_.Tags['sinequa'] -eq $imageName} -ErrorAction SilentlyContinue
-if (!$vm) {
-    $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -tags $tags
+$vm = Get-AzVM -ResourceGroupName $rg.ResourceGroupName -Name $vmName -ErrorAction SilentlyContinue
+if ($vm) {
+    WriteLog "Delete existing $vmName VM"
+    Remove-AzVM -ResourceGroupName $rg.ResourceGroupName -Name $vmName -Force
 }
+$vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -tags $tags
+
+WriteLog "Delete existing VM extensions"
+Get-AzVMExtension -ResourceGroupName $rg.ResourceGroupName -VMName $vmName -ErrorAction SilentlyContinue | Remove-AzVMExtension -Force -ErrorAction SilentlyContinue 
 
 #Apply Windows Updates
 WriteLog "Apply Windows Updates"
