@@ -120,8 +120,8 @@ if ($vm) {
 }
 $vm = SqAzurePSCreateTempVM -resourceGroup $rg -image $baseImage -vmName $vmName -nodeName $nodeName -osUsername $osUsername -osPassword $osPassword -tags $tags
 
-WriteLog "Delete existing VM extensions"
-Get-AzVMExtension -ResourceGroupName $rg.ResourceGroupName -VMName $vmName -ErrorAction SilentlyContinue | Remove-AzVMExtension -Force -ErrorAction SilentlyContinue 
+#WriteLog "Delete existing VM extensions"
+#Get-AzVMExtension -ResourceGroupName $rg.ResourceGroupName -VMName $vmName -ErrorAction SilentlyContinue | Remove-AzVMExtension -Force -ErrorAction SilentlyContinue 
 
 #Apply Windows Updates
 WriteLog "Apply Windows Updates"
