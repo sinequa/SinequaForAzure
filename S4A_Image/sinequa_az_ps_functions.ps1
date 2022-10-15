@@ -234,7 +234,7 @@ function SqAzurePSCreateVMforNode(
         WriteLog "Delete existing $osDiskName disk"
         Remove-AzDisk -ResourceGroupName $resourceGroup.ResourceGroupName -DiskName $osDiskName -Force
     }
-    $null = Set-AzVMOSDisk -VM $vm -CreateOption FromImage -Name $osDiskName -DiskSizeInGB $osDiskSize -DeleteOption Delete
+    $null = Set-AzVMOSDisk -VM $vm -CreateOption FromImage -Name $osDiskName -DiskSizeInGB $osDiskSize
 
     # Add a DataDisk
     if ($dataDiskSizeInGB) {
