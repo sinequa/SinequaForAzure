@@ -48,8 +48,8 @@ Set-Location -Path $tempDrive
 # Install Custom BGInfo (This file has to be accessible for downloading - e.g. a blob Storage)
 if ($bgFileUrl.Length -gt 0)
 {
-    WriteLog "Download $bgFileUrl"
     $bgFile = "$tempDrive\config.bgi"
+    WriteLog "Download $bgFileUrl to $bgFile"
     Invoke-WebRequest $bgFileUrl -OutFile $bgFile
     $bgInfoDir = Get-ChildItem -Directory -Path "C:\Packages\Plugins\Microsoft.Compute.BGInfo"
     Copy-Item -Path $bgFile -Destination $bgInfoDir.FullName -Force
@@ -72,7 +72,7 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 WriteLog "Install NVIDIA Tesla Driver"
 Invoke-WebRequest "https://download.microsoft.com/download/7/3/6/7361d1b9-08c8-4571-87aa-18cf671e71a0/512.78_grid_win10_win11_server2016_server2019_server2022_64bit_azure_swl.exe" -OutFile "$tempDrive\nvidia-driver.exe"
 & "C:\Program Files\7-Zip\7z.exe" x "nvidia-driver.exe" "-onvidia"
-Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish" -Wait -PassThru
+Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish -s" -Wait -PassThru
 
 
 ########Install Optional programs

@@ -25,13 +25,13 @@ provider "azurerm" {
 data "azurerm_client_config" "current" {}
 
 locals {
-  region                  = "francecentral"
   resource_group_name     = var.resource_group_name
   os_admin_username       = "sinequa" // Windows Login Name
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0) // Windows Login Password
 
   sinequa_default_admin_password = element(concat(random_password.sq_passwd.*.result, [""]), 0) // Sinequa Admin user password
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):"" //Sinequa License
+  api_domain              = var.azure_environment == "AzureUSGovernment"?"usgovcloudapi.net":(var.azure_environment == "AzureGermanCloud"?"microsoftazure.de":(var.azure_environment == "AzureChinaCloud"?"vault.azure.cn":"windows.net"))
   
   //Sinequa Org & Grid  
   org_name                 = "sinequa"
@@ -48,7 +48,7 @@ locals {
   st_hot_name             = substr(join("",["sthot",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   st_container_name       = "sinequa"
 
-  data_storage_url        = "https://${local.st_premium_name}.blob.core.windows.net/${local.org_name}/grids/${local.grid_name}/"
+  data_storage_url        = "https://${local.st_premium_name}.blob.core.${local.api_domain}/${local.org_name}/grids/${local.grid_name}/"
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = "QueueCluster1(${local.node1_name})" //For Creating a Queuecluster during Cloud Init
   image_id                = var.image_id
@@ -119,6 +119,7 @@ module "kv_st_services" {
   grid_name             = local.grid_name
   admin_password        = local.os_admin_password
   default_admin_password = local.sinequa_default_admin_password
+  api_domain            = local.api_domain
 
   blob_sinequa_primary_nodes = local.primary_nodes 
   blob_sinequa_beta          = true

@@ -4,6 +4,13 @@ variable "location" {
   default       = "francecentral"
 }
 
+variable "api_domain" {
+  description   = "API domain suffix for Services"
+  type          = string
+  default       = "windows.net"
+}
+
+
 variable "resource_group_name" {
   description       = "The name of the resource group"
   type              = string

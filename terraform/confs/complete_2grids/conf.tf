@@ -25,13 +25,13 @@ provider "azurerm" {
 data "azurerm_client_config" "current" {}
 
 locals {
-  region                  = "francecentral"
   resource_group_name     = var.resource_group_name
   os_admin_username       = "sinequa" // Windows Login Name
   os_admin_password       = element(concat(random_password.passwd.*.result, [""]), 0) // Windows Login Password
 
   sinequa_default_admin_password = element(concat(random_password.sq_passwd.*.result, [""]), 0) // Sinequa Admin user password
   license                 = fileexists("../sinequa.license.txt")?file("../sinequa.license.txt"):"" //Sinequa License
+  api_domain              = var.azure_environment == "AzureUSGovernment"?"usgovcloudapi.net":(var.azure_environment == "AzureGermanCloud"?"microsoftazure.de":(var.azure_environment == "AzureChinaCloud"?"vault.azure.cn":"windows.net"))
 
   // ##############################################################################################################################
   // ### Sinequa Org parameters
@@ -63,7 +63,7 @@ locals {
   //    - Indexer vmss
   dev_os_indexer_name         = "vmss-dev-indexer" //Windows Computer Name
 
-  dev_data_storage_url        = "https://${local.st_premium_name}.blob.core.windows.net/${local.org_name}/grids/${local.dev_grid_name}/" 
+  dev_data_storage_url        = "https://${local.st_premium_name}.blob.core.${local.api_domain}/${local.org_name}/grids/${local.dev_grid_name}/" 
   
   dev_node_aliases            = {
     "node1" = local.dev_node1_name
@@ -92,7 +92,7 @@ locals {
   //    - Indexer vmss
   prd_os_indexer_name         = "vmss-prd-indexer" //Windows Computer Name
 
-  prd_data_storage_url        = "https://${local.st_premium_name}.blob.core.windows.net/${local.org_name}/grids/${local.prd_grid_name}/" 
+  prd_data_storage_url        = "https://${local.st_premium_name}.blob.core.${local.api_domain}/${local.org_name}/grids/${local.prd_grid_name}/" 
  
   prd_node_aliases            = {
     "node1" = local.prd_node1_name
@@ -133,7 +133,7 @@ resource "random_password" "sq_passwd" {
 // Create the resource group
 resource "azurerm_resource_group" "sinequa_rg" {
   name = local.resource_group_name
-  location = local.region
+  location = var.location
 
   tags = merge({
   },var.additional_tags)
@@ -169,6 +169,8 @@ module "kv_st_services" {
   org_name              = local.org_name
   default_admin_password = local.sinequa_default_admin_password
   blob_sinequa_keyvault  = local.kv_name
+  api_domain            = local.api_domain
+
   tags = merge({
   },var.additional_tags)
 

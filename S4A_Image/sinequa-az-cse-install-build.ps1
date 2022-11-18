@@ -49,7 +49,6 @@ $cloudInitServiceName = "sinequa.cloudinit.service"
 
 # Remove escaping character "xxxx" used for Invoke-AzVMRunCommand parameter limitations
 if ($fileUrl -and $fileUrl.length -gt 1 -and $fileUrl[0] -eq """" -and $fileUrl[$fileUrl.length-1] -eq """") { $fileUrl = $fileUrl -replace ".$" -replace "^." }
-
 	
 # Set Sinequa Azure OS Environment Variables
 WriteLog "Set Sinequa Azure OS Environment Variables";
@@ -79,7 +78,7 @@ if ((Test-Path $sinequaFolder) -and (Test-Path $versionFile)) {
 
 # Download the Sinequa Distribution
 if ($fileUrl) {
-    WriteLog "Download $($fileUrl)";
+    WriteLog "Download $($fileUrl) to $zipFile";
     Invoke-WebRequest $fileUrl -OutFile $zipFile
     if (-Not (Test-Path $sinequaScriptsFolder)) {
         New-Item $sinequaScriptsFolder -ItemType Directory

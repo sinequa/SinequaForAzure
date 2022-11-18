@@ -61,6 +61,7 @@ In the modules folder, scripts are provided to build blocks:
 | Variables                | Description |
 | ------------------------ | ----------- |
 | location                 | Azure location. |
+| api_domain               | API domain suffix for Services. Default is windows.net for Azure Commercial. |
 | resource_group_name      | Resource group for deployment. |
 | kv_name                  | Key vault to create. Name as to be unique on Azure. |
 | st_premium_name          | Primary Storage account to create. Name as to be unique on Azure. |
