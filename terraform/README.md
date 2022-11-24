@@ -78,7 +78,12 @@ In the modules folder, scripts are provided to build blocks:
 | blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
 | blob_sinequa_version     | Sinequa Version installed. Optional |
 | blob_sinequa_queuecluster | Sinequa cloud variable to create a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). Optional. |
-| blob_sinequa_node_aliases | Map of confiuguration Aliases. Optional. |
+| blob_sinequa_node_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_nodelist_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_engine_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_enginelist_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_indexer_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_indexerlist_aliases | Map of configuration Aliases. Optional. |
 | tags                     | Azure tags. Optional. |
 
 
@@ -96,7 +101,12 @@ In the modules folder, scripts are provided to build blocks:
 | blob_sinequa_keyvault    | Sinequa cloud variable to specify the key vault URL. |
 | blob_sinequa_version     | Sinequa Version installed. Optional |
 | blob_sinequa_queuecluster | Sinequa cloud variable to create a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). Optional. |
-| blob_sinequa_node_aliases | Map of confiuguration Aliases. Optional. |
+| blob_sinequa_node_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_nodelist_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_engine_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_enginelist_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_indexer_aliases | Map of configuration Aliases. Optional. |
+| blob_sinequa_indexerlist_aliases | Map of configuration Aliases. Optional. |
 
 * **vm**: Deploys a virtual machine.
 
