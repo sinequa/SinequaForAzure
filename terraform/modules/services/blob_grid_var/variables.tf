@@ -39,6 +39,32 @@ variable "blob_sinequa_node_aliases" {
     type            = map
     default         = {}
 }
+
+variable "blob_sinequa_nodelist_aliases" {
+    type            = map
+    default         = {}
+}
+
+variable "blob_sinequa_engine_aliases" {
+    type            = map
+    default         = {}
+}
+
+variable "blob_sinequa_enginelist_aliases" {
+    type            = map
+    default         = {}
+}
+
+variable "blob_sinequa_indexer_aliases" {
+    type            = map
+    default         = {}
+}
+
+variable "blob_sinequa_indexerlist_aliases" {
+    type            = map
+    default         = {}
+}
+
 variable "blob_sinequa_version" {
     type            = string
     default         = ""
