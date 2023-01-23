@@ -9,6 +9,12 @@ terraform {
     key                   = "<key name>" // e.g. dev.my_deployment.terraform.tfstate
   } 
   */
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=2.78.0"
+    }
+  }
 }
 
 provider "azurerm" {
