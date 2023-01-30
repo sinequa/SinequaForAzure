@@ -251,7 +251,7 @@ Minimum required size is 64GB, recommended type is Premium SSD
 
 Tag Name | Tag Value | Mandatory | Optional | Comment
 --- | --- | --- | --- | ---
-sinequa-data-storage-url | https://`{primary_storage_account_name}`.blob.core.windows.net/`{sinequa_org_container}`/grids/`{environment_name}` <br> ex:  `https://sinequaprimary.blob.core.windows.net/sinequa-enterprise-search/grids/dev/` | X | | Enable Primary Storage Account
+sinequa-data-storage-url | https://`{primary_storage_account_name}`.blob.core.windows.net/<br>`{sinequa_org_container}`/grids/`{environment_name}` <br><br> ex:  `https://sinequaprimary.blob.core.windows.net/`<br>`sinequa-enterprise-search/grids/dev/` | X | | Enable Primary Storage Account
 sinequa-node | `{node_name}` <br> ex: node-1 | X | | Node name
 sinequa-auto-disk | auto | | X | At VM start, raw disks are automatically partitioned. Mandatory if your image doesn't contains the data disk. sinequa-auto-disk is performed by the sinequa.cloudinit service
 sinequa-path | F:\sinequa | | X | Root folder for the Sinequa `data` folder. Default is Sinequa Binaries folder. Recommended to have the data folder on a different drive than the OS drive.
