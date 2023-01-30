@@ -78,17 +78,18 @@ Windows documentation: [Set Environment Variable in Windows operating system reg
 ## <a name="build_version_image_win_services"></a> Create Windows Services:
 
 Do **NOT** start the Sinequa services at this stage. Services will be started later on, when the VM will be deployed using the image.
+Services must be running using a admin account or localsystem account.
 
 Name | Start | BinPath | displayname | obj | Mandatory | Optional | Comment
 --- | --- | --- | --- | --- | --- | --- | ---
-sinequa.cloudinit.service | delayed-auto | C:\sinequa\bin\sinequa.cloudinit.exe -SinequaPath d:\sinequa | sinequa.cloudinit.service | | X | | sinequa.cloudinit.service will bootstrap  the VM and then start the sinequa.service
+sinequa.cloudinit.service | delayed-auto | C:\sinequa\bin\sinequa.cloudinit.exe | sinequa.cloudinit.service | | X | | sinequa.cloudinit.service will bootstrap  the VM and then start the sinequa.service
 sinequa.service | demand | C:\sinequa\bin\sinequa.service.exe | sinequa.service | NT Authority\NetworkService | X | | sinequa.service start the Sinequa Node on the VM
 
 Command line:
 
 Install sinequa.cloudinit.service
 
-> `sc.exe create sinequa.cloudinit.service start=delayed-auto binPath="C:\sinequa\bin\sinequa.cloudinit.exe -SinequaPath d:\sinequa" DisplayName="sinequa.cloudinit.service"`
+> `sc.exe create sinequa.cloudinit.service start=delayed-auto binPath="C:\sinequa\bin\sinequa.cloudinit.exe" DisplayName="sinequa.cloudinit.service"`
 
 Install sinequa.service
 
@@ -252,7 +253,7 @@ Tag Name | Tag Value | Mandatory | Optional | Comment
 --- | --- | --- | --- | ---
 sinequa-data-storage-url | https://`{primary_storage_account_name}`.blob.core.windows.net/`{sinequa_org_container}`/grids/`{environment_name}` <br> ex:  `https://sinequaprimary.blob.core.windows.net/sinequa-enterprise-search/grids/dev/` | X | | Enable Primary Storage Account
 sinequa-node | `{node_name}` <br> ex: node-1 | X | | Node name
-sinequa-auto-disk | auto | | X | At VM start, raw disks are automatically partitioned. Mandatory if your image doesn't contains the data disk.
+sinequa-auto-disk | auto | | X | At VM start, raw disks are automatically partitioned. Mandatory if your image doesn't contains the data disk. sinequa-auto-disk is performed by the sinequa.cloudinit service
 sinequa-path | F:\sinequa | | X | Root folder for the Sinequa `data` folder. Default is Sinequa Binaries folder. Recommended to have the data folder on a different drive than the OS drive.
 sinequa-primary-node-id | 1 | | X | Only for Primary Node. Note: You need at least one Primary Node
 
@@ -265,7 +266,7 @@ Tag Name | Tag Value |  Comment
 --- | --- | --- 
 sinequa-engine | `{engine_name}` <br> ex: engine-1 | Engine name
 sinequa-kestrel-webapp | `{webapp_name}` <br> ex: webapp-1 | WebApp name
-sinequa-webapp-fw-port | 80 | Opens windows firewall port 80 if not done in the image
+sinequa-webapp-fw-port | 80 | Opens windows firewall port 80 if not done in the image. Firewall is opened by the sinequa.cloudinit service
 
 ### <a name="azure_services_vm_identity"></a> User assigned managed identities
 
