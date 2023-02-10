@@ -65,3 +65,53 @@ resource "azurerm_storage_blob" "sinequa-node-aliases" {
   content_type           = "text/plain"
   source_content         = each.value
 }
+
+resource "azurerm_storage_blob" "sinequa-nodelist-aliases" {
+  for_each               = var.blob_sinequa_nodelist_aliases
+  name                   = "grids/${var.grid_name}/aliases/nodelist/${each.key}"
+  storage_account_name   = var.storage_account_name
+  storage_container_name = var.org_name
+  type                   = "Block"
+  content_type           = "text/plain"
+  source_content         = each.value
+}
+
+resource "azurerm_storage_blob" "sinequa-engine-aliases" {
+  for_each               = var.blob_sinequa_engine_aliases
+  name                   = "grids/${var.grid_name}/aliases/engine/${each.key}"
+  storage_account_name   = var.storage_account_name
+  storage_container_name = var.org_name
+  type                   = "Block"
+  content_type           = "text/plain"
+  source_content         = each.value
+}
+
+resource "azurerm_storage_blob" "sinequa-enginelist-aliases" {
+  for_each               = var.blob_sinequa_enginelist_aliases
+  name                   = "grids/${var.grid_name}/aliases/enginelist/${each.key}"
+  storage_account_name   = var.storage_account_name
+  storage_container_name = var.org_name
+  type                   = "Block"
+  content_type           = "text/plain"
+  source_content         = each.value
+}
+
+resource "azurerm_storage_blob" "sinequa-indexer-aliases" {
+  for_each               = var.blob_sinequa_indexer_aliases
+  name                   = "grids/${var.grid_name}/aliases/indexer/${each.key}"
+  storage_account_name   = var.storage_account_name
+  storage_container_name = var.org_name
+  type                   = "Block"
+  content_type           = "text/plain"
+  source_content         = each.value
+}
+
+resource "azurerm_storage_blob" "sinequa-indexerlist-aliases" {
+  for_each               = var.blob_sinequa_indexerlist_aliases
+  name                   = "grids/${var.grid_name}/aliases/indexerlist/${each.key}"
+  storage_account_name   = var.storage_account_name
+  storage_container_name = var.org_name
+  type                   = "Block"
+  content_type           = "text/plain"
+  source_content         = each.value
+}

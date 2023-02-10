@@ -137,6 +137,12 @@ module "grid_var" {
   blob_sinequa_queuecluster             = var.blob_sinequa_queuecluster
   blob_sinequa_authentication_enabled   = var.blob_sinequa_authentication_enabled
   blob_sinequa_node_aliases             = var.blob_sinequa_node_aliases
+  blob_sinequa_nodelist_aliases         = var.blob_sinequa_nodelist_aliases
+  blob_sinequa_engine_aliases             = var.blob_sinequa_engine_aliases
+  blob_sinequa_enginelist_aliases         = var.blob_sinequa_enginelist_aliases
+  blob_sinequa_indexer_aliases             = var.blob_sinequa_indexer_aliases
+  blob_sinequa_indexerlist_aliases         = var.blob_sinequa_indexerlist_aliases
+  
   blob_sinequa_version                  = var.blob_sinequa_version
 
   depends_on = [azurerm_storage_account.sinequa_st_premium,azurerm_storage_container.sinequa_st_premium_container]

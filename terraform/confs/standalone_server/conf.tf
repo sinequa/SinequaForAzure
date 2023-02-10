@@ -9,6 +9,12 @@ terraform {
     key                   = "<key name>" // e.g. dev.my_deployment.terraform.tfstate
   } 
   */
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=2.78.0"
+    }
+  }
 }
 
 provider "azurerm" {
@@ -83,7 +89,7 @@ resource "random_password" "sq_passwd" {
 // Create the resource group
 resource "azurerm_resource_group" "sinequa_rg" {
   name = local.resource_group_name
-  location = local.region
+  location = var.location
 
   tags = merge({
   },var.additional_tags)
@@ -125,7 +131,7 @@ module "kv_st_services" {
   blob_sinequa_beta          = true
   blob_sinequa_keyvault      = local.kv_name
   blob_sinequa_queuecluster  = local.queue_cluster
-
+  
   tags = merge({
   },var.additional_tags)
 
