@@ -114,8 +114,8 @@ resource "azurerm_storage_container" "sinequa_st_premium_container" {
 }
 
 
-resource "azurerm_storage_blob" "st-org-root-secondary" {
-  name                   = "var/st-org-root-secondary"
+resource "azurerm_storage_blob" "sinequa-secondary" {
+  name                   = "var/sinequa-secondary"
   storage_account_name   = azurerm_storage_account.sinequa_st_premium.name
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"

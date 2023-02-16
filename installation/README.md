@@ -215,7 +215,7 @@ Then, on the **Primary Storage Account**, you must create the following blobs:
 
 Path | Content | Comment
 --- | --- | ---
-`{sinequa_org_container}`/var/st-org-root-secondary <br/> ex: `sinequa-enterprise-search/var/st-org-root-secondary` | https://`{secondary_storage_account}`.`{api_doamin}`/`{sinequa_org_container}`  <br/> ex: `https://sinequasecondary.blob.core.windows.net/sinequa-enterprise-search` | Secondary storage definition
+`{sinequa_org_container}`/var/sinequa-secondary <br/> ex: `sinequa-enterprise-search/var/sinequa-secondary` | https://`{secondary_storage_account}`.`{api_doamin}`/`{sinequa_org_container}`  <br/> ex: `https://sinequasecondary.blob.core.windows.net/sinequa-enterprise-search` | Secondary storage definition
 `{sinequa_org_container}`/grids/`{environment_name}`/var/sinequa-primary-nodes <br/> ex: `sinequa-enterprise-search/grids/dev/var/sinequa-primary-nodes` | ex: 1=srpc://`{hostname}`:`{node_port}` <br/> `1=srpc://vm1:10301` | Primary Node(s) definition
 
 Sinequa For Azure (S4A) documentation: [Cloud Variables](https://github.com/sinequa/SinequaForAzure#213-cloud-variables--cloud-secrets--)

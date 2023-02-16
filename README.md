@@ -133,7 +133,7 @@ It concerns:
 
 As Blobs have not the same size and not the same frequency of access, a second storage could be used for leveraging cheaper SKUs.
 
-If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if this storage contains an org var called `st-org-root-secondary` then some blobs will be moved to this secondary Azure Storage account.
+If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if this storage contains an org var called `sinequa-secondary` then some blobs will be moved to this secondary Azure Storage account.
 
 #### Asure Storage SKU recommendations:
 - Primary Storage with the `Premium` sku for fast access and small content (blob < 10ko)
@@ -143,7 +143,7 @@ If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if 
 * Primary Storage (Premium --> blob <= 10K)
   * /`{org name}`
     * /var
-	  * /st-org-root-secondary => contains url of the secondary storage
+	  * /sinequa-secondary => contains url of the secondary storage
     * /grids
 	  * /`{grid name}`
 	    * /var
