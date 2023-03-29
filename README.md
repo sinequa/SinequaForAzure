@@ -7,7 +7,9 @@ In case you don't want to install Sinequa For Azure using the PowerShell and Ter
 #### Table of Contents
 0. [Prerequisistes](#prerequisites)<br>
 1. [Repository Content](#content)<br>
-2. [Sinequa Azure Features](#features)<br>
+1.1. [Build your own Sinequa image](#build)<br>
+1.2. [Deploy a Sinequa grid](#deploy)<br>
+3. [Sinequa Azure Features](#features)<br>
 2.1. [Cloud Init](#cloudinit)<br>
 2.2. [Leverage Storage Account](#storageaccount)<br>
 2.3. [Leverage a Secondary Storage Account](#secondarystorageaccount)<br>
@@ -23,8 +25,8 @@ In case you don't want to install Sinequa For Azure using the PowerShell and Ter
 ## 1. Repository Content <a name="content">
 
 This repository contains:
-* **[Powershell](./S4A_Image)** scripts to **[build your own Sinequa image](./S4A_Image)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
-* **[Terraform](./terraform)** samples to **[deploy a Sinequa grid](./terraform)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+* <a name="build"> **[Powershell](./S4A_Image)** scripts to **[build your own Sinequa image](./S4A_Image)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+* <a name="deploy"> **[Terraform](./terraform)** samples to **[deploy a Sinequa grid](./terraform)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 
 ![Sinequa For Azure](images/S4A.png)
 
