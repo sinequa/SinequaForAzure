@@ -226,7 +226,7 @@ PS C:\S4A\terraform\confs\complete_2grids> .\terraform apply
  * 1 key vault
  * 2 network security groups
  * 1 public IP address
- * 1 storage account
+ * 2 storage accounts
  * 1 virtual machine scale sets for indexer
  * 1 virtual network
  * 3 virtual machines for [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html)
@@ -246,7 +246,7 @@ PS C:\S4A\terraform\confs\complete_grid_with_app_gateway> .\terraform apply
  * 1 key vault
  * 1 network security
  * 1 public IP address
- * 1 storage account
+ * 2 storage accounts
  * 1 virtual network
  * 1 virtual machine for all roles (including on [primary node](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html))
 
