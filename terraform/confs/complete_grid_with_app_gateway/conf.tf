@@ -59,11 +59,11 @@ locals {
   indexer_capacity         = 3 // Max Number of VMSS Instances Allowed for Indexer
   indexer_vmss_size       = "Standard_B2s"
 
-  st_premium_name         = substr(join("",["st",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
-  st_hot_name             = substr(join("",["sthot",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_primary_name         = substr(join("",["st-prim-",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_secondary_name       = substr(join("",["st-sec-",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   st_container_name       = "sinequa"
 
-  data_storage_url        = "https://${local.st_premium_name}.blob.core.${local.api_domain}/${local.org_name}/grids/${local.grid_name}/"
+  data_storage_url        = "https://${local.st_primary_name}.blob.core.${local.api_domain}/${local.org_name}/grids/${local.grid_name}/"
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = "QueueCluster1(${local.node1_name},${local.node2_name},${local.node3_name})" //For Creating a Queuecluster during Cloud Init
   
@@ -155,8 +155,8 @@ module "kv_st_services" {
   resource_group_name   = azurerm_resource_group.sinequa_rg.name
   location              = azurerm_resource_group.sinequa_rg.location
   kv_name               = local.kv_name
-  st_premium_name       = local.st_premium_name
-  st_hot_name           = local.st_hot_name 
+  st_primary_name       = local.st_primary_name
+  st_secondary_name     = local.st_secondary_name 
   license               = local.license
   org_name              = local.org_name
   grid_name             = local.grid_name

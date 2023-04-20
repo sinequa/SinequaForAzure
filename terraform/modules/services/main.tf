@@ -73,7 +73,7 @@ resource "azurerm_key_vault_secret" "sinequa_authentication_secret" {
 
 
 resource "azurerm_storage_account" "sinequa_st_hot" {
-  name                     = var.st_hot_name
+  name                     = var.st_secondary_name
   location                 = var.location
   resource_group_name      = var.resource_group_name
   account_tier             = "Standard"
@@ -85,7 +85,7 @@ resource "azurerm_storage_account" "sinequa_st_hot" {
 }
 
 resource "azurerm_storage_account" "sinequa_st_premium" {
-  name                     = var.st_premium_name
+  name                     = var.st_primary_name
   location                 = var.location
   resource_group_name      = var.resource_group_name
   account_tier             = "Premium"
@@ -120,7 +120,7 @@ resource "azurerm_storage_blob" "sinequa-secondary" {
   storage_container_name = azurerm_storage_container.sinequa_st_premium_container.name
   type                   = "Block"
   content_type           = "text/plain"
-  source_content         = "https://${var.st_hot_name}.blob.core.${var.api_domain}/${var.org_name}"
+  source_content         = "https://${var.st_secondary_name}.blob.core.${var.api_domain}/${var.org_name}"
 
   depends_on = [azurerm_storage_container.sinequa_st_premium_container]
 }

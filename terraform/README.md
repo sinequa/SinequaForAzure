@@ -64,8 +64,8 @@ In the modules folder, scripts are provided to build blocks:
 | api_domain               | API domain suffix for Services. Default is windows.net for Azure Commercial. |
 | resource_group_name      | Resource group for deployment. |
 | kv_name                  | Key vault to create. Name as to be unique on Azure. |
-| st_premium_name          | Primary Storage account to create. Name as to be unique on Azure. |
-| st_hot_name              | Secondary Storage account to create. Name as to be unique on Azure. |
+| st_primary_name          | Primary Storage account to create. Name as to be unique on Azure. |
+| st_secondary_name        | Secondary Storage account to create. Name as to be unique on Azure. |
 | org_name                 | Organization Name. An Orgranization can contains several grids (like dev, prod) |
 | grid_name                | Grid Name to deploy (e.g: dev) |
 | license                  | Sinequa license to be uploaded in the key vault as secret. Optional. |
