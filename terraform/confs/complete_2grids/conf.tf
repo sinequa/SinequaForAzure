@@ -46,8 +46,8 @@ locals {
   data_disk_size           = 100 // Size of Datadisk (for data such as Indexes)
   indexer_capacity         = 3 // Max Number of VMSS Instances Allowed for Indexer
   indexer_vmss_size        = "Standard_B2s"
-  st_primary_name         = substr(join("",["st-prim-",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
-  st_secondary_name       = substr(join("",["st-sec-",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_primary_name         = substr(join("",["stprim",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_secondary_name       = substr(join("",["stsec",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   kv_name                 = substr(join("-",["kv",replace(md5(local.resource_group_name),"-","")]),0,24)
   queue_cluster           = "QueueCluster1(@_CloudAlias_node1,@_CloudAlias_node2,@_CloudAlias_node3)" //For Creating a Queuecluster during Cloud Init
 

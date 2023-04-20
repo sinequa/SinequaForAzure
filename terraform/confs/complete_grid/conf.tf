@@ -60,8 +60,8 @@ locals {
   indexer_capacity         = 3 // Max Number of VMSS Instances Allowed for Indexer
   indexer_vmss_size       = "Standard_B2s"
 
-  st_primary_name         = substr(join("",["st-prim-",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
-  st_secondary_name       = substr(join("",["st-sec-",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_primary_name         = substr(join("",["stprim",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_secondary_name       = substr(join("",["stsec",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
     
 
   data_storage_url        = "https://${local.st_primary_name}.blob.core.${local.api_domain}/${local.org_name}/grids/${local.grid_name}/"

@@ -50,8 +50,8 @@ locals {
   primary_node_vm_size    = "Standard_B2s"
   data_disk_size        = 100 // Size of Datadisk (for data such as Indexes)
 
-  st_primary_name         = substr(join("",["st-prim-",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
-  st_secondary_name       = substr(join("",["st-sec-",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_primary_name         = substr(join("",["stprim",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
+  st_secondary_name       = substr(join("",["stsec",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   st_container_name       = "sinequa"
 
   data_storage_url        = "https://${local.st_primary_name}.blob.core.${local.api_domain}/${local.org_name}/grids/${local.grid_name}/"
