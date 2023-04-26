@@ -78,6 +78,9 @@ $vmName = "vm-sq-" + $version.Replace(".","-")
 if ($vmName.Length -gt 14) {
     $vmName = $vmName.Substring(0,14)
 }
+# remove last char if it is a dash
+$vmName = $vmName.TrimEnd('-')
+
 $nodeName = "sq-version"
 
 
