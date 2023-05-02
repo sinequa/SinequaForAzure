@@ -54,22 +54,22 @@ We recommend to unzip the Sinequa binaries to the OS drive on the `C:\sinequa\` 
 
 Name | Value | Target | Mandatory | Optional | Comment
 --- | --- | --- | --- | --- | --- 
-SINEQUA_CLOUD | Azure | Machine | X | | Specify Sinequa Node to run in S4A mode 
+SINEQUA_CLOUD | Azure | Machine | X | | Specify Sinequa Node to run in S4A mode
+SINEQUA_LOG_INIT | Path=d:\;Level=10000 | Machine | X | | Set log level of all process before configuration is loaded. Enable Sinequa.cloudinit.service logs.
 SINEQUA_TEMP | d:\sinequa\temp | Machine | | X | Sinequa temp folder. By default the temp folder is located in *&lt;sinequa&gt;/temp*. It's recommended to leverage the local "Temp Storage" (Temp drive) of the VM instead of writing temp files in the distribution folder. Not all the VMs instances type have "Temp Storage", please refer to [Sizes for virtual machines in Azure](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes)
-SINEQUA_LOG_INIT | Path=d:\;Level=10000 | Machine | | X | Set log level of all process before configuration is loaded
 
 Sinequa For Azure (S4A) documentation: [Cloud Init](https://github.com/sinequa/SinequaForAzure#211-environment-variable--)
 
 **Command Lines:**
 
 Set SINEQUA_CLOUD
-> `[System.Environment]::SetEnvironmentVariable('SINEQUA_TEMP', 'd:\sinequa\temp',[System.EnvironmentVariableTarget]::Machine)`
-
-Set SINEQUA_TEMP
-> `[System.Environment]::SetEnvironmentVariable('SINEQUA_CLOUD', 'Azure',[System.EnvironmentVariableTarget]::Machine)`
+> [System.Environment]::SetEnvironmentVariable('SINEQUA_TEMP', 'd:\sinequa\temp',[System.EnvironmentVariableTarget]::Machine)
 
 Set SINEQUA_LOG_INIT
-> `[System.Environment]::SetEnvironmentVariable('SINEQUA_LOG_INIT', 'Path=d:\;Level=10000',[System.EnvironmentVariableTarget]::Machine)`
+> [System.Environment]::SetEnvironmentVariable('SINEQUA_LOG_INIT', 'Path=d:\;Level=10000',[System.EnvironmentVariableTarget]::Machine)
+
+Set SINEQUA_TEMP
+> [System.Environment]::SetEnvironmentVariable('SINEQUA_CLOUD', 'Azure',[System.EnvironmentVariableTarget]::Machine)
 
 Windows documentation: [Set Environment Variable in Windows operating system registry key](https://learn.microsoft.com/en-us/dotnet/api/system.environment.setenvironmentvariable?view=net-7.0#system-environment-setenvironmentvariable(system-string-system-string-system-environmentvariabletarget))
 
@@ -89,11 +89,11 @@ Command line:
 
 Install sinequa.cloudinit.service
 
-> `sc.exe create sinequa.cloudinit.service start=delayed-auto binPath="C:\sinequa\bin\sinequa.cloudinit.exe" DisplayName="sinequa.cloudinit.service"`
+> sc.exe create sinequa.cloudinit.service start=delayed-auto binPath="C:\sinequa\bin\sinequa.cloudinit.exe" DisplayName="sinequa.cloudinit.service"
 
 Install sinequa.service
 
-> `sc.exe create sinequa.service start=demand obj="NT Authority\NetworkService" binPath="C:\sinequa\bin\sinequa.service.exe" DisplayName="sinequa.service"`
+> sc.exe create sinequa.service start=demand obj="NT Authority\NetworkService" binPath="C:\sinequa\bin\sinequa.service.exe" DisplayName="sinequa.service"
 
 Windows documentation: [Creates a subkey and entries for a service in the registry and in the Service Control Manager database](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sc-create)
 
@@ -181,6 +181,8 @@ Create a new *User assigned managed identity*, this identity will be refereed as
 - Key Vault 
 - VM Scale Set
 
+NOTE: You must have only one "user assigned identity" and zero "System assigned identity". Otherwise, the sinequa.cloudinit.service will fail to connect to the storage account(s).
+
 <br>
 
 ## <a name="azure_services_sa"></a> Azure - Storage Accounts 
@@ -251,7 +253,7 @@ Minimum required size is 64GB, recommended type is Premium SSD
 
 Tag Name | Tag Value | Mandatory | Optional | Comment
 --- | --- | --- | --- | ---
-sinequa-data-storage-url | https://`{primary_storage_account_name}`.blob.core.windows.net/`{sinequa_org_container}`/grids/`{environment_name}` <br> ex:  `https://sinequaprimary.blob.core.windows.net/sinequa-enterprise-search/grids/dev/` | X | | Enable Primary Storage Account
+sinequa-data-storage-url | https://`{primary_storage_account_name}`.blob.core.windows.net/<br>`{sinequa_org_container}`/grids/`{environment_name}` <br><br> ex:  `https://sinequaprimary.blob.core.windows.net/`<br>`sinequa-enterprise-search/grids/dev/` | X | | Enable Primary Storage Account
 sinequa-node | `{node_name}` <br> ex: node-1 | X | | Node name
 sinequa-auto-disk | auto | | X | At VM start, raw disks are automatically partitioned. Mandatory if your image doesn't contains the data disk. sinequa-auto-disk is performed by the sinequa.cloudinit service
 sinequa-path | F:\sinequa | | X | Root folder for the Sinequa `data` folder. Default is Sinequa Binaries folder. Recommended to have the data folder on a different drive than the OS drive.
