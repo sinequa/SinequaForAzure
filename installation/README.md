@@ -54,22 +54,22 @@ We recommend to unzip the Sinequa binaries to the OS drive on the `C:\sinequa\` 
 
 Name | Value | Target | Mandatory | Optional | Comment
 --- | --- | --- | --- | --- | --- 
-SINEQUA_CLOUD | Azure | Machine | X | | Specify Sinequa Node to run in S4A mode 
+SINEQUA_CLOUD | Azure | Machine | X | | Specify Sinequa Node to run in S4A mode
+SINEQUA_LOG_INIT | Path=d:\;Level=10000 | Machine | X | | Set log level of all process before configuration is loaded. Enable Sinequa.cloudinit.service logs.
 SINEQUA_TEMP | d:\sinequa\temp | Machine | | X | Sinequa temp folder. By default the temp folder is located in *&lt;sinequa&gt;/temp*. It's recommended to leverage the local "Temp Storage" (Temp drive) of the VM instead of writing temp files in the distribution folder. Not all the VMs instances type have "Temp Storage", please refer to [Sizes for virtual machines in Azure](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes)
-SINEQUA_LOG_INIT | Path=d:\;Level=10000 | Machine | | X | Set log level of all process before configuration is loaded
 
 Sinequa For Azure (S4A) documentation: [Cloud Init](https://github.com/sinequa/SinequaForAzure#211-environment-variable--)
 
 **Command Lines:**
 
 Set SINEQUA_CLOUD
-> `[System.Environment]::SetEnvironmentVariable('SINEQUA_TEMP', 'd:\sinequa\temp',[System.EnvironmentVariableTarget]::Machine)`
-
-Set SINEQUA_TEMP
-> `[System.Environment]::SetEnvironmentVariable('SINEQUA_CLOUD', 'Azure',[System.EnvironmentVariableTarget]::Machine)`
+> [System.Environment]::SetEnvironmentVariable('SINEQUA_TEMP', 'd:\sinequa\temp',[System.EnvironmentVariableTarget]::Machine)
 
 Set SINEQUA_LOG_INIT
-> `[System.Environment]::SetEnvironmentVariable('SINEQUA_LOG_INIT', 'Path=d:\;Level=10000',[System.EnvironmentVariableTarget]::Machine)`
+> [System.Environment]::SetEnvironmentVariable('SINEQUA_LOG_INIT', 'Path=d:\;Level=10000',[System.EnvironmentVariableTarget]::Machine)
+
+Set SINEQUA_TEMP
+> [System.Environment]::SetEnvironmentVariable('SINEQUA_CLOUD', 'Azure',[System.EnvironmentVariableTarget]::Machine)
 
 Windows documentation: [Set Environment Variable in Windows operating system registry key](https://learn.microsoft.com/en-us/dotnet/api/system.environment.setenvironmentvariable?view=net-7.0#system-environment-setenvironmentvariable(system-string-system-string-system-environmentvariabletarget))
 
@@ -89,11 +89,11 @@ Command line:
 
 Install sinequa.cloudinit.service
 
-> `sc.exe create sinequa.cloudinit.service start=delayed-auto binPath="C:\sinequa\bin\sinequa.cloudinit.exe" DisplayName="sinequa.cloudinit.service"`
+> sc.exe create sinequa.cloudinit.service start=delayed-auto binPath="C:\sinequa\bin\sinequa.cloudinit.exe" DisplayName="sinequa.cloudinit.service"
 
 Install sinequa.service
 
-> `sc.exe create sinequa.service start=demand obj="NT Authority\NetworkService" binPath="C:\sinequa\bin\sinequa.service.exe" DisplayName="sinequa.service"`
+> sc.exe create sinequa.service start=demand obj="NT Authority\NetworkService" binPath="C:\sinequa\bin\sinequa.service.exe" DisplayName="sinequa.service"
 
 Windows documentation: [Creates a subkey and entries for a service in the registry and in the Service Control Manager database](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sc-create)
 
@@ -180,6 +180,8 @@ Create a new *User assigned managed identity*, this identity will be refereed as
 - Primary and Secondary Storage accounts
 - Key Vault 
 - VM Scale Set
+
+NOTE: You must have only one "user assigned identity" and zero "System assigned identity". Otherwise, the sinequa.cloudinit.service will fail to connect to the storage account(s).
 
 <br>
 
