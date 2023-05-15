@@ -58,7 +58,7 @@ Note: Cloud tags are available as "Environment Variables" in the product with th
 |	sinequa-data-storage-url   | https://`{storage account name}`.blob.core.windows.net/`{container}`/grids/`{grid-name}` | Used to enable storage of:<br>* Configuration<br>* User settings<br>* Document cache<br>* Log store<br>* Audit store<br>and to declare cloud variables <br>(see bellow).|
 |   sinequa-auto-disk          | "auto" or JSON value                | When adding data disks to an Azure VM, they are not partitioned/formatted. If you select "auto", all raw disks are automaticaly enabled. |
 |	sinequa-path		       | "f:\sinequa".  Default is `distrib_path` | `sinequa-path` is the root folder for all customer data, as opposed to `distrib-path` that only contains binaries on the OS disk. `sinequa-path` should be located on a dedicated Azure data disk. |
-|	sinequa-index-path	       | "g:\sinequa". Optional. Default is sinequa-path | `sinequa-index-path` is the root folder for all indexes. It is recommended to use it for NVMe disks. | 
+|	sinequa-index-path	       | "g:\sinequa\indexes". Optional. Default is `sinequa-path\indexes` | `sinequa-index-path` is the root folder for all indexes. It is recommended to use it for NVMe disks. | 
 |	sinequa-node               | "node1"                             | Node name. |
 |   sinequa-primary-node-id    | 1 (or 2 or 3 or empty)              | To be used on [primary nodes](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-primary-nodes.html). |
 |	sinequa-kestrel-webapp     | "webapp1"                           | Name of the [ Kestrel WebApp](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-webapps.html) to be created and started on this node.  |
