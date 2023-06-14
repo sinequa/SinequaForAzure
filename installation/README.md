@@ -3,30 +3,31 @@
 
 If you don't want to use the Sinequa PowerShell samples to build the Sinequa version Image or deploy your Sinequa environment in Azure using the Sinequa Terraform samples scripts, you can follow the procedure described bellow.
 
-* [Build your Sinequa Version Image](#build_version_image)
-    * [Deploy Sinequa distribution ](#build_version_image_dist)
-    * [Set Windows environment variables](#build_version_image_env_vars)
-    * [Create Windows Services](#build_version_image_win_services)
-    * [Open Ports](#build_version_image_win_ports)
-    * [Generalize VM and Build Image](#build_version_image_gen_build_img)
-* [Provision Azure Services](#azure_services)
-    * [Azure - Managed Identity](#azure_services_identity)
-    * [Azure - Storage Accounts](#azure_services_sa)
-        * [Create container (Organization)](#azure_services_sa_container)
-        * [Create Blobs](#azure_services_sa_blobs)
-        * [Role Assignments](#azure_services_roles)
-    * [Azure - Storage Accounts](#azure_services_vm)
-        * [Data Disk](#azure_services_vm_disk)
-        * [Tags](#azure_services_vm_tags)
-        * [User assigned managed identities](#azure_services_vm_identity)
-    * [Azure - Key Vault (optional)](#azure_services_kv)
-        * [Create Blob](#azure_services_kv_blob)
-        * [Role Assignment](#azure_services_kv_role)
-        * [Add Secrets](#azure_services_kv_secret)
-    * [Azure - VM Scale Set (optional)](#azure_services_vmss)
-        * [Tags](#azure_services_vmss_tags)
-        * [User assigned managed identities](#azure_services_vmss_identity)
-        * [Role Assignments](#azure_services_vmss_roles)
+- [Sinequa for Azure - Deploy using agnostic Infrastructure as Code](#sinequa-for-azure---deploy-using-agnostic-infrastructure-as-code)
+- [ Build your Sinequa Version Image](#-build-your-sinequa-version-image)
+  - [ Deploy Sinequa distribution](#-deploy-sinequa-distribution)
+  - [ Set Windows environment variables](#-set-windows-environment-variables)
+  - [ Create Windows Services:](#-create-windows-services)
+  - [ Open ports](#-open-ports)
+  - [ Generalize VM and Build Image](#-generalize-vm-and-build-image)
+- [ Provision Azure Services](#-provision-azure-services)
+  - [ Azure - Managed Identity](#-azure---managed-identity)
+  - [ Azure - Storage Accounts](#-azure---storage-accounts)
+    - [ Create container (Organization)](#-create-container-organization)
+    - [ Create Blobs](#-create-blobs)
+    - [ Role Assignments](#-role-assignments)
+  - [ Azure - VM](#-azure---vm)
+    - [ Data Disk](#-data-disk)
+    - [ Tags](#-tags)
+    - [ User assigned managed identities](#-user-assigned-managed-identities)
+  - [ Azure - Key Vault (optional)](#-azure---key-vault-optional)
+    - [ Create Blob](#-create-blob)
+    - [ Role Assignment](#-role-assignment)
+    - [ Add Secrets](#-add-secrets)
+  - [ Azure - VM Scale Set (optional)](#-azure---vm-scale-set-optional)
+    - [ Tags](#-tags-1)
+    - [ User assigned managed identities](#-user-assigned-managed-identities-1)
+    - [ Role Assignments](#-role-assignments-1)
 
 <br><br>
 
@@ -138,12 +139,12 @@ VM Scale Set | | X | Dynamic pool of indexers. If you don't want to use the S4A 
 
 <br>
 
-When provisioning the resources, please include the Sinequa Partner ID in your scripts.
+When provisioning the resources, please include the Sinequa Partner Tracking GUID in your scripts.
 
-**Sinequa Partner ID**: `947f5924-5e20-4f0a-96eb-808371995ac8`
+**Sinequa Partner Tracking GUID**: `947f5924-5e20-4f0a-96eb-808371995ac8`
 
 ARM Documentation: [Add a GUID to a Resource Manager template
-](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/marketplace/azure-partner-customer-usage-attribution.md#add-a-guid-to-a-resource-manager-template)
+](https://learn.microsoft.com/en-us/partner-center/marketplace/azure-partner-customer-usage-attribution#add-a-guid-to-a-resource-manager-template)
 
 Terraform Documentation: [Partner ID a GUID/UUID registered with Microsoft to facilitate partner resource
 ](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs#partner_id)
