@@ -2,6 +2,8 @@
 
 Sinequa For Azure (S4A) is a set of capabilities and dedicated features designed for Azure.
 
+This repository contains resources for deploying a S4A grid. Sinequa For Azure features are included in the Sinequa distribution 11.7.0 version and above.
+
 In case you don't want to install Sinequa For Azure using the PowerShell and Terraform scripts, you can read this guide: [S4A - Deploy using agnostic Infrastructure as Code](./installation)
 
 #### Table of Contents
