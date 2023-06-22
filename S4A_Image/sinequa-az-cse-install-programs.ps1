@@ -69,12 +69,15 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 (Get-WmiObject -class "Win32_TSGeneralSetting" -Namespace root\cimv2\terminalservices -ComputerName $env:COMPUTERNAME -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(0)
 
 # Install NVIDIA GPU Driver
+# it requires to run this script on a VM with GPU, otherwise the driver is not installed in the image
 # https://learn.microsoft.com/fr-fr/azure/virtual-machines/windows/n-series-driver-setup
-WriteLog "Install NVIDIA Tesla Driver"
+WriteLog "Download NVIDIA Driver"
 Invoke-WebRequest "https://download.microsoft.com/download/2/5/a/25ad21ca-ed89-41b4-935f-73023ef6c5af/528.89_grid_win10_win11_server2019_server2022_dch_64bit_international_Azure_swl.exe" -OutFile "$tempDrive\nvidia-driver.exe"
 & "C:\Program Files\7-Zip\7z.exe" x "nvidia-driver.exe" "-onvidia"
+WriteLog "Install NVIDIA Driver"
 Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish -s" -Wait -PassThru
-
+WriteLog "Check Install of NVIDIA Driver"
+& "nvidia-smi.exe"
 
 ########Install Optional programs
 
@@ -96,7 +99,7 @@ Start-Process -FilePath "VSCodeSetup.exe" -Args "/VERYSILENT /NORESTART /MERGETA
 
 # GIT Client (can be removed)
 WriteLog "Install Git Client"
-Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.30.2.windows.1/Git-2.30.2-64-bit.exe" -OutFile "$tempDrive\git.exe"
+Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.41.0.windows.1/Git-2.41.0-64-bit.exe" -OutFile "$tempDrive\git.exe"
 Start-Process -FilePath "git.exe" -Args "/VERYSILENT /NORESTART /MERGETASKS=!runcode" -Wait -PassThru
 
 <#
