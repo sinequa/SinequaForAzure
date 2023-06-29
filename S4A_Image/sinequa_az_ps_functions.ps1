@@ -194,7 +194,7 @@ function SqAzurePSCreateVMforNode(
     $pipId = $null
     if ($createPip) {
         WriteLog "[$($vmName)] Creating public IP address: $pipName"
-        $pip = New-AzPublicIpAddress -ResourceGroupName $resourceGroup.ResourceGroupName-Location $resourceGroup.Location -AllocationMethod "Dynamic" -Name $pipName -Tag @{Sinequa_Grid=$prefix} -Force
+        $pip = New-AzPublicIpAddress -ResourceGroupName $resourceGroup.ResourceGroupName-Location $resourceGroup.Location -AllocationMethod "Static" -Name $pipName -Tag @{Sinequa_Grid=$prefix} -Force
         $pipId = $pip.Id
     }
 
