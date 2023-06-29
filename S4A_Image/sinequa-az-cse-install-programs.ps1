@@ -77,7 +77,13 @@ Invoke-WebRequest "https://download.microsoft.com/download/2/5/a/25ad21ca-ed89-4
 WriteLog "Install NVIDIA Driver"
 Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish -s" -Wait -PassThru
 WriteLog "Check Install of NVIDIA Driver"
-& "nvidia-smi.exe"
+if ( Get-Command nvidia-smi.exe -ErrorAction SilentlyContinue) 
+{
+    & "nvidia-smi.exe"
+} else {
+    WriteLog "Driver not installed"
+}
+
 
 ########Install Optional programs
 
