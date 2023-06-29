@@ -81,7 +81,7 @@ if ( Get-Command nvidia-smi.exe -ErrorAction SilentlyContinue)
 {
     & "nvidia-smi.exe"
 } else {
-    WriteLog "Driver not installed"
+    WriteLog "Driver not installed. Please check that the current machine has GPU."
 }
 
 
