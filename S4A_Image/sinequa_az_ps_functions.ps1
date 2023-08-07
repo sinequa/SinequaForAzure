@@ -194,7 +194,7 @@ function SqAzurePSCreateVMforNode(
     $pipId = $null
     if ($createPip) {
         WriteLog "[$($vmName)] Creating public IP address: $pipName"
-        $pip = New-AzPublicIpAddress -ResourceGroupName $resourceGroup.ResourceGroupName-Location $resourceGroup.Location -AllocationMethod "Dynamic" -Name $pipName -Tag @{Sinequa_Grid=$prefix} -Force
+        $pip = New-AzPublicIpAddress -ResourceGroupName $resourceGroup.ResourceGroupName-Location $resourceGroup.Location -AllocationMethod "Static" -Name $pipName -Tag @{Sinequa_Grid=$prefix} -Force
         $pipId = $pip.Id
     }
 
@@ -512,7 +512,7 @@ function SqAzGetImageByRefId($referenceId, $context){
     return $image
 }
 
-function SqAzurePSCreateImageVersion($resourceGroup, $galleryName, $imageDefinitionName, $version, $image) {
+function SqAzurePSCreateImageVersion($resourceGroup, $galleryName, $imageDefinitionName, $version, $image, $targetRegions) {
     <#
     .SYNOPSIS
         Create an Image Version in a Gallery from an image
@@ -549,9 +549,18 @@ function SqAzurePSCreateImageVersion($resourceGroup, $galleryName, $imageDefinit
 
     #Create a new version for the image
     WriteLog "Create Image Version: $igVersion"
-    $region1 = @{Name=$image.Location;ReplicaCount=1}
-    #$region2 = @{Name="westeurope";ReplicaCount=1}
-    $targetRegions = @($region1)
+    $targets = @()    
+    if ($targetRegions) {
+        foreach ($t in $targetRegions) {
+            $region2 = @{Name=$t;ReplicaCount=1}
+            $targets += $region2
+        }
+    } else {
+        $region1 = @{Name=$image.Location;ReplicaCount=1}
+        $targets += $region1    
+    }
+    WriteLog "replicated in:"
+    $targets
     $expiration = ((Get-Date).AddYears(1)).ToString("yyyy-MM-dd")
 
     return New-AzGalleryImageVersion `
@@ -560,7 +569,7 @@ function SqAzurePSCreateImageVersion($resourceGroup, $galleryName, $imageDefinit
     -GalleryName $galleryName `
     -ResourceGroupName $resourceGroup.ResourceGroupName `
     -Location $resourceGroup.Location `
-    -TargetRegion $targetRegions `
+    -TargetRegion $targets `
     -SourceImageId $image.Id `
     -PublishingProfileEndOfLifeDate $expiration    
 }

@@ -38,6 +38,9 @@ param (
     [Parameter(HelpMessage = "Image Definition Name")]
     [string]    $imageDefinitionName = "sinequa-11-nightly",    
 
+    [Parameter(HelpMessage = "Image Definition Target Regions; eg. ""-targetRegions @('westeurope','francecentral')""")]
+    [array]    $targetRegions,    
+
     [Parameter(HelpMessage = "Sinequa Image Name to share")]
     [string]    $imageName,    
 
@@ -79,10 +82,14 @@ $rg = Get-AzResourceGroup -Name $imageResourceGroupName -Location $location
 # Get Image
 WriteLog "Get '$imageName' Image"
 $image = Get-AzImage -ResourceGroupName $imageResourceGroupName -ImageName $imageName
+if (!$image) {
+    WriteError("'$imageName' not found")
+    Exit 1   
+}
 
 # Create Image Definition
 WriteLog "Create '$galleryName/$imageDefinitionName' Image Definition "
-$imageDef = SqAzurePSCreateImageVersion -resourceGroup $rg -galleryName $galleryName -imageDefinitionName $imageDefinitionName -version $version -image $image
+$imageDef = SqAzurePSCreateImageVersion -resourceGroup $rg -galleryName $galleryName -imageDefinitionName $imageDefinitionName -version $version -image $image -targetRegions $targetRegions
 $imageDef
 
 #Delete old images
