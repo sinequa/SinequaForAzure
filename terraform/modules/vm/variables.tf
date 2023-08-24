@@ -83,9 +83,9 @@ variable "linked_to_application_gateway" {
     default         = false
 }
 
-variable "backend_address_pool_id" {
-    type            = string
-    default         = ""
+variable "backend_address_pool_ids" {
+    type            = list(string)
+    default         = []
 }
 
 variable "network_security_group_id" {

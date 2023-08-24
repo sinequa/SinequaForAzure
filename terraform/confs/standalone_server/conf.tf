@@ -12,7 +12,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=2.78.0"
+      version = "=3.68.0"
     }
   }
 }
@@ -48,7 +48,7 @@ locals {
   node1_name              = local.node1_osname //Name in Sinequa Grid
   primary_nodes           = "1=srpc://${local.node1_osname}:10301" // sRPC Connection String
   primary_node_vm_size    = "Standard_B2s"
-  data_disk_size        = 100 // Size of Datadisk (for data such as Indexes)
+  data_disk_size          = 100 // Size of DataDisk (for data such as Indexes)
 
   st_primary_name         = substr(join("",["stprim",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
   st_secondary_name       = substr(join("",["stsec",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
