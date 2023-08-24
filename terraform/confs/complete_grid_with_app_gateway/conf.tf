@@ -12,7 +12,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=2.78.0"
+      version = "=3.68.0"
     }
   }
 }
@@ -52,7 +52,7 @@ locals {
   node3_name              = local.node3_osname //Name in Sinequa Grid
   primary_nodes           = "1=srpc://${local.node1_osname}:10301;2=srpc://${local.node2_osname}:10301;3=srpc://${local.node3_osname}:10301" // sRPC Connection String
   primary_node_vm_size    = "Standard_B2s"
-  data_disk_size        = 100 // Size of Datadisk (for data such as Indexes)
+  data_disk_size          = 100 // Size of DataDisk (for data such as Indexes)
 
   // Indexer vmss
   os_indexer_name         = "vmss-indexer" //Windows Computer Name
@@ -192,7 +192,7 @@ module "vm-primary-node1" {
   user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
-  backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
+  backend_address_pool_ids = module.frontend.ag.backend_address_pool[*].id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
   pip                   = true
@@ -227,7 +227,7 @@ module "vm-primary-node2" {
   user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = true
-  backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
+  backend_address_pool_ids = module.frontend.ag.backend_address_pool[*].id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
   pip                   = false
@@ -262,7 +262,7 @@ module "vm-primary-node3" {
   user_identity_id      = module.kv_st_services.id.id
   availability_set_id   = module.frontend.as.id
   linked_to_application_gateway = false
-  backend_address_pool_id = module.frontend.ag.backend_address_pool[0].id
+  backend_address_pool_ids = module.frontend.ag.backend_address_pool[*].id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
   pip                   = false

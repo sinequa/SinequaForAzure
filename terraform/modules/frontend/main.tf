@@ -71,12 +71,14 @@ resource "azurerm_application_gateway" "sinequa_ag" {
     http_listener_name         = "httpslistener"
     backend_address_pool_name  = "sinequaBackendPool"
     backend_http_settings_name = "HTTP"
+    priority                   = 100
   }
   
   dynamic "identity" {
     for_each = var.kv_identity_reader[*]
     content {
       identity_ids = identity.value.identity_ids
+      type = "UserAssigned"
     }
   }
  

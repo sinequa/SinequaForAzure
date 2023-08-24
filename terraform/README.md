@@ -128,7 +128,7 @@ In the modules folder, scripts are provided to build blocks:
 | availability_set_id      | Availability set for the application gateway. |
 | pip                      | Add a public IP if needed. |
 | linked_to_application_gateway | The VM is linked to an application gateway. |
-| backend_address_pool_id  | Backend address pool ID of the application gateway. Required for VM with WebApp. |
+| backend_address_pool_ids  | Backend address pool IDs of the application gateway. Required for VM with WebApp. Only the first one is used.|
 | network_security_group_id | Network security group of the VM. |
 | datadisk_ids             | Provide existing data disks for attaching them, instead of creating empty disks. Optional. |
 | private_ip_address       | Set a static IP on the VM. If not used a dynamic IP is used. |

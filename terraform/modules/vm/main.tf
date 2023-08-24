@@ -33,7 +33,7 @@ resource "azurerm_network_interface_application_gateway_backend_address_pool_ass
   count                   = var.linked_to_application_gateway?1:0
   network_interface_id    = azurerm_network_interface.sinequa_vm_nic.id
   ip_configuration_name   = azurerm_network_interface.sinequa_vm_nic.ip_configuration[0].name
-  backend_address_pool_id = var.backend_address_pool_id
+  backend_address_pool_id = var.backend_address_pool_ids[0]
 
   depends_on = [azurerm_network_interface.sinequa_vm_nic]
 }
@@ -82,7 +82,7 @@ resource "azurerm_virtual_machine" "sinequa_vm" {
 }
 
 resource "azurerm_managed_disk" "sinequa_vm_datadisk" {
-  count                = length(var.datadisk_ids) == 0?1:0
+  count                = (length(var.datadisk_ids) == 0) && (var.data_disk_size > 0)?1:0
   name                 = local.data_disk_name
   location             = var.location
   resource_group_name  = var.resource_group_name
@@ -93,7 +93,7 @@ resource "azurerm_managed_disk" "sinequa_vm_datadisk" {
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "sinequa_vm_datadisk_attach" {
-  count              = length(var.datadisk_ids) == 0?1:0
+  count              = (length(var.datadisk_ids) == 0) && (var.data_disk_size > 0)?1:0
   managed_disk_id    = azurerm_managed_disk.sinequa_vm_datadisk[0].id
   virtual_machine_id = azurerm_virtual_machine.sinequa_vm.id
   lun                = "0"
