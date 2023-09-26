@@ -92,11 +92,6 @@ WriteLog "Install Google Chrome"
 Invoke-WebRequest "http://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile "$tempDrive\chrome_installer.exe"
 Start-Process -FilePath "chrome_installer.exe" -Args "/silent /install" -Verb RunAs -Wait
 
-# NotePad++ (can be removed)
-WriteLog "Install Notepad++"
-[xml]$npp = (New-Object System.Net.WebClient).DownloadString("https://notepad-plus-plus.org/update/getDownloadUrl.php")
-Invoke-WebRequest $npp.GUP.Location -OutFile "$tempDrive\npp.Installer.exe"
-Start-Process -FilePath "npp.Installer.exe" -Args "/S" -Wait -PassThru
 
 # Visual Code (can be removed)
 WriteLog "Install Visual Code"
