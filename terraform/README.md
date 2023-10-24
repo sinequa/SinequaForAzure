@@ -124,7 +124,6 @@ In the modules folder, scripts are provided to build blocks:
 | admin_username           | OS user login. |
 | admin_password           | OS user password. |
 | key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VM identity. |
-| storage_account_id       | Storage account used for Sinequa cloud variable and container. Needed to grant read/write access on the VM identity. |
 | availability_set_id      | Availability set for the application gateway. |
 | pip                      | Add a public IP if needed. |
 | linked_to_application_gateway | The VM is linked to an application gateway. |
@@ -150,7 +149,6 @@ In the modules folder, scripts are provided to build blocks:
 | admin_username           | OS user login. |
 | admin_password           | OS user password. |
 | key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VMSS identity. |
-| storage_account_id       | Storage account used for Sinequa cloud variable and container. Needed to grant read/write access on the VMSS identity. |
 | network_security_group_id | Network security group of the VM. |
 | primary_node_vm_principal_ids | List of principals (VM identity) of Primary Nodes, it's required for managing the scale up/down of the Scaleset from the platform. |
 | tags                     | Azure tags to specify Sinequa roles. |
@@ -281,7 +279,6 @@ module "vm-node4" {
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
 
@@ -320,7 +317,6 @@ module "vmss-connectors" {
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
   key_vault_id          = module.kv_st_services.kv.id
-  storage_account_id    = module.kv_st_services.st.id
   network_security_group_id = module.network.nsg_app.id
 
   tags = {
