@@ -58,8 +58,9 @@ variable "vm_size" {
 source "azure-arm" "build-image" {
   tenant_id                         = var.tenant_id
   subscription_id                   = var.subscription_id
-  use_azure_cli_auth                = true
   build_resource_group_name         = var.resource_group_name
+
+  #use_azure_cli_auth                = true
 
   os_type                           = "Windows"
   image_offer                       = "WindowsServer"
