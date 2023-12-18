@@ -40,6 +40,7 @@ variable "version" {
 variable "download_token" {
   description = "Build Download Token"
   type        = string
+  default     = ""
 }
 
 variable "download_url" {
