@@ -8,6 +8,9 @@
 *.tfstate.*
 **/*.tfvars
 
+# .pkr files
+**/*.pkrvars.*
+
 # .zip files
 *.zip
 
