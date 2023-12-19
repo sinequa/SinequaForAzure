@@ -21,6 +21,16 @@ variable "subscription_id" {
   type        = string
 }
 
+variable "client_id" {
+  description = "Client ID"
+  type        = string
+}
+
+variable "client_secret" {
+  description = "Client Secret"
+  type        = string
+}
+
 variable "additional_tags" {
   description = "Tags for all resources"
   type        = map(string)
@@ -32,8 +42,8 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "version" {
-  description = "Sinequa Version to install"
+variable "image_name" {
+  description = "Image name to build"
   type        = string
 }
 
@@ -80,7 +90,10 @@ variable "gallery_regions" {
 source "azure-arm" "build-image" {
   tenant_id                         = var.tenant_id
   subscription_id                   = var.subscription_id
-  use_azure_cli_auth                = true
+  client_id                         = var.client_id
+  client_secret                     = var.client_secret
+  #use_azure_cli_auth                = true
+
   build_resource_group_name         = var.resource_group_name
 
   os_type                           = "Windows"

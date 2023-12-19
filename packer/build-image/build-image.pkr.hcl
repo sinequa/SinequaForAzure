@@ -42,8 +42,8 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "version" {
-  description = "Sinequa Version to install"
+variable "image_name" {
+  description = "Image name to build"
   type        = string
 }
 
@@ -88,7 +88,7 @@ source "azure-arm" "build-image" {
 
   azure_tags                        = var.additional_tags
 
-  managed_image_name                = "sinequa-${var.version}"
+  managed_image_name                = var.image_name
   managed_image_resource_group_name = var.resource_group_name
 }
 
