@@ -21,20 +21,12 @@ WriteLog "Install Nuget"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 
-#Windows Update by PowerShell    
-WriteLog "Install Windows Updates PS Package"
-Install-Module PSWindowsUpdate -Force
-
-#Extend Disk C is os-disk-size is greater than the original osdisk image
+# Extend Disk C is os-disk-size is greater than the original osdisk image
 WriteLog "Extend OS Disk Size"
 Set-Content -Path ./diskpart.txt -Value "list disk`nlist volume`nselect volume C`nextend"
 diskpart.exe -s diskpart.txt
 
-#Azure Storage
-WriteLog "Install Azure PS Package"
-Install-Module Az.Storage -Force
-
-#Go to Install Directory
+# Go to Install Directory
 $installDir = "d:\"
 Set-Location -Path $installDir
 
@@ -65,12 +57,12 @@ if (Test-Path $srcBgFile -PathType leaf)
 
 
 
-#Install C++ Resdistribuable (Sinequa Prerequisite)
+# Install C++ Resdistribuable (Sinequa Prerequisite)
 WriteLog "Install vc_redist"
 Invoke-WebRequest "https://aka.ms/vs/16/release/vc_redist.x64.exe" -OutFile "$installDir\vc_redist.x64.exe"
 Start-Process -filepath "vc_redist.x64.exe" -ArgumentList "/install /passive /norestart" -Wait -PassThru
 
-#Install 7zip
+# Install 7zip
 WriteLog "Install 7zip"
 Invoke-WebRequest "https://www.7-zip.org/a/7z2107-x64.exe" -OutFile "$installDir\7zsetup.exe"
 Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
