@@ -31,12 +31,6 @@ variable "client_secret" {
   type        = string
 }
 
-variable "additional_tags" {
-  description = "Tags for all resources"
-  type        = map(string)
-  default     = {}
-}
-
 variable "resource_group_name" {
   description = "Resource Group"
   type        = string
@@ -85,8 +79,6 @@ source "azure-arm" "build-image" {
   winrm_insecure                    = true
   winrm_timeout                     = "5m"
   winrm_use_ssl                     = true
-
-  azure_tags                        = var.additional_tags
 
   managed_image_name                = var.image_name
   managed_image_resource_group_name = var.resource_group_name
