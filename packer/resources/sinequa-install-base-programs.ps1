@@ -74,7 +74,7 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 # it requires to run this script on a VM with GPU, otherwise the driver is not installed in the image
 # https://learn.microsoft.com/fr-fr/azure/virtual-machines/windows/n-series-driver-setup
 WriteLog "Download NVIDIA Driver"
-Invoke-WebRequest "https://download.microsoft.com/download/2/5/a/25ad21ca-ed89-41b4-935f-73023ef6c5af/528.89_grid_win10_win11_server2019_server2022_dch_64bit_international_Azure_swl.exe" -OutFile "$installDir\nvidia-driver.exe"
+Invoke-WebRequest "https://us.download.nvidia.com/tesla/537.70/537.70-data-center-tesla-desktop-winserver-2019-2022-dch-international.exe" -OutFile "$installDir\nvidia-driver.exe"
 & "C:\Program Files\7-Zip\7z.exe" x "nvidia-driver.exe" "-onvidia"
 WriteLog "Install NVIDIA Driver"
 Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish -s" -Wait -PassThru
