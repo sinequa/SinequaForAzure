@@ -27,7 +27,8 @@ Set-Content -Path ./diskpart.txt -Value "list disk`nlist volume`nselect volume C
 diskpart.exe -s diskpart.txt
 
 # Go to Install Directory
-$installDir = "d:\"
+$installDir = "c:\install"
+if (-not(Test-Path $installDir)) { New-Item -Path $installDir -ItemType Directory -Force }
 Set-Location -Path $installDir
 
 

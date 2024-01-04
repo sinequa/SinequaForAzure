@@ -88,16 +88,22 @@ source "azure-arm" "build-image" {
 build {
   sources = ["source.azure-arm.build-image"]
 
+  provisioner "powershell" {
+    inline = [
+      "New-Item -Path c:\\install -ItemType Directory -Force"
+    ]
+  }
+
   provisioner "file" {
     source = "../resources/"
-    destination = "d:\\"
+    destination = "c:\\install"
   }
 
   provisioner "powershell" {
     inline = [
       "while ((Get-Service RdAgent).Status -ne 'Running') { Start-Sleep -s 5 }",
       "while ((Get-Service WindowsAzureGuestAgent).Status -ne 'Running') { Start-Sleep -s 5 }",
-      "d:\\sinequa-install-base-programs.ps1"
+       "c:\\install\\sinequa-install-base-programs.ps1"
     ]
   }
 
@@ -106,8 +112,9 @@ build {
 
   provisioner "powershell" {
     inline = [
-      "d:\\sinequa-install-build.ps1 -downloadUrl \"${var.download_url}\" -downloadToken \"${var.download_token}\"",
-      "d:\\sinequa-image-sysprep.ps1"
+      "c:\\install\\sinequa-install-build.ps1 -downloadUrl \"${var.download_url}\" -downloadToken \"${var.download_token}\"",
+      "Remove-Item -Recurse -Force c:\\install\\*.zip, c:\\install\\*.exe, c:\\install\\nvidia",
+      "c:\\install\\sinequa-image-sysprep.ps1"
     ]
   }
 }

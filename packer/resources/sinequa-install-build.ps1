@@ -36,11 +36,12 @@ function WriteLog ($message) {
 
 
 # Variables
-$tempDrive = "D:\"
+$installDir = "c:\install"
+if (-not(Test-Path $installDir)) { New-Item -Path $installDir -ItemType Directory -Force }
 $destinationFolder = "C:\"
 $sinequaFolder = Join-Path $destinationFolder "sinequa"
 $versionFile = Join-Path $sinequaFolder "version.txt"
-$zipFile = "$tempDrive\sinequa.zip"
+$zipFile = "$installDir\sinequa.zip"
 $serviceName = "sinequa.service"
 $cloudInitServiceName = "sinequa.cloudinit.service"
 
@@ -92,7 +93,7 @@ if (-not (Test-Path $zipFile)) {
 }
 
 # Unzip Package
-WriteLog "Unzip package" ;
+WriteLog "Unzip package $zipFile into $destinationFolder" ;
 & "C:\Program Files\7-Zip\7z.exe" x $zipFile "-o$destinationFolder"
 $currentVersion = Get-Content $versionFile;
 WriteLog "Unzip of $currentVersion binaries are done"
