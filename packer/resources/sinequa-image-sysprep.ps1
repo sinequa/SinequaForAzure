@@ -1,6 +1,6 @@
 
 Write-Host "Sysprep"
-& $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quit /mode:vm
+& $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quiet /quit /mode:vm
 
 Write-Host "Waiting for the image state"
 while($true) {
