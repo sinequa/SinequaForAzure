@@ -103,7 +103,7 @@ build {
     inline = [
       "while ((Get-Service RdAgent).Status -ne 'Running') { Start-Sleep -s 5 }",
       "while ((Get-Service WindowsAzureGuestAgent).Status -ne 'Running') { Start-Sleep -s 5 }",
-       "c:\\install\\sinequa-install-base-programs.ps1"
+      "c:\\install\\sinequa-install-base-programs.ps1 -cloud \"azure\""
     ]
   }
 

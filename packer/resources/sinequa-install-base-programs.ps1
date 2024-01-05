@@ -1,4 +1,8 @@
 
+param (
+    [Parameter(HelpMessage="Type of cloud")]
+	[string]	$cloud = "" # azure|aws|gcp
+)
 
 Set-StrictMode -Version latest;
 $ErrorActionPreference = "Stop"
@@ -73,10 +77,21 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 
 # Install NVIDIA GPU Driver
 # it requires to run this script on a VM with GPU, otherwise the driver is not installed in the image
-# https://learn.microsoft.com/fr-fr/azure/virtual-machines/windows/n-series-driver-setup
-WriteLog "Download NVIDIA Driver"
-Invoke-WebRequest "https://us.download.nvidia.com/tesla/537.70/537.70-data-center-tesla-desktop-winserver-2019-2022-dch-international.exe" -OutFile "$installDir\nvidia-driver.exe"
+$nvidiaDriverUrl = "https://us.download.nvidia.com/tesla/537.70/537.70-data-center-tesla-desktop-winserver-2019-2022-dch-international.exe"
+if ($cloud.ToLower() -eq "aws") {
+    # https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/install-nvidia-driver.html
+    $nvidiaDriverUrl = "https://ec2-windows-nvidia-drivers.s3.us-east-1.amazonaws.com/grid-16.2/537.70_grid_win10_win11_server2019_server2022_dch_64bit_international_aws_swl.exe"
+} elseif ($cloud.ToLower() -eq "gcp") {
+    # https://cloud.google.com/compute/docs/gpus/grid-drivers-table?hl=fr#windows_drivers
+    $nvidiaDriverUrl = "https://storage.googleapis.com/nvidia-drivers-us-public/GRID/vGPU16.2/537.70_grid_win10_win11_server2019_server2022_dch_64bit_international.exe"
+} elseif ($cloud.ToLower() -eq "azure") {
+    # https://learn.microsoft.com/en-us/azure/virtual-machines/windows/n-series-driver-setup
+    $nvidiaDriverUrl = "https://download.microsoft.com/download/9/d/6/9d6f3611-ff0c-43bc-8958-fe7fb0ded78d/537.13_grid_win10_win11_server2019_server2022_dch_64bit_international_azure_swl.exe"
+}
+WriteLog "Download NVIDIA Driver: $nvidiaDriverUrl"
+Invoke-WebRequest $nvidiaDriverUrl -OutFile "$installDir\nvidia-driver.exe"
 & "C:\Program Files\7-Zip\7z.exe" x "nvidia-driver.exe" "-onvidia"
+
 WriteLog "Install NVIDIA Driver"
 Start-Process -FilePath "nvidia\setup.exe" -Args "-noreboot -noeula -clean -passive -nofinish -s" -Wait -PassThru
 WriteLog "Check Install of NVIDIA Driver"
