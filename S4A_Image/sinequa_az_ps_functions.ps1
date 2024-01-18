@@ -613,6 +613,7 @@ function SqAzurePSLocalFileToRGStorageAccount($resourceGroup, $imageName, $local
     $sasStartTime = (Get-Date).AddDays(-1)
     $sasEndTime = $sasStartTime.AddDays(2)
     $sasToken = New-AzStorageContainerSASToken -Container $saContainerName -Permission "rl" -StartTime $sasStartTime -ExpiryTime $sasEndTime -Context $saContext
+    if (!$sasToken.StartsWith("?")) { $sasToken = "?" + $sasToken }
     $url = "$($sa.PrimaryEndpoints.Blob)$($saContainerName)/$($filename)$($sasToken)"
     WriteLog "Url: $url"
     return $url
