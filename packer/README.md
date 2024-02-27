@@ -51,8 +51,8 @@ vm_size | VM size used for building the image. Default is `Standard_D4s_v3`. For
   build-image.pkr.hcl
 ```
 
-### 2. build-image-with-image Sample <a name="build-image-with-image">
-`build-image-with-image\build-image-with-image.pkr.hcl`: Create a VM image with Packer and publish it in an Image Gallery
+### 2. build-image-with-gallery Sample <a name="build-image-with-image">
+`build-image-with-gallery\build-image-with-gallery.pkr.hcl`: Create a VM image with Packer and publish into an Image Gallery
  
  Variable | Description
 --- | --- 
@@ -73,7 +73,7 @@ gallery_regions | Regions of the image. Default is `westeurope`
  Example:
 
 ```powershell
- > .\packer.exe init -upgrade build-image-with-image.pkr.hcl
+ > .\packer.exe init -upgrade build-image-with-gallery.pkr.hcl
  > .\packer.exe build `
   -var "tenant_id=xxxxxx" `
   -var "subscription_id=xxxxxx" `
