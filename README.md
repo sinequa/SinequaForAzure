@@ -117,6 +117,13 @@ Note: Cloud secrets begining with the `sinequa-env-`prefix are available as "Env
 |	grids/`{grid name}`/aliases/identity/`{alias name}`"               | "node/identity0"                   | Create an `{alias name}` identity alias. |
 |	grids/`{grid name}`/aliases/identitylist/`{alias name}`"           | "node/identity0,node/identity1"    | Create an `{alias name}` identity alias list. |
 
+#### 2.1.4. Cloud Init Scripts <a name="cloudinitscripts">
+Cloud Init Scripts are custom PowerShell scripts that are located in the primary storage account. These scripts are executed by the `Cloud Init` service before the `sinequa.service` service starts. All scripts must be located in a `cloudinit-scripts` folder. These folders could be in two levels:
+1. Org level - {org name}/cloudinit-scripts
+2. Grid level - {org name}/grids/{grid name}/cloudinit-scripts
+
+All scripts are executed in alphabetical order of the filename, and Grid level scripts overwrite Org level scripts with the same name.
+
 ### 2.2. Leverage Storage Account <a name="storageaccount">
 
 To reduce the cost of the disk usage and have a better reliability and availabilty on data, an Azure Blob storage account is broadly used for all data that do not require high I/O performances.
@@ -147,6 +154,7 @@ If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if 
 * Primary Storage (Premium --> blob <= 10K)
   * /`{org name}`
     * /var
+    * /cloudinit-scripts
 	  * /sinequa-secondary => contains url of the secondary storage
     * /grids
 	  * /`{grid name}`
@@ -155,6 +163,8 @@ If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if 
         * /User settings
         * /Registry
         * /Configuration
+      * /cloudinit-scripts
+      
 
 * Secondary Storage (Standard Hot)
   * /`{org name}`
