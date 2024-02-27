@@ -1,4 +1,4 @@
-# Terraform <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
+# Terraform
 
 Sinequa For Azure (S4A) Terraform is a set of Terraform scripts used for a Sinequa ES grid deployment.
 
