@@ -2,7 +2,7 @@
 
 Sinequa For Azure (S4A) is a set of capabilities and dedicated features designed for Azure.
 
-This repository contains resources for deploying a S4A grid. Sinequa For Azure features are included in the Sinequa distribution 11.7.0 version and above.
+This repository contains resources for deploying a S4A grid. Sinequa For Azure features are included in the Sinequa distribution **11.7.0** version and above.
 
 In case you don't want to install Sinequa For Azure using the PowerShell and Terraform scripts, you can read this guide: [S4A - Deploy using agnostic Infrastructure as Code](./installation)
 
@@ -27,20 +27,20 @@ In case you don't want to install Sinequa For Azure using the PowerShell and Ter
 ## 1. Repository Content <a name="content">
 
 This repository contains:
-* <a name="build"> **[Packer](./packer)** scripts to **[build your own Sinequa image](./packer)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
-* <a name="deploy"> **[Terraform](./terraform)** samples to **[deploy a Sinequa grid](./terraform)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+* <a name="build"> **[Packer](./packer)** scripts to **[build your own Sinequa image](./packer)**
+* <a name="deploy"> **[Terraform](./terraform)** samples to **[deploy a Sinequa grid](./terraform)**
 
 ![Sinequa For Azure](images/S4A.png)
 
 
 ## 2. Sinequa Azure Features <a name="features">
 
-### 2.1. Cloud Init <a name="cloudinit"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+### 2.1. Cloud Init <a name="cloudinit">
 
 The cloud init features are some capabilities used upon VM deployment to initialize an out-of-the-box Sinequa node that is automaticaly registered into a grid with some roles enabled (like engine, indexer, etc.).
 
 
-#### 2.1.1. Environment Variable <a name="envvars"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+#### 2.1.1. Environment Variable <a name="envvars">
 
 You must set the **SINEQUA_CLOUD** environment variable before starting the Sinequa service to enable all Sinequa For Azure features such as the **cloud init**.
 
@@ -49,7 +49,7 @@ You must set the **SINEQUA_CLOUD** environment variable before starting the Sine
 |	SINEQUA_CLOUD          | "Azure"                              | Enable cloud init features.          |
 
 
-#### 2.1.2. Cloud Tags <a name="cloudtags"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
+#### 2.1.2. Cloud Tags <a name="cloudtags">
 
 Cloud tags are Azure tags used on Azure resources. They are used to run some specific init tasks for a particular VM or VMSS. 
 
@@ -69,7 +69,7 @@ Note: Cloud tags are available as "Environment Variables" in the product with th
 |	sinequa-indexer		       | "indexer1"                          | Name of the [indexer](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-indexers.html) to be created and started on this node. |
 
 
-#### 2.1.3. Cloud Variables & Cloud Secrets <a name="cloudvars"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+#### 2.1.3. Cloud Variables & Cloud Secrets <a name="cloudvars">
 
 * Cloud variables are Azure blobs stored in the storage account. They are used to declare global variables in the configuration.
 
@@ -100,7 +100,7 @@ Note: Cloud secrets begining with the `sinequa-env-`prefix are available as "Env
 |	sinequa-ssl-client-key                  | x         | x            |                                      | Client private key for sRPC. |
 |	sinequa-ssl-client-override-host-name   | x         | x            |                                      | Overrides host name for sRPC. |
 
-#### 2.1.4. Cloud Aliases <a name="cloudaliases"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
+#### 2.1.4. Cloud Aliases <a name="cloudaliases">
 
 * Cloud Aliases are Azure blobs stored in the primary storage account. They are used to declare Sinequa aliases in the configuration.
 
@@ -117,7 +117,7 @@ Note: Cloud secrets begining with the `sinequa-env-`prefix are available as "Env
 |	grids/`{grid name}`/aliases/identity/`{alias name}`"               | "node/identity0"                   | Create an `{alias name}` identity alias. |
 |	grids/`{grid name}`/aliases/identitylist/`{alias name}`"           | "node/identity0,node/identity1"    | Create an `{alias name}` identity alias list. |
 
-### 2.2. Leverage Storage Account <a name="storageaccount"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+### 2.2. Leverage Storage Account <a name="storageaccount">
 
 To reduce the cost of the disk usage and have a better reliability and availabilty on data, an Azure Blob storage account is broadly used for all data that do not require high I/O performances.
 
@@ -133,7 +133,7 @@ It concerns:
 
 ![Storage Account](./images/S4A_Storage.png)
 
-### 2.3. Leverage a Secondary Storage Account <a name="secondarystorageaccount"> <img alt="11.7.1" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.1&color=9cf">
+### 2.3. Leverage a Secondary Storage Account <a name="secondarystorageaccount">
 
 As Blobs have not the same size and not the same frequency of access, a second storage could be used for leveraging cheaper SKUs.
 
@@ -167,13 +167,13 @@ If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if 
 	  * /blobs
 
 
-### 2.4. Leverage Scale Set for Elasticity <a name="scaleset"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+### 2.4. Leverage Scale Set for Elasticity <a name="scaleset">
 
 To reduce the cost of VM usage and control the indexing workload, scale set is used to scale up & down the number of indexers based on the indexing workload.
 
 ![Indexing Scale Set](./images/S4A_Indexing_ScaleSet.png)
 
-### 2.5. Back Up and Restore the Application <a name="backup"> <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+### 2.5. Back Up and Restore the Application <a name="backup">
 
 Thanks to [Storage Accounts](#storageaccount), you can easily back up and restore a complete grid with consistency between components. 
 
