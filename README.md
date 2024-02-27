@@ -27,7 +27,7 @@ In case you don't want to install Sinequa For Azure using the PowerShell and Ter
 ## 1. Repository Content <a name="content">
 
 This repository contains:
-* <a name="build"> **[Powershell](./S4A_Image)** scripts to **[build your own Sinequa image](./S4A_Image)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
+* <a name="build"> **[Packer](./packer)** scripts to **[build your own Sinequa image](./packer)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 * <a name="deploy"> **[Terraform](./terraform)** samples to **[deploy a Sinequa grid](./terraform)** <img alt="11.7.0" src="https://img.shields.io/static/v1?label=Sinequa&message=11.7.0&color=9cf">
 
 ![Sinequa For Azure](images/S4A.png)

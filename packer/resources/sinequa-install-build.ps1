@@ -5,12 +5,11 @@
 #>
 
 param (
-	[Parameter(HelpMessage="Url of the package")]
-	[string]	$fileUrl, # eg "http://.../sinequa.*.zip",
+    [Parameter(HelpMessage="Build Download Url")]
+	[string]	$downloadUrl, # eg "https://download.sinequa.com/api/filedownload?type=release&version=$version&file=sinequa.11.zip"
 
-    [Parameter(HelpMessage="Url of the package")]
-	[string]	$filePath # eg "C:\install\sinequa.*.zip"	
-
+    [Parameter(HelpMessage="Build Download Token")]
+	[string]	$downloadToken
 )
 
 
@@ -37,19 +36,22 @@ function WriteLog ($message) {
 
 
 # Variables
-$tempDrive = "D:\"
+$installDir = "c:\install"
+if (-not(Test-Path $installDir)) { New-Item -Path $installDir -ItemType Directory -Force }
 $destinationFolder = "C:\"
 $sinequaFolder = Join-Path $destinationFolder "sinequa"
-$sinequaScriptsFolder = Join-Path $sinequaFolder "scripts"
 $versionFile = Join-Path $sinequaFolder "version.txt"
-$zipFile = "$tempDrive\sinequa.zip"
-if ($filePath) {$zipFile = $filePath}
+$zipFile = "$installDir\sinequa.zip"
 $serviceName = "sinequa.service"
 $cloudInitServiceName = "sinequa.cloudinit.service"
 
-# Remove escaping character "xxxx" used for Invoke-AzVMRunCommand parameter limitations
-if ($fileUrl -and $fileUrl.length -gt 1 -and $fileUrl[0] -eq """" -and $fileUrl[$fileUrl.length-1] -eq """") { $fileUrl = $fileUrl -replace ".$" -replace "^." }
-	
+# Check if downloadUrl is set
+if (-not($downloadUrl)) {
+	WriteLog "'downloadUrl' parameter is missing";
+	Exit 0
+}
+
+
 # Set Sinequa Azure OS Environment Variables
 WriteLog "Set Sinequa Azure OS Environment Variables";
 [System.Environment]::SetEnvironmentVariable('SINEQUA_TEMP', 'd:\sinequa\temp',[System.EnvironmentVariableTarget]::Machine)
@@ -69,7 +71,7 @@ Add-MpPreference -ExclusionPath $sinequaFolder
 Add-MpPreference -ExclusionPath "F:\sinequa"
 
 # Test if Sinequa is already installed
-WriteLog "Install Sinequa in $destinationFolder";
+WriteLog "Sinequa will be installed on $destinationFolder";
 if ((Test-Path $sinequaFolder) -and (Test-Path $versionFile)) {
 	$currentVersion = Get-Content $versionFile;
 	WriteLog "Sinequa is already installed: $currentVersion";
@@ -77,16 +79,21 @@ if ((Test-Path $sinequaFolder) -and (Test-Path $versionFile)) {
 }
 
 # Download the Sinequa Distribution
-if ($fileUrl) {
-    WriteLog "Download $($fileUrl) to $zipFile";
-    Invoke-WebRequest $fileUrl -OutFile $zipFile
-    if (-Not (Test-Path $sinequaScriptsFolder)) {
-        New-Item $sinequaScriptsFolder -ItemType Directory
-    }   
+WriteLog "Download from $downloadUrl to $zipFile";
+$ProgressPreference = 'SilentlyContinue'
+$downloadHeader = @{"Accept"="application/octet-stream"}
+if ($downloadToken) {
+    $downloadHeader = @{"Accept"="application/octet-stream"; "Authorization"="Bearer $downloadToken"}
+}
+$res = Invoke-WebRequest $downloadUrl -Method Get -Headers $downloadHeader -OutFile $zipFile 
+$res
+if (-not (Test-Path $zipFile)) {
+	WriteLog "File not downloaded.";
+	Exit 0
 }
 
 # Unzip Package
-WriteLog "Unzip package" ;
+WriteLog "Unzip package $zipFile into $destinationFolder" ;
 & "C:\Program Files\7-Zip\7z.exe" x $zipFile "-o$destinationFolder"
 $currentVersion = Get-Content $versionFile;
 WriteLog "Unzip of $currentVersion binaries are done"
