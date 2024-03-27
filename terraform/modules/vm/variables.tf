@@ -65,11 +65,6 @@ variable "admin_password" {
     type            = string
 }
 
-variable "key_vault_id" {
-    type            = string
-    default         = ""
-}
-
 variable "availability_set_id" {
     type            = string
     default         = ""
