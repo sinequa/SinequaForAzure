@@ -83,11 +83,11 @@ Note: Cloud secrets begining with the `sinequa-env-`prefix are available as "Env
 | ----------------------------------------- | --------- | ------------ | ------------------------------------ | ------------------------------------ |
 |	sinequa-primary-nodes                   | x         |              | "1=srpc://vm-node1:10300;2=srpc://vm-node2:10300;3=srpc://vm-node3=10300" | sRPC connection string of primary nodes. |
 |   sinequa-keyvault 	                    | x         |              | "kv-grid1"                           | Name of the key vault containing secrets (see below). |
-|   sinequa-queue-cluster 	                | x         |              | "QueueCluster1(node1,node2,node3)"   | Creates and starts a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). |
-|	sinequa-beta		                    | x         |              | true or false                        | Enables beta features. |
-|   sinequa-encryption-key                  | x         | x            | xxxxx                                | Encryption key (see the documentation on [how to generate your own encryption key](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.how-to.encrypt.html#generating-encryption-key)) |
-|   sinequa_authentication_secret           | x         | x            | xxxxx                                | Secret for authenticating all sRPC calls |
-|	sinequa-license		                    | x         | x            | xxxxx                                | Sinequa license. |
+|   sinequa-queue-cluster 	              | x         |              | "QueueCluster1(node1,node2,node3)"   | Creates and starts a [queue cluster](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.admin-grid-queue-clusters.html). |
+|	sinequa-beta		                        | x         |              | true or false                        | Enables beta features. |
+| sinequa-encryption-key                  | x         | x            | xxxxx                                | Encryption key (see the documentation on [how to generate your own encryption key](https://doc.sinequa.com/en.sinequa-es.v11/Content/en.sinequa-es.how-to.encrypt.html#generating-encryption-key)) |
+| sinequa-authentication-secret           | x         | x            | xxxxx                                | Secret for authenticating all sRPC calls |
+|	sinequa-license		                      | x         | x            | xxxxx                                | Sinequa license. |
 |	sinequa-default-admin-password          | x         | x            | xxxxx                                | Default Sinequa admin password. |
 |	sinequa-ssl-force                       | x         | x            | true or false                        | Forces SSL on sRPC. |
 |	sinequa-ssl-roots-pem-file              | x         | x            |                                      | pem file for sRPC. |
