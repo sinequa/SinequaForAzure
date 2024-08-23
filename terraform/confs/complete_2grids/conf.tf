@@ -228,7 +228,6 @@ module "vm-dev-primary-node1" {
   image_id              = local.dev_image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   linked_to_application_gateway = false
   network_security_group_id = module.network.nsg_app.id
@@ -261,7 +260,6 @@ module "vm-dev-primary-node2" {
   image_id              = local.dev_image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
@@ -293,7 +291,6 @@ module "vm-dev-primary-node3" {
   image_id              = local.dev_image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
@@ -322,7 +319,6 @@ module "vmss-dev-indexer1" {
   image_id              = local.dev_image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   user_identity_principal_id = module.kv_st_services.id.principal_id
   network_security_group_id = module.network.nsg_app.id
@@ -354,7 +350,6 @@ module "vm-prd-primary-node1" {
   image_id              = local.prd_image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   linked_to_application_gateway = false
   network_security_group_id = module.network.nsg_app.id
@@ -387,7 +382,6 @@ module "vm-prd-primary-node2" {
   image_id              = local.prd_image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
@@ -419,7 +413,6 @@ module "vm-prd-primary-node3" {
   image_id              = local.prd_image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size
@@ -448,7 +441,6 @@ module "vmss-prd-indexer1" {
   image_id              = local.prd_image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id
   user_identity_principal_id = module.kv_st_services.id.principal_id
   network_security_group_id = module.network.nsg_app.id

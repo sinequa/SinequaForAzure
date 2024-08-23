@@ -150,7 +150,6 @@ module "vm-primary-node1" {
   image_id              = local.image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   user_identity_id      = module.kv_st_services.id.id 
   network_security_group_id = module.network.nsg_app.id
   data_disk_size        = local.data_disk_size

@@ -83,10 +83,10 @@ if ($cloud.ToLower() -eq "aws") {
     $nvidiaDriverUrl = "https://ec2-windows-nvidia-drivers.s3.us-east-1.amazonaws.com/grid-16.2/537.70_grid_win10_win11_server2019_server2022_dch_64bit_international_aws_swl.exe"
 } elseif ($cloud.ToLower() -eq "gcp") {
     # https://cloud.google.com/compute/docs/gpus/grid-drivers-table?hl=fr#windows_drivers
-    $nvidiaDriverUrl = "https://storage.googleapis.com/nvidia-drivers-us-public/GRID/vGPU16.2/537.70_grid_win10_win11_server2019_server2022_dch_64bit_international.exe"
+    $nvidiaDriverUrl = "https://storage.googleapis.com/nvidia-drivers-us-public/GRID/vGPU16.4/538.33_grid_win10_win11_server2019_server2022_dch_64bit_international.exe"
 } elseif ($cloud.ToLower() -eq "azure") {
     # https://learn.microsoft.com/en-us/azure/virtual-machines/windows/n-series-driver-setup
-    $nvidiaDriverUrl = "https://download.microsoft.com/download/9/d/6/9d6f3611-ff0c-43bc-8958-fe7fb0ded78d/537.13_grid_win10_win11_server2019_server2022_dch_64bit_international_azure_swl.exe"
+    $nvidiaDriverUrl = "https://download.microsoft.com/download/c/b/0/cb00d90e-5786-4882-89cd-75fb17fa787d/538.15_grid_win10_win11_server2019_server2022_dch_64bit_international_azure_swl.exe"
 }
 WriteLog "Download NVIDIA Driver: $nvidiaDriverUrl"
 Invoke-WebRequest $nvidiaDriverUrl -OutFile "$installDir\nvidia-driver.exe"

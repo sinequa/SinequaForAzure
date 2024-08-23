@@ -123,7 +123,6 @@ In the modules folder, scripts are provided to build blocks:
 | data_disk_type           | Size of the data disk. |
 | admin_username           | OS user login. |
 | admin_password           | OS user password. |
-| key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VM identity. |
 | availability_set_id      | Availability set for the application gateway. |
 | pip                      | Add a public IP if needed. |
 | linked_to_application_gateway | The VM is linked to an application gateway. |
@@ -148,7 +147,6 @@ In the modules folder, scripts are provided to build blocks:
 | os_disk_type             | OS disk type. |
 | admin_username           | OS user login. |
 | admin_password           | OS user password. |
-| key_vault_id             | Key vault used for secrets. Needed to grant read secrets access on the VMSS identity. |
 | network_security_group_id | Network security group of the VM. |
 | primary_node_vm_principal_ids | List of principals (VM identity) of Primary Nodes, it's required for managing the scale up/down of the Scaleset from the platform. |
 | tags                     | Azure tags to specify Sinequa roles. |
@@ -278,7 +276,6 @@ module "vm-node4" {
   image_id              = local.image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   network_security_group_id = module.network.nsg_app.id
   pip                   = true
 
@@ -316,7 +313,6 @@ module "vmss-connectors" {
   image_id              = local.image_id
   admin_username        = local.os_admin_username
   admin_password        = local.os_admin_password
-  key_vault_id          = module.kv_st_services.kv.id
   network_security_group_id = module.network.nsg_app.id
 
   tags = {
