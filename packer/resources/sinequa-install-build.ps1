@@ -58,7 +58,7 @@ WriteLog "Set Sinequa Azure OS Environment Variables";
 [System.Environment]::SetEnvironmentVariable('SINEQUA_CLOUD', 'Azure',[System.EnvironmentVariableTarget]::Machine)
 
 # For Debugging Sinequa init - Folder must exist
-[System.Environment]::SetEnvironmentVariable('SINEQUA_LOG_INIT', 'Path=d:\;Level=10000',[System.EnvironmentVariableTarget]::Machine)
+# [System.Environment]::SetEnvironmentVariable('SINEQUA_LOG_INIT', 'Path=d:\;Level=10000',[System.EnvironmentVariableTarget]::Machine)
 
 # Add inbound Firewall Rules for Sinequa
 WriteLog "Add Sinequa Rule in Firewall"
