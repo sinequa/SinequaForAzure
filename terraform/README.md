@@ -140,7 +140,7 @@ In the modules folder, scripts are provided to build blocks:
 | resource_group_name      | Resource group for deployment. |
 | vmss_name                | Name of the VMSS. |
 | vmss_size                | VMSS size. |
-| vmss_capacity            | Number of instances of the VMSS. |
+| vmss_capacity            | Maximum number of instances managed by Sinequa (Scaling up) on the VMSS. |
 | computer_name_prefix     | VMSS OS computer name prefix. |
 | subnet_id                | Subnet ID of the VM. |
 | image_id                 | Sinequa image to use (image or image definition) to create the VMSS. |

@@ -56,7 +56,7 @@ We recommend to unzip the Sinequa binaries to the OS drive on the `C:\sinequa\` 
 Name | Value | Target | Mandatory | Optional | Comment
 --- | --- | --- | --- | --- | --- 
 SINEQUA_CLOUD | Azure | Machine | X | | Specify Sinequa Node to run in S4A mode
-SINEQUA_LOG_INIT | Path=d:\;Level=10000 | Machine | X | | Set log level of all process before configuration is loaded. Enable Sinequa.cloudinit.service logs.
+SINEQUA_LOG_INIT | Path=d:\;Level=10000 | Machine | | X | Set log level of all process before configuration is loaded. Enable Sinequa.cloudinit.service logs for debugging.
 SINEQUA_TEMP | d:\sinequa\temp | Machine | | X | Sinequa temp folder. By default the temp folder is located in *&lt;sinequa&gt;/temp*. It's recommended to leverage the local "Temp Storage" (Temp drive) of the VM instead of writing temp files in the distribution folder. Not all the VMs instances type have "Temp Storage", please refer to [Sizes for virtual machines in Azure](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes)
 
 Sinequa For Azure (S4A) documentation: [Cloud Init](https://github.com/sinequa/SinequaForAzure#211-environment-variable--)
@@ -64,13 +64,13 @@ Sinequa For Azure (S4A) documentation: [Cloud Init](https://github.com/sinequa/S
 **Command Lines:**
 
 Set SINEQUA_CLOUD
-> [System.Environment]::SetEnvironmentVariable('SINEQUA_TEMP', 'd:\sinequa\temp',[System.EnvironmentVariableTarget]::Machine)
+> [System.Environment]::SetEnvironmentVariable('SINEQUA_CLOUD', 'Azure',[System.EnvironmentVariableTarget]::Machine)
 
-Set SINEQUA_LOG_INIT
+Set SINEQUA_LOG_INIT (Optional)
 > [System.Environment]::SetEnvironmentVariable('SINEQUA_LOG_INIT', 'Path=d:\;Level=10000',[System.EnvironmentVariableTarget]::Machine)
 
-Set SINEQUA_TEMP
-> [System.Environment]::SetEnvironmentVariable('SINEQUA_CLOUD', 'Azure',[System.EnvironmentVariableTarget]::Machine)
+Set SINEQUA_TEMP (Optional)
+> [System.Environment]::SetEnvironmentVariable('SINEQUA_TEMP', 'd:\sinequa\temp',[System.EnvironmentVariableTarget]::Machine)
 
 Windows documentation: [Set Environment Variable in Windows operating system registry key](https://learn.microsoft.com/en-us/dotnet/api/system.environment.setenvironmentvariable?view=net-7.0#system-environment-setenvironmentvariable(system-string-system-string-system-environmentvariabletarget))
 
