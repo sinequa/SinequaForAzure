@@ -12,7 +12,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.68.0"
+      version = "=4.4.0"
     }
   }
 }
@@ -43,7 +43,6 @@ locals {
   // ### Sinequa Org parameters
   // ##############################################################################################################################
   org_name                 = "sinequa"
-  data_disk_size           = 100 // Size of Datadisk (for data such as Indexes)
   indexer_capacity         = 3 // Max Number of VMSS Instances Allowed for Indexer
   indexer_vmss_size        = "Standard_B2s"
   st_primary_name         = substr(join("",["stprim",replace(md5(local.resource_group_name),"-","")]),0,24) // Unique Name Across Azure
@@ -231,7 +230,8 @@ module "vm-dev-primary-node1" {
   user_identity_id      = module.kv_st_services.id.id
   linked_to_application_gateway = false
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]  
   pip                   = true
 
   tags = merge({
@@ -262,7 +262,8 @@ module "vm-dev-primary-node2" {
   admin_password        = local.os_admin_password
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]  
   pip                   = false
 
   tags = merge({
@@ -293,7 +294,8 @@ module "vm-dev-primary-node3" {
   admin_password        = local.os_admin_password
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]  
   pip                   = false
 
   tags = merge({
@@ -353,7 +355,8 @@ module "vm-prd-primary-node1" {
   user_identity_id      = module.kv_st_services.id.id
   linked_to_application_gateway = false
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]  
   pip                   = true
 
   tags = merge({
@@ -384,7 +387,8 @@ module "vm-prd-primary-node2" {
   admin_password        = local.os_admin_password
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]  
   pip                   = false
 
   tags = merge({
@@ -415,7 +419,8 @@ module "vm-prd-primary-node3" {
   admin_password        = local.os_admin_password
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]  
   pip                   = false
 
   tags = merge({

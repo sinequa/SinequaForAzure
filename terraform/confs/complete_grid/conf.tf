@@ -9,10 +9,11 @@ terraform {
     key                   = "<key name>" // e.g. dev.my_deployment.terraform.tfstate
   } 
   */
+  
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.68.0"
+      version = "=4.4.0"
     }
   }
 
@@ -26,7 +27,7 @@ provider "azurerm" {
     key_vault {
       purge_soft_delete_on_destroy = true
     }
-  }  
+  }
 }
 
 data "azurerm_client_config" "current" {}
@@ -53,7 +54,6 @@ locals {
   node3_name              = local.node3_osname //Name in Sinequa Grid
   primary_nodes           = "1=srpc://${local.node1_osname}:10301;2=srpc://${local.node2_osname}:10301;3=srpc://${local.node3_osname}:10301" // sRPC Connection String
   primary_node_vm_size    = "Standard_B2s"
-  data_disk_size        = 100 // Size of Datadisk (for data such as Indexes)
 
   // Indexer vmss
   os_indexer_name         = "vmss-indexer" //Windows Computer Name
@@ -169,7 +169,8 @@ module "vm-primary-node1" {
   user_identity_id      = module.kv_st_services.id.id
   linked_to_application_gateway = false
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]
   pip                   = true
 
   tags = merge({
@@ -200,7 +201,8 @@ module "vm-primary-node2" {
   admin_password        = local.os_admin_password
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]
   pip                   = false
 
   tags = merge({
@@ -231,7 +233,8 @@ module "vm-primary-node3" {
   admin_password        = local.os_admin_password
   user_identity_id      = module.kv_st_services.id.id
   network_security_group_id = module.network.nsg_app.id
-  data_disk_size        = local.data_disk_size
+  //By default a data disk of size 100 GB is created 
+  //To create more date disk with different size set - data_disks = [100, 200]
   pip                   = false
 
   tags = merge({

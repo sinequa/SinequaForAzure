@@ -51,11 +51,6 @@ variable "data_disk_type" {
     default         = "Premium_LRS"
 }
 
-variable "data_disk_size" {
-    type            = number
-    default         = 100
-}
-
 variable "admin_username" {    
     type            = string
     default         = "sinequa"
@@ -89,6 +84,12 @@ variable "network_security_group_id" {
 
 variable "user_identity_id" {
     type            = string
+}
+
+variable "data_disks" {
+  description = "List of the number of data disks needed with the size"
+  type        = list(number)
+  default     = [100]  # This will create a data disk of size 100 GB
 }
 
 variable "datadisk_ids" {

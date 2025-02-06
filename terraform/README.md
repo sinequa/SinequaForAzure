@@ -120,7 +120,8 @@ In the modules folder, scripts are provided to build blocks:
 | subnet_id                | Subnet ID of the VM. |
 | image_id                 | Sinequa image to use (image or image definition) to create the VM. |
 | os_disk_type             | OS disk type. |
-| data_disk_type           | Size of the data disk. |
+| data_disk_type           | Type of the data disk. |
+| data_disk                | Number of data disks and their size: by default one data disk of 100 GB. |
 | admin_username           | OS user login. |
 | admin_password           | OS user password. |
 | availability_set_id      | Availability set for the application gateway. |

@@ -91,7 +91,6 @@ resource "azurerm_storage_account" "sinequa_st_premium" {
   account_tier             = "Premium"
   account_kind             = "BlockBlobStorage"
   account_replication_type = "LRS"
-  access_tier              = "Cool"
   tags                      = var.tags
 
   depends_on = [azurerm_user_assigned_identity.identity]

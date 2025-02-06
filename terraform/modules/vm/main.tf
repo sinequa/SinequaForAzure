@@ -8,8 +8,7 @@ resource "azurerm_public_ip" "sinequa_vm_pip" {
   name                      = "pip-${var.vm_name}"
   location                  = var.location
   resource_group_name       = var.resource_group_name
-  allocation_method         = "Dynamic"
-  sku                       = "Basic"  
+  allocation_method         = "Static"
   tags                      = var.tags
 }
 
@@ -82,21 +81,21 @@ resource "azurerm_virtual_machine" "sinequa_vm" {
 }
 
 resource "azurerm_managed_disk" "sinequa_vm_datadisk" {
-  count                = (length(var.datadisk_ids) == 0) && (var.data_disk_size > 0)?1:0
-  name                 = local.data_disk_name
+  count                = (length(var.datadisk_ids) == 0) && (length(var.data_disks) > 0)?length(var.data_disks):0
+  name                 = "${local.data_disk_name}-${count.index}"
   location             = var.location
   resource_group_name  = var.resource_group_name
   storage_account_type = var.data_disk_type
   create_option        = "Empty"
-  disk_size_gb         = var.data_disk_size
+  disk_size_gb         = var.data_disks[count.index]
   tags                 = var.tags
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "sinequa_vm_datadisk_attach" {
-  count              = (length(var.datadisk_ids) == 0) && (var.data_disk_size > 0)?1:0
-  managed_disk_id    = azurerm_managed_disk.sinequa_vm_datadisk[0].id
+  count              = (length(var.datadisk_ids) == 0) && (length(var.data_disks) > 0) ?length(var.data_disks):0
+  managed_disk_id    = azurerm_managed_disk.sinequa_vm_datadisk[count.index].id 
   virtual_machine_id = azurerm_virtual_machine.sinequa_vm.id
-  lun                = "0"
+  lun                = count.index
   caching            = "ReadOnly"
 }
 
@@ -108,6 +107,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "sinequa_vm_datadiskids_
   lun                = index(var.datadisk_ids, each.key)
   caching            = "ReadOnly"
 }
+
 
 resource "azurerm_network_interface_security_group_association" "sinequa_nic_nsg" {
   network_interface_id      = azurerm_network_interface.sinequa_vm_nic.id
