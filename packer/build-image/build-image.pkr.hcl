@@ -66,6 +66,8 @@ source "azure-arm" "build-image" {
   client_secret                     = var.client_secret
   #use_azure_cli_auth                = true
 
+  polling_duration_timeout          = "60m"
+  
   build_resource_group_name         = var.resource_group_name
 
   os_type                           = "Windows"
