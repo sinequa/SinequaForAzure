@@ -77,7 +77,7 @@ Note: Cloud variables are available as "Environment Variables" in the product wi
 
 * Cloud secrets are secrets stored in the key vault defined in cloud variables. They are used to store sensitive data.
 
-Note: Cloud secrets begining with the `sinequa-env-`prefix are available as "Environment Variables" in the product with the `_CloudSecret_` prefix. E.g The `sinequa-env-my-secret` secret value is accessible through the `_CloudSecret_sinequa-env-my-secret` Environment Variable.
+Note: Cloud secrets beginning with the `sinequa-env-`prefix are available as "Environment Variables" in the product with the `_CloudSecret_` prefix. E.g The `sinequa-env-my-secret` secret value is accessible through the `_CloudSecret_sinequa-env-my-secret` Environment Variable.
 
 | Name                                      | Cloud Var | Cloud Secret | Value Example                        | Description                          |
 | ----------------------------------------- | --------- | ------------ | ------------------------------------ | ------------------------------------ |
@@ -126,7 +126,7 @@ All scripts are executed in alphabetical order of the filename, and Grid level s
 
 ### 2.2. Leverage Storage Account <a name="storageaccount">
 
-To reduce the cost of the disk usage and have a better reliability and availabilty on data, an Azure Blob storage account is broadly used for all data that do not require high I/O performances.
+To reduce the cost of the disk usage and have a better reliability and availability on data, an Azure Blob storage account is broadly used for all data that do not require high I/O performances.
 
 If a `sinequa-data-storage-url` cloud tag is provided, the components below will automatically synchronize data from disk to Azure Storage account.
 
@@ -146,7 +146,7 @@ As Blobs have not the same size and not the same frequency of access, a second s
 
 If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if this storage contains an org var called `sinequa-secondary` then some blobs will be moved to this secondary Azure Storage account.
 
-#### Asure Storage SKU recommendations:
+#### Azure Storage SKU recommendations:
 - Primary Storage with the `Premium` sku for fast access and small content (blob < 10ko)
 - Secondary Storage with the `Standard Hot` sku for large content (sha + queue + logs)
 
