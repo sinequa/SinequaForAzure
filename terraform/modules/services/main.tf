@@ -28,14 +28,29 @@ resource "azurerm_role_assignment" "sinequa_kv_role_for_me" {
   depends_on = [azurerm_key_vault.sinequa_kv]
 }
 
+resource "azurerm_role_assignment" "sinequa_kv_cert_role_for_me" {
+  scope                = azurerm_key_vault.sinequa_kv.id
+  role_definition_name = "Key Vault Certificates Officer"
+  principal_id         = data.azurerm_client_config.current.object_id
+
+  depends_on = [azurerm_key_vault.sinequa_kv]
+}
+
 resource "azurerm_role_assignment" "sinequa_kv_role_for_id" {
   scope                = azurerm_key_vault.sinequa_kv.id
-  role_definition_name = "Key Vault Secrets Officer"
+  role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.identity.principal_id
 
   depends_on = [azurerm_user_assigned_identity.identity, azurerm_key_vault.sinequa_kv]
 }
 
+resource "azurerm_role_assignment" "sinequa_kv_cert_role_for_id" {
+  scope                = azurerm_key_vault.sinequa_kv.id
+  role_definition_name = "Key Vault Certificate User"
+  principal_id         = azurerm_user_assigned_identity.identity.principal_id
+
+  depends_on = [azurerm_user_assigned_identity.identity, azurerm_key_vault.sinequa_kv]
+}
 
 resource "azurerm_key_vault_secret" "sinequa_kv_secret_sinequa_license" {
   name         = "sinequa-license"
@@ -98,7 +113,7 @@ resource "azurerm_storage_account" "sinequa_st_premium" {
 
 resource "azurerm_storage_container" "sinequa_st_hot_container" {
   name                  = var.org_name
-  storage_account_name  = azurerm_storage_account.sinequa_st_hot.name
+  storage_account_id    = azurerm_storage_account.sinequa_st_hot.id
   container_access_type = "private"
 
   depends_on = [azurerm_storage_account.sinequa_st_hot]
@@ -106,7 +121,7 @@ resource "azurerm_storage_container" "sinequa_st_hot_container" {
 
 resource "azurerm_storage_container" "sinequa_st_premium_container" {
   name                  = var.org_name
-  storage_account_name  = azurerm_storage_account.sinequa_st_premium.name
+  storage_account_id  = azurerm_storage_account.sinequa_st_premium.id
   container_access_type = "private"
 
   depends_on = [azurerm_storage_account.sinequa_st_premium]

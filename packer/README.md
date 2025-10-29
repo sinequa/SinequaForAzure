@@ -25,14 +25,14 @@ Variable | Description
 --- | --- 
 tenant_id | Tenant ID
 subscription_id | Subscription ID
-client_id | Client ID for authentication
-client_secret | Client Secret for authentication
+client_id | Application Client ID of the AAD Service Principal. Not required if `use_azure_cli_auth` is used. See https://developer.hashicorp.com/packer/integrations/hashicorp/azure/latest/components/builder/arm
+client_secret | Application Client Secret of the AAD Service Principal.Not required if `use_azure_cli_auth` is used.
 resource_group_name | Resource group for creating the image.
 image_name | Name of the image. Eg. `sinequa-11.10.0.2098`
 download_url | Url of sinequa.zip that will be downloaded from the VM. Eg. `https://download.sinequa.com/api/filedownload?type=release&version=11.10.0.2098&file=sinequa.11.zip`
 download_token | Token that is used as a Bearer token in the Authorization HTTP Header of the `download_url`
-vm_size | VM size used for building the image. Default is `Standard_D4s_v3`. For installing GPU Driver (for Neural Search), a VM size with GPU must be used.
-
+vm_size | VM size used for building the image. Default is `Standard_D4s_v3`. For installing GPU Driver (for Neural Search), a VM size with GPU must be used. If the vm size don't have a Temp Storage, adapt  the `SINEQUA_TEMP` variable in [sinequa-install-build.ps1](./resources/sinequa-install-build.ps1)
+use_azure_cli_auth | Use an active `az login` session
 
  Example:
 

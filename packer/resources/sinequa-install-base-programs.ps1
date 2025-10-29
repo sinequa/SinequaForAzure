@@ -80,13 +80,13 @@ Start-Process -filepath "7zsetup.exe" -ArgumentList "/S" -Wait -PassThru
 $nvidiaDriverUrl = "https://us.download.nvidia.com/tesla/537.70/537.70-data-center-tesla-desktop-winserver-2019-2022-dch-international.exe"
 if ($cloud.ToLower() -eq "aws") {
     # https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/install-nvidia-driver.html
-    $nvidiaDriverUrl = "https://ec2-windows-nvidia-drivers.s3.us-east-1.amazonaws.com/grid-16.2/537.70_grid_win10_win11_server2019_server2022_dch_64bit_international_aws_swl.exe"
+    $nvidiaDriverUrl = "https://ec2-windows-nvidia-drivers.s3.us-east-1.amazonaws.com/grid-17.5/553.62_grid_win10_win11_server2019_server2022_dch_64bit_international_aws_swl.exe"
 } elseif ($cloud.ToLower() -eq "gcp") {
     # https://cloud.google.com/compute/docs/gpus/grid-drivers-table?hl=fr#windows_drivers
-    $nvidiaDriverUrl = "https://storage.googleapis.com/nvidia-drivers-us-public/GRID/vGPU16.4/538.33_grid_win10_win11_server2019_server2022_dch_64bit_international.exe"
+    $nvidiaDriverUrl = "https://storage.googleapis.com/nvidia-drivers-us-public/GRID/vGPU17.3/552.74_grid_win10_win11_server2022_dch_64bit_international.exe"
 } elseif ($cloud.ToLower() -eq "azure") {
     # https://learn.microsoft.com/en-us/azure/virtual-machines/windows/n-series-driver-setup
-    $nvidiaDriverUrl = "https://download.microsoft.com/download/c/b/0/cb00d90e-5786-4882-89cd-75fb17fa787d/538.15_grid_win10_win11_server2019_server2022_dch_64bit_international_azure_swl.exe"
+    $nvidiaDriverUrl = "https://download.microsoft.com/download/1/1/d/11dd7071-c632-4a83-b950-d5eb3fdcf587/553.62_grid_win10_win11_server2019_server2022_dch_64bit_international_azure_swl.exe"
 }
 WriteLog "Download NVIDIA Driver: $nvidiaDriverUrl"
 Invoke-WebRequest $nvidiaDriverUrl -OutFile "$installDir\nvidia-driver.exe"
@@ -104,6 +104,7 @@ if ( Get-Command nvidia-smi.exe -ErrorAction SilentlyContinue)
 
 
 ########Install Optional programs
+<#
 
 # Google Chrome (can be removed)
 WriteLog "Install Google Chrome"
@@ -121,9 +122,4 @@ WriteLog "Install Git Client"
 Invoke-WebRequest "https://github.com/git-for-windows/git/releases/download/v2.41.0.windows.1/Git-2.41.0-64-bit.exe" -OutFile "$installDir\git.exe"
 Start-Process -FilePath "git.exe" -Args "/VERYSILENT /NORESTART /MERGETASKS=!runcode" -Wait -PassThru
 
-<#
-# Visual Studio (can be removed)
-WriteLog "Install Visual Studio 2022"
-Invoke-WebRequest "https://aka.ms/vs/17/release/vs_professional.exe" -OutFile "$installDir\vs_Professional.exe"
-Start-Process -FilePath "vs_Professional.exe" -Args "--add Microsoft.VisualStudio.Workload.CoreEditor --add Microsoft.VisualStudio.Workload.Azure --add Microsoft.VisualStudio.Workload.NetWeb --add Microsoft.VisualStudio.Workload.ManagedDesktop --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended --passive --wait" -Wait -PassThru
 #>

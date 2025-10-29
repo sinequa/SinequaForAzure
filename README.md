@@ -99,7 +99,8 @@ Note: Cloud secrets begining with the `sinequa-env-`prefix are available as "Env
 |	sinequa-ssl-client-crt                  | x         | x            |                                      | Client crt file for sRPC. |
 |	sinequa-ssl-client-key                  | x         | x            |                                      | Client private key for sRPC. |
 |	sinequa-ssl-client-override-host-name   | x         | x            |                                      | Overrides host name for sRPC. |
-
+| sinequa-webapp-ssl-server-crt           | x         | x            | https://xxxxx.vault.azure.net/certificates/sinequa-ssl | Certificate Identifier in the Keyvault for using SSL on all Webapps |
+| sinequa-webapp-ssl-server-crt-pwd       | x         | x            | xxxxx  | Password of sinequa-webapp-ssl-server-crt |
 #### 2.1.4. Cloud Aliases <a name="cloudaliases">
 
 * Cloud Aliases are Azure blobs stored in the primary storage account. They are used to declare Sinequa aliases in the configuration.
@@ -146,9 +147,9 @@ As Blobs have not the same size and not the same frequency of access, a second s
 
 If a `sinequa-data-storage-url` cloud tag is provided (primary storage), and if this storage contains an org var called `sinequa-secondary` then some blobs will be moved to this secondary Azure Storage account.
 
-#### Asure Storage SKU recommendations:
-- Primary Storage with the `Premium` sku for fast access and small content (blob < 10ko)
-- Secondary Storage with the `Standard Hot` sku for large content (sha + queue + logs)
+#### Azure Storage SKU recommendations:
+- Primary Storage with the `Premium block blobs` sku for fast access and small content (blob < 10ko)
+- Secondary Storage with the `Standard` sku and a `Hot` access tier for large content (sha + queue + logs)
 
 #### Storage hierarchy:
 * Primary Storage (Premium --> blob <= 10K)

@@ -298,7 +298,8 @@ Once the Key Vault is created you must add the *Managed Identity* `{sinequa_user
 
 Role | Resource Name | Resource Type | Comment
 --- | --- | --- | --- 
-Key Vault Secrets Officer | `{sinequa_key_vault}` | Key vault | Perform any action on the secrets of a key vault, except manage permissions
+Key Vault Secrets User | `{sinequa_key_vault}` | Key vault | Read secret contents. Only works for key vaults that use the 'Azure role-based access control' permission model.
+Key Vault Certificate User | `{sinequa_key_vault}` | Key vault | Read certificate contents. Only works for key vaults that use the 'Azure role-based access control' permission model.
 
 ### <a name="azure_services_kv_secret"></a> Add Secrets
 

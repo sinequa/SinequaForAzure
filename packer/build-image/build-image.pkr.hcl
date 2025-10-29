@@ -5,7 +5,7 @@ packer {
       version = "~> 2"
     }
     windows-update = {
-      version = "0.14.3"
+      version = "0.16.9"
       source = "github.com/rgl/windows-update"
     }
   }
@@ -59,6 +59,12 @@ variable "vm_size" {
   default     = "Standard_D4s_v3"
 }
 
+variable "vm_disk_type" {
+  description = "VM Storage Account Type"
+  type        = string
+  default     = "Standard_LRS"
+}
+
 source "azure-arm" "build-image" {
   tenant_id                         = var.tenant_id
   subscription_id                   = var.subscription_id
@@ -73,9 +79,11 @@ source "azure-arm" "build-image" {
   os_type                           = "Windows"
   image_offer                       = "WindowsServer"
   image_publisher                   = "MicrosoftWindowsServer"
+  #image_sku                         = "2022-datacenter-smalldisk-g2" # Gen v2 image
   image_sku                         = "2022-datacenter-smalldisk"
   vm_size                           = var.vm_size
   os_disk_size_gb                   = 64
+  managed_image_storage_account_type = var.vm_disk_type
 
   communicator                      = "winrm"
   winrm_insecure                    = true
