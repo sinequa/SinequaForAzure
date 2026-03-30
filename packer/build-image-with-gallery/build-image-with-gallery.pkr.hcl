@@ -85,7 +85,11 @@ variable "gallery_regions" {
   default     = ["westeurope"]
 }
 
-
+variable "image_sku" {
+  description = "Base Image SKU"
+  type        = string
+  default     = "2025-datacenter-smalldisk"
+}
 
 source "azure-arm" "build-image" {
   tenant_id                         = var.tenant_id
@@ -101,8 +105,7 @@ source "azure-arm" "build-image" {
   os_type                           = "Windows"
   image_offer                       = "WindowsServer"
   image_publisher                   = "MicrosoftWindowsServer"
-  #image_sku                         = "2022-datacenter-smalldisk-g2" # Gen v2 image
-  image_sku                         = "2022-datacenter-smalldisk"
+  image_sku                         = var.image_sku #"2022-datacenter-smalldisk-g2" "2022-datacenter-smalldisk"
   vm_size                           = var.vm_size
   os_disk_size_gb                   = 64
   managed_image_storage_account_type = var.vm_disk_type

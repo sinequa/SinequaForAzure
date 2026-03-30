@@ -52,7 +52,7 @@ use_azure_cli_auth | Use an active `az login` session
 ```
 
 ### 2. build-image-with-gallery Sample <a name="build-image-with-image">
-`build-image-with-gallery\build-image-with-gallery.pkr.hcl`: Create a VM image with Packer and publish into an Image Gallery
+`build-image-with-gallery\build-image-with-gallery.pkr.hcl`: Create a VM image with Packer and publish into an existing Image Gallery (with Image Definition)
  
  Variable | Description
 --- | --- 
@@ -65,10 +65,10 @@ image_name | Name of the image. Eg. `sinequa-11.10.0.2098`
 download_url | Url of sinequa.zip that will be downloaded from the VM. Eg. `https://download.sinequa.com/api/filedownload?type=release&version=11.10.0.2098&file=sinequa.11.zip`
 download_token | Token that is used as a Bearer token in the Authorization HTTP Header of the `download_url`
 vm_size | VM size used for building the image. Default is `Standard_D4s_v3`. For installing GPU Driver (for Neural Search), a VM size with GPU must be used.
-gallery_name | Image Gallery name
-gallery_image_name | Image Definition name
-gallery_image_version | Image Version
-gallery_regions | Regions of the image. Default is `westeurope`
+gallery_name | Existing Azure compute gallery name
+gallery_image_name | Existing VM Image Definition name
+gallery_image_version | Image Version. Format is X.Y.Z (only 3 numbers)
+gallery_regions | Replication Regions of the image. Default is `westeurope`
 
  Example:
 

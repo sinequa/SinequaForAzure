@@ -65,6 +65,20 @@ variable "vm_disk_type" {
   default     = "Standard_LRS"
 }
 
+
+variable "vm_size" {
+  description = "VM Size"
+  type        = string
+  default     = "Standard_D4s_v3"
+}
+
+variable "image_sku" {
+  description = "Base Image SKU"
+  type        = string
+  default     = "2025-datacenter-smalldisk"
+}
+
+
 source "azure-arm" "build-image" {
   tenant_id                         = var.tenant_id
   subscription_id                   = var.subscription_id
@@ -79,8 +93,7 @@ source "azure-arm" "build-image" {
   os_type                           = "Windows"
   image_offer                       = "WindowsServer"
   image_publisher                   = "MicrosoftWindowsServer"
-  #image_sku                         = "2022-datacenter-smalldisk-g2" # Gen v2 image
-  image_sku                         = "2022-datacenter-smalldisk"
+  image_sku                         = var.image_sku #"2022-datacenter-smalldisk-g2 "2022-datacenter-smalldisk" " # Gen v2 image
   vm_size                           = var.vm_size
   os_disk_size_gb                   = 64
   managed_image_storage_account_type = var.vm_disk_type
